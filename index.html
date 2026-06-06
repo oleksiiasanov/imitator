@@ -388,6 +388,12 @@
       background: linear-gradient(180deg, #ffffff, #fbf7ee);
     }
 
+    .phase-head > .button,
+    .phase-head > .small-btn {
+      align-self: center;
+      justify-self: end;
+    }
+
     .phase-kicker {
       margin: 0 0 4px;
       color: var(--accent-dark);
@@ -493,6 +499,20 @@
 
     .step p {
       margin: 2px 0 0;
+    }
+
+    .step-content {
+      display: grid;
+      min-width: 0;
+      gap: 10px;
+    }
+
+    .step-content p {
+      margin: 2px 0 0;
+    }
+
+    .step .code-card {
+      margin-top: 2px;
     }
 
     .code-card {
@@ -839,23 +859,42 @@
                 </div>
 
                 <ol class="steps">
-                  <li class="step"><p>Pi TV pad припаяй до VTX VIDEO IN / yellow wire.</p></li>
-                  <li class="step"><p>Pi GND припаяй до VTX GND / black wire.</p></li>
-                  <li class="step"><p>VTX RED / VBAT+ підключи до плюса батареї.</p></li>
-                  <li class="step"><p>VTX BLACK / GND підключи до мінуса батареї.</p></li>
-                  <li class="step"><p>Перевір правило: Battery GND = VTX GND = Raspberry Pi GND.</p></li>
-                </ol>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Мінімальна схема підключення</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>Pi TV  -> VTX VIDEO IN
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Pi TV pad припаяй до VTX VIDEO IN / yellow wire.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Pi GND припаяй до VTX GND / black wire.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>VTX RED / VBAT+ підключи до плюса батареї.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>VTX BLACK / GND підключи до мінуса батареї.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Перевір правило: Battery GND = VTX GND = Raspberry Pi GND.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Мінімальна схема підключення</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>Pi TV  -> VTX VIDEO IN
 Pi GND -> VTX GND
 Battery + -> VTX VBAT+
 Battery - -> VTX GND</code></pre>
-                </div>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
 
                 <div class="result">
                   <strong>Результат фази</strong>
@@ -886,38 +925,65 @@ Battery - -> VTX GND</code></pre>
                 </div>
 
                 <ol class="steps">
-                  <li class="step"><p>У Raspberry Pi Imager задай Hostname: <strong>vtxpi</strong>, Username: <strong>pi</strong>, пароль, Wi-Fi SSID і Wi-Fi Password.</p></li>
-                  <li class="step"><p>Встав microSD у Raspberry Pi.</p></li>
-                  <li class="step"><p>Живи Pi через USB-C 5V. Не підключай одразу складне живлення через DC-DC.</p></li>
-                  <li class="step"><p>Почекай 2-5 хвилин після першого boot.</p></li>
-                  <li class="step"><p>Підключись по SSH з Mac або Linux.</p></li>
-                </ol>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Основне SSH-підключення</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>ssh pi@vtxpi.local</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Якщо macOS/Linux свариться на старий SSH-ключ</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>ssh-keygen -R vtxpi.local
+                  <li class="step">
+                    <div class="step-content">
+                      <p>У Raspberry Pi Imager задай Hostname: <strong>vtxpi</strong>, Username: <strong>pi</strong>, пароль, Wi-Fi SSID і Wi-Fi Password.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Встав microSD у Raspberry Pi.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Живи Pi через USB-C 5V. Не підключай одразу складне живлення через DC-DC.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Почекай 2-5 хвилин після першого boot.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Підключись по SSH з Mac або Linux.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Основне SSH-підключення</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>ssh pi@vtxpi.local</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Якщо macOS/Linux свариться на старий SSH-ключ, видали старий запис і підключись знову.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Оновити SSH-ключ для vtxpi.local</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>ssh-keygen -R vtxpi.local
 ssh pi@vtxpi.local</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Якщо .local не працює</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>arp -a
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Якщо .local не працює, знайди IP Raspberry Pi і підключись по IP.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Підключення по IP</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>arp -a
 ssh pi@192.168.X.X</code></pre>
-                </div>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
 
                 <div class="result">
                   <strong>Результат фази</strong>
@@ -937,63 +1003,77 @@ ssh pi@192.168.X.X</code></pre>
               </header>
               <div class="phase-body">
                 <ol class="steps">
-                  <li class="step"><p>Відкрий config.txt.</p></li>
-                  <li class="step"><p>Заміни <strong>dtoverlay=vc4-kms-v3d</strong> на <strong>dtoverlay=vc4-kms-v3d,composite=1</strong>.</p></li>
-                  <li class="step"><p>Додай або перевір рядки <strong>enable_tvout=1</strong> і <strong>sdtv_mode=0</strong>.</p></li>
-                  <li class="step"><p>Відкрий cmdline.txt і в кінець цього ж рядка додай <strong>video=Composite-1:720x480@60e</strong>.</p></li>
-                  <li class="step"><p>Перезавантаж Pi і перевір Composite-1 через modetest.</p></li>
-                </ol>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Відкрити config.txt</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo nano /boot/firmware/config.txt</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Фінальні важливі рядки в config.txt</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>dtoverlay=vc4-kms-v3d,composite=1
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Відкрий config.txt.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Відкрити config.txt</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo nano /boot/firmware/config.txt</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Заміни <strong>dtoverlay=vc4-kms-v3d</strong> на <strong>dtoverlay=vc4-kms-v3d,composite=1</strong>.</p>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Додай або перевір рядки <strong>enable_tvout=1</strong> і <strong>sdtv_mode=0</strong>.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Фінальні важливі рядки в config.txt</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>dtoverlay=vc4-kms-v3d,composite=1
 enable_tvout=1
 sdtv_mode=0</code></pre>
-                </div>
-
-                <div class="note">
-                  <strong>NTSC або PAL</strong>
-                  <p>sdtv_mode=0 означає NTSC. Якщо потрібен PAL, постав sdtv_mode=2. Для більшості FPV/analog receiver NTSC нормальний варіант.</p>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Відкрити cmdline.txt</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo nano /boot/firmware/cmdline.txt</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Додати в кінець єдиного рядка cmdline.txt</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>video=Composite-1:720x480@60e</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Перезавантаження і перевірка Composite-1</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo reboot
+                      </div>
+                      <div class="note">
+                        <strong>NTSC або PAL</strong>
+                        <p>sdtv_mode=0 означає NTSC. Якщо потрібен PAL, постав sdtv_mode=2. Для більшості FPV/analog receiver NTSC нормальний варіант.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Відкрий cmdline.txt і в кінець цього ж рядка додай <strong>video=Composite-1:720x480@60e</strong>.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Відкрити cmdline.txt</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo nano /boot/firmware/cmdline.txt</code></pre>
+                      </div>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Додати в кінець єдиного рядка cmdline.txt</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>video=Composite-1:720x480@60e</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Перезавантаж Pi і перевір Composite-1 через modetest.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Перезавантаження і перевірка Composite-1</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo reboot
 ssh pi@vtxpi.local
 sudo apt update
 sudo apt install libdrm-tests -y
 modetest -c</code></pre>
-                </div>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
 
                 <div class="result">
                   <strong>Результат фази</strong>
@@ -1013,67 +1093,86 @@ modetest -c</code></pre>
               </header>
               <div class="phase-body">
                 <ol class="steps">
-                  <li class="step"><p>На Raspberry створи папку для відео.</p></li>
-                  <li class="step"><p>На Mac або Linux в окремому терміналі залий video.mp4 через scp.</p></li>
-                  <li class="step"><p>На Raspberry встанови mpv і ffmpeg.</p></li>
-                  <li class="step"><p>Запусти MPV напряму на DRM connector Composite-1.</p></li>
-                  <li class="step"><p>Якщо є dropped frames, зроби video_fpv.mp4 у 640x480, 30 fps, H.264, без аудіо.</p></li>
-                </ol>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Створити папку на Raspberry</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>mkdir -p ~/videos</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Залити файл з Mac/Linux на Raspberry</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>scp ~/Downloads/video.mp4 pi@vtxpi.local:/home/pi/videos/
+                  <li class="step">
+                    <div class="step-content">
+                      <p>На Raspberry створи папку для відео.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Створити папку на Raspberry</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>mkdir -p ~/videos</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>На Mac або Linux в окремому терміналі залий video.mp4 через scp і перевір файл на Raspberry.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Залити файл з Mac/Linux на Raspberry</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>scp ~/Downloads/video.mp4 pi@vtxpi.local:/home/pi/videos/
 ssh pi@vtxpi.local
 ls -lh ~/videos</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Встановити MPV і FFMPEG</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo apt update
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>На Raspberry встанови mpv і ffmpeg.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Встановити MPV і FFMPEG</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo apt update
 sudo apt install mpv ffmpeg -y</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Перший запуск оригінального відео через Composite-1</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>cd ~/videos
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Запусти MPV напряму на DRM connector Composite-1.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Перший запуск оригінального відео через Composite-1</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>cd ~/videos
 mpv --vo=drm --drm-device=/dev/dri/card0 --drm-connector=Composite-1 --loop=inf --fs video.mp4</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Оптимізувати відео під Raspberry Pi Zero</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>ffmpeg -y -i ~/videos/video.mp4 \
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Якщо є dropped frames, зроби video_fpv.mp4 у 640x480, 30 fps, H.264, без аудіо.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Оптимізувати відео під Raspberry Pi Zero</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>ffmpeg -y -i ~/videos/video.mp4 \
 -vf "scale=640:480,fps=30" \
 -c:v libx264 -preset ultrafast -b:v 1500k \
 -an ~/videos/video_fpv.mp4</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Запустити оптимізоване відео</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>mpv --vo=drm --drm-device=/dev/dri/card0 --drm-connector=Composite-1 --loop=inf --fs ~/videos/video_fpv.mp4</code></pre>
-                </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Запусти вже оптимізований файл.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Запустити оптимізоване відео</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>mpv --vo=drm --drm-device=/dev/dri/card0 --drm-connector=Composite-1 --loop=inf --fs ~/videos/video_fpv.mp4</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
 
                 <div class="result">
                   <strong>Результат фази</strong>
@@ -1097,20 +1196,28 @@ mpv --vo=drm --drm-device=/dev/dri/card0 --drm-connector=Composite-1 --loop=inf 
                   <p>Переконайся, що файл /home/pi/videos/video_fpv.mp4 існує і команда MPV запускає його вручну.</p>
                 </div>
 
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Створити service-файл</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo nano /etc/systemd/system/vtx-video.service</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Вміст vtx-video.service</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>[Unit]
+                <ol class="steps">
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Створи service-файл для автозапуску відео.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Створити service-файл</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo nano /etc/systemd/system/vtx-video.service</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Встав у файл service-конфіг і збережи його.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Вміст vtx-video.service</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>[Unit]
 Description=Loop video to composite VTX
 After=multi-user.target
 
@@ -1123,36 +1230,51 @@ RestartSec=3
 
 [Install]
 WantedBy=multi-user.target</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Увімкнути і запустити service</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo systemctl daemon-reload
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Онови systemd, увімкни автозапуск і перевір статус.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Увімкнути і запустити service</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo systemctl daemon-reload
 sudo systemctl enable vtx-video.service
 sudo systemctl start vtx-video.service
 systemctl status vtx-video.service</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Перевірити автозапуск після reboot</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo reboot</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Зупинити автозапуск або подивитися логи</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>sudo systemctl stop vtx-video.service
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Перезавантаж Raspberry Pi і переконайся, що відео стартує автоматично.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Перевірити автозапуск після reboot</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo reboot</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Якщо потрібно зупинити автозапуск або подивитися логи, використовуй ці команди.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Зупинити автозапуск або подивитися логи</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>sudo systemctl stop vtx-video.service
 sudo systemctl disable vtx-video.service
 journalctl -u vtx-video.service -f</code></pre>
-                </div>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
 
                 <div class="result">
                   <strong>Результат фази</strong>
@@ -1182,22 +1304,33 @@ journalctl -u vtx-video.service -f</code></pre>
                   </div>
                 </div>
 
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Живлення VTX від 6S, якщо VTX підтримує VBAT / 6S</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>6S battery + -> VTX VBAT+
+                <ol class="steps">
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Якщо VTX підтримує VBAT / 6S, підключи його напряму до акумулятора.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Живлення VTX від 6S</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>6S battery + -> VTX VBAT+
 6S battery - -> VTX GND</code></pre>
-                </div>
-
-                <div class="code-card">
-                  <div class="code-top">
-                    <span>Живлення Raspberry Pi через buck converter</span>
-                    <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                  </div>
-                  <pre><code>6S battery -> buck converter -> 5.1V -> Raspberry Pi</code></pre>
-                </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Raspberry Pi живи тільки через step-down / buck converter на 5.1V.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Живлення Raspberry Pi через buck converter</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>6S battery -> buck converter -> 5.1V -> Raspberry Pi</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
 
                 <div class="note warning">
                   <strong>Перед підключенням Pi</strong>
