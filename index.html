@@ -515,6 +515,28 @@
       margin-top: 2px;
     }
 
+    .step-figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .step-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .step-figure figcaption {
+      padding: 9px 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 750;
+    }
+
     .code-card {
       overflow: hidden;
       border: 1px solid #283245;
@@ -850,6 +872,10 @@
                   <div>
                     <a class="button primary" href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener noreferrer">Завантажити Raspberry Pi Imager</a>
                   </div>
+                  <figure class="step-figure">
+                    <img src="assets/imager-use-custom.svg" alt="Raspberry Pi Imager: на кроці OS обрано пункт Use custom">
+                    <figcaption>У Raspberry Pi Imager на кроці OS обери Use custom і вибери готовий .img файл.</figcaption>
+                  </figure>
                   <div class="note warning">
                     <strong>Перед записом</strong>
                     <p>Переконайся, що обрав правильний носій, бо під час запису всі дані на microSD/флешці будуть стерті.</p>
