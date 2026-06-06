@@ -760,7 +760,8 @@
           <div class="brand-text">Raspberry Pi Zero 2 W + 5.8GHz VTX</div>
         </div>
         <nav class="tabs" aria-label="Розділи інструкції">
-          <button class="tab is-active" type="button" data-view="guide">Майстер</button>
+          <button class="tab is-active" type="button" data-view="quickstart">Quickstart</button>
+          <button class="tab" type="button" data-view="guide">Повна інструкція</button>
           <button class="tab" type="button" data-view="commands">Команди</button>
           <button class="tab" type="button" data-view="checklist">Чекліст</button>
           <button class="tab" type="button" data-view="diagnostics">Діагностика</button>
@@ -771,10 +772,11 @@
     <section class="hero">
       <div class="hero-inner">
         <div>
-          <h1>Інтерактивна інструкція для запуску відео через composite TV OUT</h1>
-          <p class="lead">Почергово збери схему, підніми Composite-1, залий відео, запусти MPV і ввімкни автозапуск. Кожна фаза має зрозумілі кроки, очікуваний результат і готові команди для копіювання.</p>
+          <h1>Quickstart для першого запуску VTX Video Control</h1>
+          <p class="lead">Швидка інструкція для вже зібраного пристрою: увімкнути живлення, підключитись до Wi-Fi VTX-SETUP, відкрити панель, завантажити відео і налаштувати автозапуск.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#phase-setup">Почати з фази 1</a>
+            <a class="button primary" href="#quickstart-start">Почати Quickstart</a>
+            <a class="button" href="#phase-setup" data-jump-view="guide">Повна інструкція</a>
             <a class="button" href="#final-checklist" data-jump-view="checklist">Відкрити чекліст</a>
           </div>
         </div>
@@ -820,7 +822,212 @@
         </div>
       </section>
 
-      <section class="view is-active" id="view-guide" aria-label="Майстер налаштування">
+      <section class="view is-active" id="view-quickstart" aria-label="Quickstart першого запуску">
+        <article class="phase-card" id="quickstart-start">
+          <header class="phase-head">
+            <div>
+              <p class="phase-kicker">Quickstart</p>
+              <h2 class="phase-title">Перший запуск після збірки</h2>
+              <p class="phase-summary">Для ситуації, коли дроти вже припаяні, Raspberry Pi вставлена в корпус, VTX підключений, а антена встановлена.</p>
+            </div>
+            <a class="button primary" href="http://10.42.0.1:8080" target="_blank" rel="noopener noreferrer">Відкрити панель</a>
+          </header>
+          <div class="phase-body">
+            <div class="info-grid">
+              <div class="note success">
+                <strong>Результат</strong>
+                <p>Відео завантажене в систему, автозапуск налаштований, після подачі живлення Raspberry Pi сама запускає відео за заданим графіком.</p>
+              </div>
+              <div class="note danger">
+                <strong>Безпека</strong>
+                <p>VTX не можна вмикати без антени. Не вимикай живлення під час завантаження або конвертації відео.</p>
+              </div>
+            </div>
+
+            <ol class="steps">
+              <li class="step">
+                <div class="step-content">
+                  <p>Увімкни пристрій: подай живлення на Raspberry Pi, подай живлення на VTX і переконайся, що антена підключена.</p>
+                  <div class="result">
+                    <strong>Очікуваний результат</strong>
+                    <p>Raspberry Pi починає завантаження, VTX увімкнений з антеною.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>Почекай 1-2 хвилини, поки Raspberry Pi повністю завантажиться.</p>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>На телефоні або ноутбуці підключись до Wi-Fi мережі пристрою.</p>
+                  <div class="code-card">
+                    <div class="code-top">
+                      <span>Wi-Fi мережа</span>
+                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                    </div>
+                    <pre><code>VTX-SETUP</code></pre>
+                  </div>
+                  <div class="code-card">
+                    <div class="code-top">
+                      <span>Пароль Wi-Fi</span>
+                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                    </div>
+                    <pre><code>12345678</code></pre>
+                  </div>
+                  <div class="note">
+                    <strong>Нормальна поведінка</strong>
+                    <p>Після підключення інтернет може не працювати. Ця Wi-Fi мережа потрібна тільки для налаштування пристрою.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>Відкрий браузер і перейди в панель керування.</p>
+                  <div class="code-card">
+                    <div class="code-top">
+                      <span>Адреса панелі керування</span>
+                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                    </div>
+                    <pre><code>http://10.42.0.1:8080</code></pre>
+                  </div>
+                  <div class="result">
+                    <strong>Очікуваний результат</strong>
+                    <p>Відкривається сторінка VTX Video Control.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>У блоці <strong>1. Завантаження відео</strong> натисни вибір файлу, обери відео і натисни <strong>Завантажити нове відео</strong>.</p>
+                  <div class="note warning">
+                    <strong>Під час завантаження</strong>
+                    <p>Дочекайся progress bar, завершення завантаження, конвертації і повідомлення про успіх. Конвертація може зайняти кілька хвилин.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>Перевір відео. Після завантаження воно має автоматично запуститись. Для ручного запуску або паузи використовуй кнопку <strong>Пуск / Пауза</strong>.</p>
+                  <div class="result">
+                    <strong>Очікуваний результат</strong>
+                    <p>Якщо на приймачі видно відео, пристрій працює правильно.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>У блоці <strong>3. Автозапуск після подачі живлення</strong> увімкни галочку <strong>Увімкнути автозапуск</strong>.</p>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>У полі <strong>Перший запуск через, хв</strong> вкажи затримку перед першим запуском відео.</p>
+                  <div class="code-card">
+                    <div class="code-top">
+                      <span>Приклади затримки першого запуску</span>
+                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                    </div>
+                    <pre><code>0   = запустити одразу
+20  = запустити через 20 хвилин
+60  = запустити через 1 годину
+180 = запустити через 3 години</code></pre>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>У полі <strong>Повторювати через N хв після завершення попереднього відео</strong> вкажи інтервал повтору.</p>
+                  <div class="code-card">
+                    <div class="code-top">
+                      <span>Приклад інтервалу повтору</span>
+                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                    </div>
+                    <pre><code>20</code></pre>
+                  </div>
+                  <div class="note">
+                    <strong>Що це означає</strong>
+                    <p>Після завершення відео пристрій почекає 20 хвилин і запустить відео знову.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>Натисни <strong>Зберегти налаштування</strong>.</p>
+                  <div class="result">
+                    <strong>Фінальний результат</strong>
+                    <p>Налаштування збережені в пам'яті Raspberry Pi і застосуються після наступного запуску пристрою або перезапуску сервісу.</p>
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+        <div class="diagnostics">
+          <article class="diag-card">
+            <h3>Як працює автозапуск</h3>
+            <ul>
+              <li>Raspberry Pi увімкнеться і завантажить систему.</li>
+              <li>Веб-інтерфейс запуститься автоматично.</li>
+              <li>Пристрій почекає задану кількість хвилин до першого запуску.</li>
+              <li>Запустить відео, дочекається завершення і повторить запуск після заданого інтервалу.</li>
+            </ul>
+          </article>
+          <article class="diag-card">
+            <h3>Замінити відео пізніше</h3>
+            <ul>
+              <li>Увімкни пристрій.</li>
+              <li>Підключись до Wi-Fi VTX-SETUP.</li>
+              <li>Відкрий http://10.42.0.1:8080.</li>
+              <li>Завантаж нове відео і дочекайся конвертації.</li>
+              <li>Старе відео автоматично заміниться новим.</li>
+            </ul>
+          </article>
+          <article class="diag-card">
+            <h3>Сторінка не відкривається</h3>
+            <ul>
+              <li>Перевір, чи пристрій увімкнений.</li>
+              <li>Перевір, чи пройшло 1-2 хвилини після подачі живлення.</li>
+              <li>Переконайся, що телефон або ноутбук підключений саме до Wi-Fi VTX-SETUP.</li>
+              <li>Перевір адресу: http://10.42.0.1:8080.</li>
+              <li>Онови сторінку або перезапусти живлення після паузи 10 секунд.</li>
+            </ul>
+          </article>
+          <article class="diag-card">
+            <h3>Відео не видно на приймачі</h3>
+            <ul>
+              <li>Перевір антену VTX, живлення VTX і частоту приймача.</li>
+              <li>Перевір, чи відео точно завантажилось через веб-інтерфейс.</li>
+              <li>Подивись, чи інтерфейс показує наявність файлу.</li>
+              <li>Натисни Пуск / Пауза для ручного запуску.</li>
+              <li>Якщо видно login Raspberry Pi, VTX і відеовихід працюють, проблема в запуску або файлі відео.</li>
+            </ul>
+          </article>
+          <article class="diag-card">
+            <h3>Що не можна робити</h3>
+            <ul>
+              <li>Не вмикати VTX без антени.</li>
+              <li>Не вимикати живлення під час завантаження відео.</li>
+              <li>Не вимикати живлення під час конвертації відео.</li>
+              <li>Не подавати 6S напряму на Raspberry Pi.</li>
+              <li>Не змінювати дроти, якщо система вже працює.</li>
+            </ul>
+          </article>
+          <article class="diag-card">
+            <h3>Швидкі значення</h3>
+            <ul>
+              <li>Wi-Fi: VTX-SETUP.</li>
+              <li>Пароль: 12345678.</li>
+              <li>Панель: http://10.42.0.1:8080.</li>
+              <li>Сторінка має назву VTX Video Control.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-guide" aria-label="Повна інструкція налаштування">
         <div class="phase-layout">
           <aside class="phase-nav" aria-label="Фази">
             <button class="phase-link is-current" type="button" data-target="phase-setup"><span class="phase-num">1</span><span>Підготовка</span></button>
@@ -1432,6 +1639,11 @@ journalctl -u vtx-video.service -f</code></pre>
 
   <script>
     const commands = [
+      { title: "Wi-Fi мережа пристрою", phase: "Quickstart", code: "VTX-SETUP" },
+      { title: "Пароль Wi-Fi", phase: "Quickstart", code: "12345678" },
+      { title: "Адреса панелі VTX Video Control", phase: "Quickstart", code: "http://10.42.0.1:8080" },
+      { title: "Приклади першого запуску", phase: "Quickstart", code: "0   = запустити одразу\n20  = запустити через 20 хвилин\n60  = запустити через 1 годину\n180 = запустити через 3 години" },
+      { title: "Приклад інтервалу повтору", phase: "Quickstart", code: "20" },
       { title: "SSH до Raspberry Pi", phase: "OS і SSH", code: "ssh pi@vtxpi.local" },
       { title: "Скинути старий SSH-ключ і зайти знову", phase: "OS і SSH", code: "ssh-keygen -R vtxpi.local\nssh pi@vtxpi.local" },
       { title: "Знайти IP і підключитись по IP", phase: "OS і SSH", code: "arp -a\nssh pi@192.168.X.X" },
