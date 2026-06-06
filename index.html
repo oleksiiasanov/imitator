@@ -828,7 +828,7 @@
             <div>
               <p class="phase-kicker">Quickstart</p>
               <h2 class="phase-title">Перший запуск після збірки</h2>
-              <p class="phase-summary">Для ситуації, коли дроти вже припаяні, Raspberry Pi вставлена в корпус, VTX підключений, а антена встановлена.</p>
+              <p class="phase-summary">Для ситуації, коли дроти вже припаяні, VTX підключений, антена встановлена, а перед першим запуском треба записати образ на microSD і вставити її в Raspberry Pi.</p>
             </div>
             <a class="button primary" href="http://10.42.0.1:8080" target="_blank" rel="noopener noreferrer">Відкрити панель</a>
           </header>
@@ -845,6 +845,20 @@
             </div>
 
             <ol class="steps">
+              <li class="step">
+                <div class="step-content">
+                  <p>Запиши готовий образ системи на microSD/флешку через Raspberry Pi Imager або інший інструмент запису образів.</p>
+                  <div class="note warning">
+                    <strong>Перед записом</strong>
+                    <p>Переконайся, що обрав правильний носій, бо під час запису всі дані на microSD/флешці будуть стерті.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <div class="step-content">
+                  <p>Після завершення запису встав microSD/флешку в Raspberry Pi.</p>
+                </div>
+              </li>
               <li class="step">
                 <div class="step-content">
                   <p>Увімкни пристрій: подай живлення на Raspberry Pi, подай живлення на VTX і переконайся, що антена підключена.</p>
