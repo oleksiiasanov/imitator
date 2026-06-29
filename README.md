@@ -65,11 +65,11 @@ sudo bash install.sh
 The installer:
 
 - Installs Python, Flask dependencies, FFmpeg, and MPV.
-- Creates a project-local Python environment in `.venv`.
-- Installs Python dependencies only into `.venv`.
+- Installs GPIO dependencies with apt: `gpiod`, `python3-gpiozero`, and `python3-lgpio`.
+- Creates a project-local Python environment in `.venv` with access to apt-installed Python packages.
+- Installs only web Python dependencies from `requirements.txt` into `.venv`.
 - Creates the upload and video directories.
 - Enables composite video output for the Raspberry Pi.
-- Installs GPIO dependencies for GPIO17 MOSFET control.
 - Installs and enables the `vtx-player` systemd service using `.venv/bin/python`.
 - Reboots automatically when hardware settings need to be applied.
 

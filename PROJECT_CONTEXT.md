@@ -239,14 +239,15 @@ Current `install.sh` owns:
 
 * apt package installation
 * Raspberry Pi OS detection from `/etc/os-release`
-* Python virtualenv creation inside the project at `.venv`
-* Python dependency installation into `.venv`
+* Python virtualenv creation inside the project at `.venv` with `--system-site-packages`
+* Python web dependency installation into `.venv`
+* GPIO Python dependency installation only through apt packages: `python3-gpiozero` and `python3-lgpio`
 * runtime directory creation
 * `config.json` creation and ownership
 * Raspberry Pi composite boot configuration
 * systemd service installation and enablement
 * systemd configuration to run `.venv/bin/python`
-* GPIO package installation for GPIO17/MOSFET control
+* GPIO package installation for GPIO17/MOSFET control through apt: `gpiod`, `python3-gpiozero`, and `python3-lgpio`
 * application self-check
 * clear success/failure output
 * rollback for boot config and service file when possible
@@ -537,6 +538,7 @@ Current service behaviour:
 
 * runs under the install user, usually `pi`
 * uses the project-local `.venv/bin/python`
+* relies on `.venv` being created with system site packages so apt-installed `gpiozero` and `lgpio` are importable
 * starts after `network-online.target`
 * sets `PYTHONUNBUFFERED=1`
 * sets `GPIOZERO_PIN_FACTORY=lgpio`

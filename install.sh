@@ -219,15 +219,8 @@ step "Installing packages..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python3 python3-pip python3-venv \
-    ffmpeg mpv procps
-
-for package in gpiod python3-gpiozero python3-lgpio; do
-    if apt-cache show "$package" >/dev/null 2>&1; then
-        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "$package"
-    else
-        info "Optional apt package not available on this OS: $package"
-    fi
-done
+    ffmpeg mpv procps \
+    gpiod python3-gpiozero python3-lgpio
 
 need_command ffmpeg
 need_command mpv
@@ -248,14 +241,24 @@ ok
 
 step "Installing Python dependencies..."
 if [ ! -d "$VENV" ]; then
-    python3 -m venv "$VENV"
+    python3 -m venv --system-site-packages "$VENV"
+elif [ -f "$VENV/pyvenv.cfg" ]; then
+    if grep -q "^include-system-site-packages = " "$VENV/pyvenv.cfg"; then
+        sed -i -E "s/^include-system-site-packages = .*/include-system-site-packages = true/" "$VENV/pyvenv.cfg"
+    else
+        printf '%s\n' "include-system-site-packages = true" >> "$VENV/pyvenv.cfg"
+    fi
 fi
 "$VENV/bin/python" -m pip install --upgrade pip
 "$VENV/bin/python" -m pip install -r "$INSTALL_DIR/requirements.txt"
 "$VENV/bin/python" - << PY
 from importlib.metadata import version
+import gpiozero
+import lgpio
 print("Flask", version("flask"))
 print("Werkzeug", version("werkzeug"))
+print("gpiozero", gpiozero.__version__)
+print("lgpio", getattr(lgpio, "__version__", "apt"))
 PY
 ok
 

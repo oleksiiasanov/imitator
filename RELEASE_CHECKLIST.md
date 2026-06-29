@@ -26,7 +26,10 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] Installer detects Raspberry Pi OS and prints the install directory and app user.
 - [ ] Installer installs apt packages without errors.
 - [ ] Installer creates `.venv` inside the project.
-- [ ] Installer installs Python dependencies into `.venv`.
+- [ ] Installer creates `.venv` with system site packages enabled.
+- [ ] Installer installs only Flask/Werkzeug from `requirements.txt` with pip.
+- [ ] Installer installs `gpiod`, `python3-gpiozero`, and `python3-lgpio` with apt.
+- [ ] `pip install -r requirements.txt` does not build or install `gpiozero` or `lgpio`.
 - [ ] Installer creates `uploads/`, `videos/`, and `config.json`.
 - [ ] Installer installs and enables `vtx-player.service`.
 - [ ] Installer self-check reports ffmpeg, mpv, GPIO17, uploads, videos, and config.json as OK.
