@@ -1,0 +1,26 @@
+[Unit]
+Description=VTX Video Control
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/imitator
+Environment=PYTHONUNBUFFERED=1
+Environment=GPIOZERO_PIN_FACTORY=lgpio
+ExecStartPre=/usr/bin/test -x /home/pi/imitator/.venv/bin/python
+ExecStartPre=/usr/bin/test -f /home/pi/imitator/app.py
+ExecStart=/home/pi/imitator/.venv/bin/python /home/pi/imitator/app.py
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGTERM
+KillMode=mixed
+TimeoutStopSec=10
+SyslogIdentifier=vtx-player
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+
+uploads/*
+videos/*
+config.json
+config.json.tmp
+video.mp4

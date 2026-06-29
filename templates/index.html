@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>VTX Video Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="box">
+    <h1>VTX Video Control</h1>
+
+    <div class="status">
+      <p><b>Версія:</b> {{ app_version }}</p>
+      <p><b>Статус плеєра:</b> {{ player_status }}</p>
+      <p><b>Відео:</b> {{ video_status }}</p>
+      <p><b>Автозапуск:</b> {{ autoplay_status }}</p>
+      <p class="small">Відкривати: <code>http://IP_RASPBERRY_PI:8080</code></p>
+      <p class="small"><a href="/system">System Status</a></p>
+    </div>
+
+    {% if runtime_error %}
+      <div class="message err visible-message">{{ runtime_error }}</div>
+    {% endif %}
+
+    <div class="diagnostics {% if diagnostics.ok %}diagnostics-ok{% else %}diagnostics-error{% endif %}">
+      <h2>Діагностика запуску</h2>
+      {% if diagnostics.ok %}
+        <p class="small">Усе готово для завантаження і відтворення відео.</p>
+      {% else %}
+        <p class="small">Є проблеми з установкою або першим запуском. Перевір пункти нижче.</p>
+      {% endif %}
+
+      <ul>
+        {% for check in diagnostics.checks %}
+          <li class="{% if check.ok %}check-ok{% else %}check-error{% endif %}">
+            <b>{{ "✓" if check.ok else "!" }} {{ check.label }}:</b>
+            {{ check.message }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <h2>1. Завантаження відео</h2>
+
+    <form id="uploadForm">
+      <div class="row">
+        <label>Нове відео</label>
+        <input id="videoInput" type="file" name="video" accept="video/*" required>
+      </div>
+
+      <button class="upload" id="uploadButton" type="submit" {% if conversion.running %}disabled{% endif %}>
+        Завантажити нове відео
+      </button>
+    </form>
+
+    <div class="progress-block" id="uploadProgressBlock">
+      <div class="progress-label">
+        <span>Upload</span>
+        <span id="uploadPercent">0%</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress" id="uploadProgressBar"></div>
+      </div>
+    </div>
+
+    <div class="progress-block" id="conversionProgressBlock">
+      <div class="progress-label">
+        <span>Conversion</span>
+        <span id="conversionPercent">0%</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress conversion-progress" id="conversionProgressBar"></div>
+      </div>
+    </div>
+
+    <div class="message {% if conversion.running %}ok{% endif %}" id="messageBox" {% if conversion.running %}style="display:block"{% endif %}>
+      {% if conversion.running %}{{ conversion.message }}{% endif %}
+    </div>
+
+    <h2>2. Пуск / Пауза</h2>
+
+    <form action="/toggle" method="post">
+      <button class="toggle" id="toggleButton" type="submit" {% if conversion.running or not diagnostics.ok %}disabled{% endif %}>
+        {{ toggle_label }}
+      </button>
+    </form>
+
+    <h2>3. Автозапуск після подачі живлення</h2>
+
+    <form action="/settings" method="post">
+      <div class="row">
+        <label>
+          <input type="checkbox" name="autoplay_enabled" {% if config.autoplay_enabled %}checked{% endif %}>
+          Увімкнути автозапуск
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Перший запуск через, хв</label>
+        <input type="number" name="delay_minutes" min="0" value="{{ delay_minutes }}">
+      </div>
+
+      <div class="row">
+        <label>Повторювати через N хв після завершення попереднього відео</label>
+        <input type="number" name="interval_minutes" min="1" value="{{ interval_minutes }}">
+      </div>
+
+      <button class="save" type="submit">Зберегти налаштування</button>
+
+      <p class="small">
+        Приклад: якщо виставити перший запуск через 180 хв і повтор кожні 20 хв,
+        то після подачі живлення Raspberry почекає 180 хв, запустить відео один раз,
+        дочекається завершення відео, почекає 20 хв і запустить знову.
+      </p>
+    </form>
+  </div>
+
+  <script>
+    window.initialConversionRunning = {{ "true" if conversion.running else "false" }};
+  </script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

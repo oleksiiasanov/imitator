@@ -1,0 +1,4 @@
+flask>=3.0
+gpiozero>=2.0
+lgpio>=0.2.2.0
+werkzeug>=3.0

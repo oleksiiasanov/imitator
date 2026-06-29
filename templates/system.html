@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>System Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="box">
+    <div class="page-head">
+      <div>
+        <h1>System Status</h1>
+        <p class="small">Read-only status page. This page does not change system settings.</p>
+      </div>
+      <a class="link-button" href="/">Back</a>
+    </div>
+
+    <div class="system-grid">
+      {% for section in sections %}
+        <section class="system-section">
+          <h2>{{ section.title }}</h2>
+
+          <div class="system-list">
+            {% for item in section["items"] %}
+              <div class="system-item {% if item["ok"] is sameas true %}check-ok{% elif item["ok"] is sameas false %}check-error{% else %}check-neutral{% endif %}">
+                <div class="system-main">
+                  <span class="system-marker">{% if item["ok"] is sameas true %}✓{% elif item["ok"] is sameas false %}!{% else %}–{% endif %}</span>
+                  <span class="system-label">{{ item["label"] }}</span>
+                  <span class="system-value">{{ item["value"] }}</span>
+                </div>
+
+                {% if item["detail"] %}
+                  <p class="system-detail">{{ item["detail"] }}</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
