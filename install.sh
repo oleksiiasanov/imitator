@@ -250,15 +250,24 @@ elif [ -f "$VENV/pyvenv.cfg" ]; then
     fi
 fi
 "$VENV/bin/python" -m pip install --upgrade pip
-"$VENV/bin/python" -m pip install -r "$INSTALL_DIR/requirements.txt"
+"$VENV/bin/python" -m pip install --no-warn-conflicts -r "$INSTALL_DIR/requirements.txt"
 "$VENV/bin/python" - << PY
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 import gpiozero
 import lgpio
+
+
+def installed_version(package_name):
+    try:
+        return version(package_name)
+    except PackageNotFoundError:
+        return "apt"
+
+
 print("Flask", version("flask"))
 print("Werkzeug", version("werkzeug"))
-print("gpiozero", gpiozero.__version__)
-print("lgpio", getattr(lgpio, "__version__", "apt"))
+print("gpiozero", installed_version("gpiozero"))
+print("lgpio", installed_version("lgpio"))
 PY
 ok
 
