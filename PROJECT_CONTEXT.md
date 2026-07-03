@@ -245,6 +245,7 @@ Current `install.sh` owns:
 * runtime directory creation
 * `config.json` creation and ownership
 * Raspberry Pi composite boot configuration
+* graphical desktop/display manager disablement when present, because MPV DRM playback needs DRM master access
 * systemd service installation and enablement
 * systemd configuration to run `.venv/bin/python`
 * GPIO package installation for GPIO17/MOSFET control through apt: `gpiod`, `python3-gpiozero`, and `python3-lgpio`
@@ -550,6 +551,8 @@ Current service behaviour:
 * uses `vtx-player` as the journal/syslog identifier
 * writes stdout and stderr to journal
 * is enabled by `install.sh`
+
+MPV DRM playback requires direct DRM master access. On Raspberry Pi OS Desktop, `lightdm`/desktop compositors such as `labwc` can hold `/dev/dri/card0` and make MPV fail with `Failed to acquire DRM master: Permission denied`. `install.sh` therefore switches the system default to `multi-user.target` and disables common display manager services when present.
 
 Every long-running production process must run under systemd.
 

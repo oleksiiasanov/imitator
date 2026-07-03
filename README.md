@@ -70,6 +70,7 @@ The installer:
 - Installs only web Python dependencies from `requirements.txt` into `.venv`.
 - Creates the upload and video directories.
 - Enables composite video output for the Raspberry Pi.
+- Disables the graphical desktop/display manager when present so MPV can control DRM/Composite directly.
 - Installs and enables the `vtx-player` systemd service using `.venv/bin/python`.
 - Reboots automatically when hardware settings need to be applied.
 

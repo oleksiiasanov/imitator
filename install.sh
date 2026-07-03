@@ -173,6 +173,34 @@ set_composite_cmdline() {
     fi
 }
 
+disable_graphical_desktop() {
+    local display_services=(
+        display-manager.service
+        lightdm.service
+        gdm.service
+        gdm3.service
+        sddm.service
+        wayfire.service
+        labwc.service
+    )
+
+    if [ "$(systemctl get-default 2>/dev/null || true)" != "multi-user.target" ]; then
+        systemctl set-default multi-user.target
+        REBOOT_REQUIRED=1
+    fi
+
+    for service in "${display_services[@]}"; do
+        if systemctl list-unit-files "$service" >/dev/null 2>&1; then
+            systemctl disable "$service" >/dev/null 2>&1 || true
+            systemctl stop "$service" --no-block >/dev/null 2>&1 || true
+        fi
+    done
+
+    pkill -TERM -f 'labwc|wayfire|weston|Xorg|pcmanfm|wf-panel-pi|kanshi|lwrespawn' >/dev/null 2>&1 || true
+    sleep 1
+    pkill -KILL -f 'labwc|wayfire|weston|Xorg|pcmanfm|wf-panel-pi|kanshi|lwrespawn' >/dev/null 2>&1 || true
+}
+
 panel_url() {
     local ip_addr=""
 
@@ -237,6 +265,7 @@ add_cmdline_token "quiet"
 add_cmdline_token "loglevel=3"
 add_cmdline_token "logo.nologo"
 add_cmdline_token "vt.global_cursor_default=0"
+disable_graphical_desktop
 ok
 
 step "Installing Python dependencies..."

@@ -57,6 +57,17 @@ def _set_powered(value):
     _powered = bool(value)
 
 
+def _gpio_exception_types():
+    errors = (RuntimeError, OSError, ValueError)
+
+    try:
+        from gpiozero.exc import GPIOZeroError
+
+        return errors + (GPIOZeroError,)
+    except ImportError:
+        return errors
+
+
 def is_available():
     _initialize()
     with _lock:
@@ -106,6 +117,8 @@ def power_off():
 
         try:
             _device.off()
+        except _gpio_exception_types() as exc:
+            logging.getLogger(__name__).warning("GPIO17 power-off skipped: %s", exc)
         finally:
             _set_powered(False)
 

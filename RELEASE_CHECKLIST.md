@@ -30,6 +30,8 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] Installer installs only Flask/Werkzeug from `requirements.txt` with pip.
 - [ ] Installer installs `gpiod`, `python3-gpiozero`, and `python3-lgpio` with apt.
 - [ ] `pip install -r requirements.txt` does not build or install `gpiozero` or `lgpio`.
+- [ ] Installer disables graphical desktop/display manager if present.
+- [ ] No desktop compositor holds `/dev/dri/card0` during playback.
 - [ ] Installer creates `uploads/`, `videos/`, and `config.json`.
 - [ ] Installer installs and enables `vtx-player.service`.
 - [ ] Installer self-check reports ffmpeg, mpv, GPIO17, uploads, videos, and config.json as OK.
