@@ -594,6 +594,8 @@ def mpv_base_cmd():
         "--drm-device=/dev/dri/card0",
         "--drm-connector=Composite-1",
         "--fs",
+        "--msg-level=all=warn",
+        "--term-osd=no",
     ]
 
 
