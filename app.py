@@ -623,8 +623,6 @@ def start_player_loop(allow_while_converting=False):
         try:
             proc = subprocess.Popen(
                 cmd,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
                 start_new_session=True,
             )
         except OSError as exc:
@@ -661,8 +659,6 @@ def play_video_once():
 
             proc = subprocess.Popen(
                 cmd,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
                 start_new_session=True,
             )
             player_process = proc
