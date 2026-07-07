@@ -1509,6 +1509,7 @@ MOSFET output -> VTX/fan power branch
               <li>Переконайся, що boot-розділ відкрився як /Volumes/bootfs.</li>
               <li>Заміни YOUR_WIFI_NAME і YOUR_WIFI_PASSWORD на реальні дані Wi-Fi.</li>
               <li>Raspberry Pi Zero 2 W підключається тільки до 2.4GHz Wi-Fi.</li>
+              <li>Перевірений спосіб для цієї збірки: cloud-init recovery через network-config, meta-data і user-data.</li>
             </ul>
             <div class="code-card">
               <div class="code-top">
@@ -1517,72 +1518,109 @@ MOSFET output -> VTX/fan power branch
               </div>
               <pre><code>ls -la /Volumes/bootfs
 cat /Volumes/bootfs/network-config
+cat /Volumes/bootfs/meta-data
 cat /Volumes/bootfs/cmdline.txt</code></pre>
             </div>
             <div class="code-card">
               <div class="code-top">
-                <span>Створити fixwifi.sh</span>
-                <button class="copy-btn" type="button" data-copy>Копіювати</button>
-              </div>
-              <pre><code>cat &gt; /Volumes/bootfs/fixwifi.sh &lt;&lt;'EOF'
-#!/bin/bash
-set -ex
-
-BOOT_DIR="/boot/firmware"
-[ -d "$BOOT_DIR" ] || BOOT_DIR="/boot"
-exec &gt; "$BOOT_DIR/fixwifi.log" 2&gt;&amp;1
-
-date
-echo "Writing Wi-Fi recovery profile"
-
-mkdir -p /etc/NetworkManager/system-connections
-
-cat &gt; /etc/NetworkManager/system-connections/vtx-wifi.nmconnection &lt;&lt;'WIFI'
-[connection]
-id=vtx-wifi
-type=wifi
-interface-name=wlan0
-autoconnect=true
-
-[wifi]
-mode=infrastructure
-ssid=YOUR_WIFI_NAME
-
-[wifi-security]
-key-mgmt=wpa-psk
-psk=YOUR_WIFI_PASSWORD
-
-[ipv4]
-method=auto
-
-[ipv6]
-method=auto
-WIFI
-
-chmod 600 /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
-chown root:root /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
-
-nmcli connection reload || true
-
-sed -i 's| systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot||' "$BOOT_DIR/cmdline.txt"
-rm -f "$BOOT_DIR/fixwifi.sh"
-sync
-EOF
-
-chmod +x /Volumes/bootfs/fixwifi.sh</code></pre>
-            </div>
-            <div class="code-card">
-              <div class="code-top">
-                <span>Додати одноразовий запуск</span>
+                <span>Оновити Wi-Fi через cloud-init</span>
                 <button class="copy-btn" type="button" data-copy>Копіювати</button>
               </div>
               <pre><code>python3 - &lt;&lt;'PY'
 from pathlib import Path
-path = Path("/Volumes/bootfs/cmdline.txt")
-token = "systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot"
-line = path.read_text().strip()
-if token not in line:
-    path.write_text(line + " " + token + "\n")
+from datetime import datetime
+
+boot = Path('/Volumes/bootfs')
+ssid = 'YOUR_WIFI_NAME'
+password = 'YOUR_WIFI_PASSWORD'
+instance = 'vtxpi-wifi-recovery-' + datetime.now().strftime('%Y%m%d%H%M%S')
+
+(boot / 'meta-data').write_text(f'instance-id: {instance}\n')
+
+cmdline = (boot / 'cmdline.txt').read_text().strip().split()
+cmdline = [part for part in cmdline if not part.startswith('systemd.run=') and not part.startswith('systemd.run_success_action=')]
+cmdline = [f'ds=nocloud;i={instance}' if part.startswith('ds=nocloud;i=') else part for part in cmdline]
+(boot / 'cmdline.txt').write_text(' '.join(cmdline) + '\n')
+
+(boot / 'network-config').write_text(f'''network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+  wifis:
+    wlan0:
+      dhcp4: true
+      regulatory-domain: "UA"
+      access-points:
+        "{ssid}":
+          password: "{password}"
+      optional: true
+''')
+
+(boot / 'user-data').write_text(f'''#cloud-config
+manage_resolv_conf: false
+
+hostname: vtxpi
+manage_etc_hosts: true
+packages:
+- avahi-daemon
+apt:
+  preserve_sources_list: true
+  conf: |
+    Acquire {{
+      Check-Date "false";
+    }};
+timezone: Europe/Kyiv
+keyboard:
+  model: pc105
+  layout: "us"
+users:
+- name: pi
+  groups: users,adm,dialout,audio,netdev,video,plugdev,cdrom,games,input,gpio,spi,i2c,render,sudo
+  shell: /bin/bash
+  lock_passwd: false
+  passwd: "$y$jB5$NNZQpF3Jh7nHqsqHHNIF5/$5vF8BgoLervTEj.z5V2UjdnlKA8dWnysTCAyNoMZkDC"
+enable_ssh: true
+ssh_pwauth: true
+rpi:
+  interfaces:
+    serial: true
+write_files:
+- path: /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
+  owner: root:root
+  permissions: '0600'
+  content: |
+    [connection]
+    id=vtx-wifi
+    type=wifi
+    interface-name=wlan0
+    autoconnect=true
+
+    [wifi]
+    mode=infrastructure
+    ssid={ssid}
+
+    [wifi-security]
+    key-mgmt=wpa-psk
+    psk={password}
+
+    [ipv4]
+    method=auto
+
+    [ipv6]
+    method=auto
+runcmd:
+- [sh, -c, 'nmcli connection reload || true']
+- [sh, -c, 'nmcli connection up vtx-wifi || true']
+- [sh, -c, 'date > /boot/firmware/cloudwifi.log || date > /boot/cloudwifi.log || true']
+''')
+
+for name in ['fixwifi.sh', 'fixwifi.log']:
+    target = boot / name
+    if target.exists():
+        target.unlink()
 PY</code></pre>
             </div>
             <div class="code-card">
@@ -1590,28 +1628,29 @@ PY</code></pre>
                 <span>Перевірити перед вставленням у Pi</span>
                 <button class="copy-btn" type="button" data-copy>Копіювати</button>
               </div>
-              <pre><code>grep -n "YOUR_WIFI\|systemd.run\|ssid=\|psk=" /Volumes/bootfs/cmdline.txt /Volumes/bootfs/fixwifi.sh /Volumes/bootfs/network-config
+              <pre><code>grep -n "YOUR_WIFI\|systemd.run\|ssid=\|psk=\|instance-id\|ds=nocloud" /Volumes/bootfs/cmdline.txt /Volumes/bootfs/meta-data /Volumes/bootfs/user-data /Volumes/bootfs/network-config
+ls -la /Volumes/bootfs/fixwifi.sh /Volumes/bootfs/fixwifi.log 2&gt;/dev/null || true
 diskutil eject /Volumes/bootfs</code></pre>
             </div>
             <ul>
               <li>Після цього встав SD у Raspberry Pi і подай живлення.</li>
-              <li>Почекай 2-3 хвилини: Pi має виконати fixwifi.sh, перезавантажитись і підключитись до нового Wi-Fi.</li>
-              <li>Після другого boot пробуй ping vtxpi.local, ssh pi@vtxpi.local або відкрий http://vtxpi.local:8080.</li>
+              <li>Почекай 3-5 хвилин: cloud-init має повторно застосувати Wi-Fi і створити NetworkManager profile.</li>
+              <li>Після boot пробуй ping vtxpi.local, ssh pi@vtxpi.local або відкрий http://vtxpi.local:8080.</li>
             </ul>
             <div class="code-card">
               <div class="code-top">
                 <span>Якщо знову не підключилось</span>
                 <button class="copy-btn" type="button" data-copy>Копіювати</button>
               </div>
-              <pre><code>ls -la /Volumes/bootfs/fixwifi.sh
-cat /Volumes/bootfs/fixwifi.log
-grep systemd.run /Volumes/bootfs/cmdline.txt
-grep -n "ssid=\|psk=" /Volumes/bootfs/fixwifi.sh /Volumes/bootfs/network-config</code></pre>
+              <pre><code>cat /Volumes/bootfs/cloudwifi.log
+cat /Volumes/bootfs/cmdline.txt
+cat /Volumes/bootfs/meta-data
+cat /Volumes/bootfs/network-config</code></pre>
             </div>
             <ul>
-              <li>Якщо fixwifi.sh зник і systemd.run зник з cmdline.txt, скрипт виконався. Тоді перевір SSID, пароль, 2.4GHz Wi-Fi і список клієнтів роутера.</li>
-              <li>Якщо fixwifi.sh лишився і systemd.run лишився, скрипт не стартував. Перевір, що cmdline.txt є одним рядком і що SD була коректно eject-нута.</li>
-              <li>Якщо fixwifi.log є, відкрий його: там буде видно, на якому кроці зупинився recovery.</li>
+              <li>Якщо cloudwifi.log з'явився, cloud-init виконав runcmd. Тоді перевір SSID, пароль, 2.4GHz Wi-Fi, WPA2 і список клієнтів роутера.</li>
+              <li>Якщо cloudwifi.log немає, перевір, чи instance-id у meta-data і ds=nocloud у cmdline.txt однакові та нові.</li>
+              <li>Якщо лишились fixwifi.sh або systemd.run, це старий recovery-спосіб. Прибери їх і повтори cloud-init recovery.</li>
             </ul>
           </article>
           <article class="diag-card">
