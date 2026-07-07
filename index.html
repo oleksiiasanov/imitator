@@ -786,7 +786,7 @@
           <button class="tab" type="button" data-view="guide">Повна інструкція</button>
           <button class="tab" type="button" data-view="commands">Команди</button>
           <button class="tab" type="button" data-view="checklist">Чекліст</button>
-          <button class="tab" type="button" data-view="diagnostics">Діагностика</button>
+          <button class="tab" type="button" data-view="diagnostics">FAQ</button>
         </nav>
       </div>
     </header>
@@ -1201,127 +1201,6 @@ ssh pi@192.168.X.X</code></pre>
               </div>
             </article>
 
-            <article class="phase-card" id="phase-wifi-recovery">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Recovery</p>
-                  <h2 class="phase-title">Змінити Wi-Fi без перезапису SD</h2>
-                  <p class="phase-summary">Якщо роутер або пароль змінився і Raspberry Pi зникла з мережі, можна вставити microSD у Mac і прописати новий Wi-Fi через одноразовий boot-скрипт.</p>
-                </div>
-              </header>
-              <div class="phase-body">
-                <div class="info-grid">
-                  <div class="note warning">
-                    <strong>Не натискай Write в Imager</strong>
-                    <p>Write повністю перезаписує SD-карту. Для зміни Wi-Fi після встановлення використовуй bootfs recovery нижче.</p>
-                  </div>
-                  <div class="note">
-                    <strong>Де лежить файл</strong>
-                    <p>На Mac boot-розділ зазвичай відкривається як <strong>/Volumes/bootfs</strong>. Файл network-config показує Wi-Fi першого запуску.</p>
-                  </div>
-                </div>
-
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Встав microSD у Mac і перевір, що bootfs змонтований.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Перевірити bootfs</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>ls -la /Volumes/bootfs
-cat /Volumes/bootfs/network-config</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Створи одноразовий скрипт. Заміни YOUR_WIFI_NAME і YOUR_WIFI_PASSWORD на нові дані.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>fixwifi.sh</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>cat &gt; /Volumes/bootfs/fixwifi.sh &lt;&lt;'EOF'
-#!/bin/bash
-set -e
-
-cat &gt; /etc/NetworkManager/system-connections/vtx-wifi.nmconnection &lt;&lt;'WIFI'
-[connection]
-id=vtx-wifi
-type=wifi
-interface-name=wlan0
-autoconnect=true
-
-[wifi]
-mode=infrastructure
-ssid=YOUR_WIFI_NAME
-
-[wifi-security]
-key-mgmt=wpa-psk
-psk=YOUR_WIFI_PASSWORD
-
-[ipv4]
-method=auto
-
-[ipv6]
-method=auto
-WIFI
-
-chmod 600 /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
-chown root:root /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
-
-sed -i 's| systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot||' /boot/firmware/cmdline.txt
-rm -f /boot/firmware/fixwifi.sh
-EOF
-
-chmod +x /Volumes/bootfs/fixwifi.sh</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Додай одноразовий запуск у кінець cmdline.txt. Файл має залишитись одним рядком.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Додати systemd.run</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>python3 - &lt;&lt;'PY'
-from pathlib import Path
-path = Path("/Volumes/bootfs/cmdline.txt")
-token = "systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot"
-line = path.read_text().strip()
-if token not in line:
-    path.write_text(line + " " + token + "\n")
-PY</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Витягни SD, встав її назад у Raspberry Pi і подай живлення. Плата завантажиться, пропише Wi-Fi, сама перезавантажиться і після другого boot має з'явитись у новій мережі.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Після reboot</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>ping vtxpi.local
-ssh pi@vtxpi.local
-http://vtxpi.local:8080</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="note">
-                  <strong>Можна повторювати</strong>
-                  <p>Так можна робити щоразу, коли змінився Wi-Fi. Для першого старту достатньо змінити network-config, але для системи, яка вже запускалась, надійніший саме fixwifi.sh.</p>
-                </div>
-              </div>
-            </article>
-
             <article class="phase-card" id="phase-composite">
               <header class="phase-head">
                 <div>
@@ -1620,8 +1499,121 @@ MOSFET output -> VTX/fan power branch
         </div>
       </section>
 
-      <section class="view" id="view-diagnostics" aria-label="Діагностика">
+      <section class="view" id="view-diagnostics" aria-label="FAQ і діагностика">
         <div class="diagnostics">
+          <article class="diag-card">
+            <h3>FAQ: змінити Wi-Fi без перезапису SD</h3>
+            <p>Використовуй це, якщо змінився роутер, SSID або пароль, і Raspberry Pi більше не з'являється в мережі. Не натискай Write в Raspberry Pi Imager: це перезапише всю SD-карту.</p>
+            <ul>
+              <li>Встав microSD у Mac.</li>
+              <li>Переконайся, що boot-розділ відкрився як /Volumes/bootfs.</li>
+              <li>Заміни YOUR_WIFI_NAME і YOUR_WIFI_PASSWORD на реальні дані Wi-Fi.</li>
+              <li>Raspberry Pi Zero 2 W підключається тільки до 2.4GHz Wi-Fi.</li>
+            </ul>
+            <div class="code-card">
+              <div class="code-top">
+                <span>Перевірити bootfs</span>
+                <button class="copy-btn" type="button" data-copy>Копіювати</button>
+              </div>
+              <pre><code>ls -la /Volumes/bootfs
+cat /Volumes/bootfs/network-config
+cat /Volumes/bootfs/cmdline.txt</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-top">
+                <span>Створити fixwifi.sh</span>
+                <button class="copy-btn" type="button" data-copy>Копіювати</button>
+              </div>
+              <pre><code>cat &gt; /Volumes/bootfs/fixwifi.sh &lt;&lt;'EOF'
+#!/bin/bash
+set -ex
+
+BOOT_DIR="/boot/firmware"
+[ -d "$BOOT_DIR" ] || BOOT_DIR="/boot"
+exec &gt; "$BOOT_DIR/fixwifi.log" 2&gt;&amp;1
+
+date
+echo "Writing Wi-Fi recovery profile"
+
+mkdir -p /etc/NetworkManager/system-connections
+
+cat &gt; /etc/NetworkManager/system-connections/vtx-wifi.nmconnection &lt;&lt;'WIFI'
+[connection]
+id=vtx-wifi
+type=wifi
+interface-name=wlan0
+autoconnect=true
+
+[wifi]
+mode=infrastructure
+ssid=YOUR_WIFI_NAME
+
+[wifi-security]
+key-mgmt=wpa-psk
+psk=YOUR_WIFI_PASSWORD
+
+[ipv4]
+method=auto
+
+[ipv6]
+method=auto
+WIFI
+
+chmod 600 /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
+chown root:root /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
+
+nmcli connection reload || true
+
+sed -i 's| systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot||' "$BOOT_DIR/cmdline.txt"
+rm -f "$BOOT_DIR/fixwifi.sh"
+sync
+EOF
+
+chmod +x /Volumes/bootfs/fixwifi.sh</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-top">
+                <span>Додати одноразовий запуск</span>
+                <button class="copy-btn" type="button" data-copy>Копіювати</button>
+              </div>
+              <pre><code>python3 - &lt;&lt;'PY'
+from pathlib import Path
+path = Path("/Volumes/bootfs/cmdline.txt")
+token = "systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot"
+line = path.read_text().strip()
+if token not in line:
+    path.write_text(line + " " + token + "\n")
+PY</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-top">
+                <span>Перевірити перед вставленням у Pi</span>
+                <button class="copy-btn" type="button" data-copy>Копіювати</button>
+              </div>
+              <pre><code>grep -n "YOUR_WIFI\|systemd.run\|ssid=\|psk=" /Volumes/bootfs/cmdline.txt /Volumes/bootfs/fixwifi.sh /Volumes/bootfs/network-config
+diskutil eject /Volumes/bootfs</code></pre>
+            </div>
+            <ul>
+              <li>Після цього встав SD у Raspberry Pi і подай живлення.</li>
+              <li>Почекай 2-3 хвилини: Pi має виконати fixwifi.sh, перезавантажитись і підключитись до нового Wi-Fi.</li>
+              <li>Після другого boot пробуй ping vtxpi.local, ssh pi@vtxpi.local або відкрий http://vtxpi.local:8080.</li>
+            </ul>
+            <div class="code-card">
+              <div class="code-top">
+                <span>Якщо знову не підключилось</span>
+                <button class="copy-btn" type="button" data-copy>Копіювати</button>
+              </div>
+              <pre><code>ls -la /Volumes/bootfs/fixwifi.sh
+cat /Volumes/bootfs/fixwifi.log
+grep systemd.run /Volumes/bootfs/cmdline.txt
+grep -n "ssid=\|psk=" /Volumes/bootfs/fixwifi.sh /Volumes/bootfs/network-config</code></pre>
+            </div>
+            <ul>
+              <li>Якщо fixwifi.sh зник і systemd.run зник з cmdline.txt, скрипт виконався. Тоді перевір SSID, пароль, 2.4GHz Wi-Fi і список клієнтів роутера.</li>
+              <li>Якщо fixwifi.sh лишився і systemd.run лишився, скрипт не стартував. Перевір, що cmdline.txt є одним рядком і що SD була коректно eject-нута.</li>
+              <li>Якщо fixwifi.log є, відкрий його: там буде видно, на якому кроці зупинився recovery.</li>
+            </ul>
+          </article>
           <article class="diag-card">
             <h3>Немає відеосигналу</h3>
             <ul>
@@ -1640,7 +1632,7 @@ MOSFET output -> VTX/fan power branch
               <li>Переконайся, що ноутбук і Raspberry Pi в одній Wi-Fi мережі.</li>
               <li>Спробуй ssh-keygen -R vtxpi.local.</li>
               <li>Знайди IP через arp -a або сторінку роутера.</li>
-              <li>Якщо Wi-Fi міняли після першого старту, не натискай Write в Imager. Встав SD у Mac і виконай bootfs recovery з розділу "Змінити Wi-Fi без перезапису SD".</li>
+              <li>Якщо Wi-Fi міняли після першого старту, виконай FAQ: змінити Wi-Fi без перезапису SD.</li>
             </ul>
           </article>
           <article class="diag-card">
