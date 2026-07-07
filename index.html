@@ -886,7 +886,7 @@
                       <span>SSH</span>
                       <button class="copy-btn" type="button" data-copy>Копіювати</button>
                     </div>
-                    <pre><code>ssh pi@raspberrypi.local</code></pre>
+                    <pre><code>ssh pi@vtxpi.local</code></pre>
                   </div>
                 </div>
               </li>
@@ -952,7 +952,7 @@ cd imitator</code></pre>
                       <span>Панель керування</span>
                       <button class="copy-btn" type="button" data-copy>Копіювати</button>
                     </div>
-                    <pre><code>http://raspberrypi.local:8080
+                    <pre><code>http://vtxpi.local:8080
 http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
                   </div>
                   <div class="result">
@@ -980,7 +980,7 @@ http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
             <ul>
               <li>Увімкни пристрій.</li>
               <li>Підключись до тієї самої Wi-Fi мережі, де Raspberry Pi.</li>
-              <li>Відкрий http://raspberrypi.local:8080 або http://&lt;raspberry-pi-ip&gt;:8080.</li>
+              <li>Відкрий http://vtxpi.local:8080 або http://&lt;raspberry-pi-ip&gt;:8080.</li>
               <li>Завантаж нове відео і дочекайся конвертації.</li>
               <li>Старе відео автоматично заміниться новим.</li>
             </ul>
@@ -991,7 +991,7 @@ http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
               <li>Перевір, чи пристрій увімкнений.</li>
               <li>Перевір, чи пройшло 1-2 хвилини після подачі живлення.</li>
               <li>Переконайся, що телефон або ноутбук у тій самій Wi-Fi мережі, що Raspberry Pi.</li>
-              <li>Перевір адресу: http://raspberrypi.local:8080 або IP Raspberry Pi.</li>
+              <li>Перевір адресу: http://vtxpi.local:8080 або IP Raspberry Pi.</li>
               <li>Онови сторінку або перезапусти живлення після паузи 10 секунд.</li>
             </ul>
           </article>
@@ -1019,7 +1019,7 @@ http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
             <h3>Швидкі значення</h3>
             <ul>
               <li>Wi-Fi: мережа, задана в Raspberry Pi Imager.</li>
-              <li>Панель: http://raspberrypi.local:8080 або http://&lt;raspberry-pi-ip&gt;:8080.</li>
+              <li>Панель: http://vtxpi.local:8080 або http://&lt;raspberry-pi-ip&gt;:8080.</li>
               <li>Сторінка має назву VTX Video Control.</li>
             </ul>
           </article>
@@ -1162,7 +1162,7 @@ Battery - -> VTX/MOSFET/Pi GND</code></pre>
                           <span>Основне SSH-підключення</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>ssh pi@raspberrypi.local</code></pre>
+                        <pre><code>ssh pi@vtxpi.local</code></pre>
                       </div>
                     </div>
                   </li>
@@ -1171,11 +1171,11 @@ Battery - -> VTX/MOSFET/Pi GND</code></pre>
                       <p>Якщо macOS/Linux свариться на старий SSH-ключ, видали старий запис і підключись знову.</p>
                       <div class="code-card">
                         <div class="code-top">
-                          <span>Оновити SSH-ключ для raspberrypi.local</span>
+                          <span>Оновити SSH-ключ для vtxpi.local</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>ssh-keygen -R raspberrypi.local
-ssh pi@raspberrypi.local</code></pre>
+                        <pre><code>ssh-keygen -R vtxpi.local
+ssh pi@vtxpi.local</code></pre>
                       </div>
                     </div>
                   </li>
@@ -1307,9 +1307,9 @@ PY</code></pre>
                           <span>Після reboot</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>ping raspberrypi.local
-ssh pi@raspberrypi.local
-http://raspberrypi.local:8080</code></pre>
+                        <pre><code>ping vtxpi.local
+ssh pi@vtxpi.local
+http://vtxpi.local:8080</code></pre>
                       </div>
                     </div>
                   </li>
@@ -1370,7 +1370,7 @@ cd imitator</code></pre>
                           <span>Після reboot</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>http://raspberrypi.local:8080
+                        <pre><code>http://vtxpi.local:8080
 http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
                       </div>
                     </div>
@@ -1494,7 +1494,7 @@ journalctl -u vtx-player.service -n 80 --no-pager</code></pre>
                           <span>System Status</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>http://raspberrypi.local:8080/system
+                        <pre><code>http://vtxpi.local:8080/system
 http://&lt;raspberry-pi-ip&gt;:8080/system</code></pre>
                       </div>
                     </div>
@@ -1638,7 +1638,7 @@ MOSFET output -> VTX/fan power branch
             <ul>
               <li>Почекай 2-5 хвилин після першого boot.</li>
               <li>Переконайся, що ноутбук і Raspberry Pi в одній Wi-Fi мережі.</li>
-              <li>Спробуй ssh-keygen -R raspberrypi.local.</li>
+              <li>Спробуй ssh-keygen -R vtxpi.local.</li>
               <li>Знайди IP через arp -a або сторінку роутера.</li>
               <li>Якщо Wi-Fi міняли після першого старту, не натискай Write в Imager. Встав SD у Mac і виконай bootfs recovery з розділу "Змінити Wi-Fi без перезапису SD".</li>
             </ul>
@@ -1672,12 +1672,12 @@ MOSFET output -> VTX/fan power branch
 
   <script>
     const commands = [
-      { title: "Адреса панелі VTX Video Control", phase: "Quickstart", code: "http://raspberrypi.local:8080\nhttp://<raspberry-pi-ip>:8080" },
-      { title: "Адреса System Status", phase: "Quickstart", code: "http://raspberrypi.local:8080/system\nhttp://<raspberry-pi-ip>:8080/system" },
+      { title: "Адреса панелі VTX Video Control", phase: "Quickstart", code: "http://vtxpi.local:8080\nhttp://<raspberry-pi-ip>:8080" },
+      { title: "Адреса System Status", phase: "Quickstart", code: "http://vtxpi.local:8080/system\nhttp://<raspberry-pi-ip>:8080/system" },
       { title: "Приклади першого запуску", phase: "Quickstart", code: "0   = запустити одразу\n20  = запустити через 20 хвилин\n60  = запустити через 1 годину\n180 = запустити через 3 години" },
       { title: "Приклад інтервалу повтору", phase: "Quickstart", code: "20" },
-      { title: "SSH до Raspberry Pi", phase: "OS і SSH", code: "ssh pi@raspberrypi.local" },
-      { title: "Скинути старий SSH-ключ і зайти знову", phase: "OS і SSH", code: "ssh-keygen -R raspberrypi.local\nssh pi@raspberrypi.local" },
+      { title: "SSH до Raspberry Pi", phase: "OS і SSH", code: "ssh pi@vtxpi.local" },
+      { title: "Скинути старий SSH-ключ і зайти знову", phase: "OS і SSH", code: "ssh-keygen -R vtxpi.local\nssh pi@vtxpi.local" },
       { title: "Знайти IP і підключитись по IP", phase: "OS і SSH", code: "arp -a\nssh pi@192.168.X.X" },
       { title: "Клонувати репозиторій", phase: "Install", code: "git clone https://github.com/oleksiiasanov/imitator.git\ncd imitator" },
       { title: "Запустити installer", phase: "Install", code: "sudo bash install.sh" },
