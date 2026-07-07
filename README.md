@@ -81,3 +81,15 @@ http://<raspberry-pi-ip>:8080
 ```
 
 Upload a video in the web panel. The app converts it to `video_fpv.mp4`, enables GPIO17 MOSFET power before playback, starts MPV on Composite-1, disables MOSFET power after stop/exit, and keeps the configured autoplay settings in `config.json`.
+
+## Changing Wi-Fi Later
+
+If the router or Wi-Fi password changes and the Raspberry Pi no longer appears on the network, do not rewrite the SD card unless you want a fresh install.
+
+With the SD card inserted into a Mac, the visible boot partition is usually mounted as:
+
+```text
+/Volumes/bootfs
+```
+
+The file `/Volumes/bootfs/network-config` contains the Wi-Fi used during first boot. For an already booted system, use a one-time recovery script on the boot partition to write a new NetworkManager connection on the next Raspberry Pi boot. Keep `/Volumes/bootfs/cmdline.txt` as one single line when adding the `systemd.run` command.

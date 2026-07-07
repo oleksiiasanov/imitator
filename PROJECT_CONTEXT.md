@@ -184,6 +184,7 @@ Current stack:
 * JavaScript upload progress in `static/app.js`
 * CSS styling in `static/style.css`
 * Static production instruction page in root `index.html`
+* SD-card Wi-Fi recovery instructions in `index.html` and `README.md` for already installed systems that no longer join the router Wi-Fi
 
 Current Python modules/files:
 

@@ -1196,7 +1196,128 @@ ssh pi@192.168.X.X</code></pre>
 
                 <div class="result">
                   <strong>Результат фази</strong>
-                  <p>Ти бачиш shell Raspberry Pi через SSH. Якщо Wi-Fi змінився після першого старту, найнадійніше переписати SD через Imager з правильним SSID.</p>
+                  <p>Ти бачиш shell Raspberry Pi через SSH. Якщо Wi-Fi змінився після першого старту, SD не треба переписувати: можна оновити Wi-Fi через bootfs recovery зі вставленої microSD.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="phase-card" id="phase-wifi-recovery">
+              <header class="phase-head">
+                <div>
+                  <p class="phase-kicker">Recovery</p>
+                  <h2 class="phase-title">Змінити Wi-Fi без перезапису SD</h2>
+                  <p class="phase-summary">Якщо роутер або пароль змінився і Raspberry Pi зникла з мережі, можна вставити microSD у Mac і прописати новий Wi-Fi через одноразовий boot-скрипт.</p>
+                </div>
+              </header>
+              <div class="phase-body">
+                <div class="info-grid">
+                  <div class="note warning">
+                    <strong>Не натискай Write в Imager</strong>
+                    <p>Write повністю перезаписує SD-карту. Для зміни Wi-Fi після встановлення використовуй bootfs recovery нижче.</p>
+                  </div>
+                  <div class="note">
+                    <strong>Де лежить файл</strong>
+                    <p>На Mac boot-розділ зазвичай відкривається як <strong>/Volumes/bootfs</strong>. Файл network-config показує Wi-Fi першого запуску.</p>
+                  </div>
+                </div>
+
+                <ol class="steps">
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Встав microSD у Mac і перевір, що bootfs змонтований.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Перевірити bootfs</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>ls -la /Volumes/bootfs
+cat /Volumes/bootfs/network-config</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Створи одноразовий скрипт. Заміни YOUR_WIFI_NAME і YOUR_WIFI_PASSWORD на нові дані.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>fixwifi.sh</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>cat &gt; /Volumes/bootfs/fixwifi.sh &lt;&lt;'EOF'
+#!/bin/bash
+set -e
+
+cat &gt; /etc/NetworkManager/system-connections/vtx-wifi.nmconnection &lt;&lt;'WIFI'
+[connection]
+id=vtx-wifi
+type=wifi
+interface-name=wlan0
+autoconnect=true
+
+[wifi]
+mode=infrastructure
+ssid=YOUR_WIFI_NAME
+
+[wifi-security]
+key-mgmt=wpa-psk
+psk=YOUR_WIFI_PASSWORD
+
+[ipv4]
+method=auto
+
+[ipv6]
+method=auto
+WIFI
+
+chmod 600 /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
+chown root:root /etc/NetworkManager/system-connections/vtx-wifi.nmconnection
+
+sed -i 's| systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot||' /boot/firmware/cmdline.txt
+rm -f /boot/firmware/fixwifi.sh
+EOF
+
+chmod +x /Volumes/bootfs/fixwifi.sh</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Додай одноразовий запуск у кінець cmdline.txt. Файл має залишитись одним рядком.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Додати systemd.run</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>python3 - &lt;&lt;'PY'
+from pathlib import Path
+path = Path("/Volumes/bootfs/cmdline.txt")
+token = "systemd.run=/boot/firmware/fixwifi.sh systemd.run_success_action=reboot"
+line = path.read_text().strip()
+if token not in line:
+    path.write_text(line + " " + token + "\n")
+PY</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="step">
+                    <div class="step-content">
+                      <p>Витягни SD, встав її назад у Raspberry Pi і подай живлення. Плата завантажиться, пропише Wi-Fi, сама перезавантажиться і після другого boot має з'явитись у новій мережі.</p>
+                      <div class="code-card">
+                        <div class="code-top">
+                          <span>Після reboot</span>
+                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                        </div>
+                        <pre><code>ping raspberrypi.local
+ssh pi@raspberrypi.local
+http://raspberrypi.local:8080</code></pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+
+                <div class="note">
+                  <strong>Можна повторювати</strong>
+                  <p>Так можна робити щоразу, коли змінився Wi-Fi. Для першого старту достатньо змінити network-config, але для системи, яка вже запускалась, надійніший саме fixwifi.sh.</p>
                 </div>
               </div>
             </article>
@@ -1519,7 +1640,7 @@ MOSFET output -> VTX/fan power branch
               <li>Переконайся, що ноутбук і Raspberry Pi в одній Wi-Fi мережі.</li>
               <li>Спробуй ssh-keygen -R raspberrypi.local.</li>
               <li>Знайди IP через arp -a або сторінку роутера.</li>
-              <li>Якщо Wi-Fi міняли після першого старту, перепиши SD через Imager.</li>
+              <li>Якщо Wi-Fi міняли після першого старту, не натискай Write в Imager. Встав SD у Mac і виконай bootfs recovery з розділу "Змінити Wi-Fi без перезапису SD".</li>
             </ul>
           </article>
           <article class="diag-card">
