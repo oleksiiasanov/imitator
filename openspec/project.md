@@ -11,6 +11,7 @@ VTX Player is a Raspberry Pi Zero 2 W analog FPV video playback controller. It p
 - FFmpeg / FFprobe
 - MPV
 - systemd
+- NetworkManager / nmcli
 - Raspberry Pi OS Lite
 - Raspberry Pi composite TV output
 - Shell installer (`install.sh`)
@@ -39,6 +40,6 @@ VTX Player is a Raspberry Pi Zero 2 W analog FPV video playback controller. It p
 - Do not add roadmap features unless explicitly requested.
 
 ## External Dependencies
-- Raspberry Pi OS apt packages: Python, FFmpeg, MPV, systemd tooling, `gpiod`, `python3-gpiozero`, and `python3-lgpio`.
+- Raspberry Pi OS apt packages: Python, FFmpeg, MPV, systemd tooling, NetworkManager, `gpiod`, `python3-gpiozero`, and `python3-lgpio`.
 - Python web dependencies are installed into project-local `.venv`.
 - GPIO Python packages are not installed through pip; `.venv` uses system site packages to import apt-installed `gpiozero` and `lgpio`.

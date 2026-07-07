@@ -29,21 +29,26 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] Installer creates `.venv` with system site packages enabled.
 - [ ] Installer installs only Flask/Werkzeug from `requirements.txt` with pip.
 - [ ] Installer installs `gpiod`, `python3-gpiozero`, and `python3-lgpio` with apt.
+- [ ] Installer installs NetworkManager tooling for Wi-Fi AP mode.
+- [ ] Installer configures NetworkManager connection `vtx-hotspot`.
 - [ ] `pip install -r requirements.txt` does not build or install `gpiozero` or `lgpio`.
 - [ ] Installer disables graphical desktop/display manager if present.
 - [ ] No desktop compositor holds `/dev/dri/card0` during playback.
 - [ ] Installer creates `uploads/`, `videos/`, and `config.json`.
 - [ ] Installer installs and enables `vtx-player.service`.
-- [ ] Installer self-check reports ffmpeg, mpv, GPIO17, uploads, videos, and config.json as OK.
-- [ ] Installer prints the web URL and journal command.
+- [ ] Installer self-check reports ffmpeg, mpv, Wi-Fi AP, GPIO17, uploads, videos, and config.json as OK.
+- [ ] Installer prints SSID `VTX-SETUP`, password `vtxplayer`, web URL, and journal command.
 - [ ] Running `sudo bash install.sh` a second time succeeds without breaking the service.
 
 ## Reboot And First Boot
 
 - [ ] Reboot after installation.
 - [ ] `vtx-player.service` starts automatically after reboot.
-- [ ] The web UI opens at `http://<raspberry-pi-ip>:8080`.
+- [ ] Wi-Fi network `VTX-SETUP` appears after reboot.
+- [ ] Browser device can join `VTX-SETUP` using password `vtxplayer`.
+- [ ] The web UI opens at `http://10.42.0.1:8080`.
 - [ ] `/system` opens and is read-only.
+- [ ] `/system` shows Wi-Fi/AP status clearly.
 - [ ] Composite output status is shown clearly.
 - [ ] GPIO17 status is shown clearly.
 - [ ] MOSFET status is shown clearly.
@@ -51,8 +56,10 @@ Use this checklist before tagging or handing off a release candidate.
 
 ## Wi-Fi
 
-- [ ] Raspberry Pi remains reachable over the configured Wi-Fi network after reboot.
-- [ ] Browser access works from another device on the same network.
+- [ ] Raspberry Pi provides Wi-Fi AP `VTX-SETUP` after reboot.
+- [ ] AP assigns an address to a phone or laptop.
+- [ ] Browser access works from a device connected to `VTX-SETUP`.
+- [ ] Re-running `sudo bash install.sh` keeps AP access working.
 
 ## Web UI
 

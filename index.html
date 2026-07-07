@@ -857,7 +857,7 @@
             <div class="info-grid">
               <div class="note success">
                 <strong>Результат</strong>
-                <p>Після install.sh пристрій сам запускає веб-панель у твоїй Wi-Fi мережі. SSH більше не потрібен для звичайного користування.</p>
+                <p>Після install.sh пристрій сам створює Wi-Fi точку <strong>VTX-SETUP</strong> і запускає веб-панель на <strong>10.42.0.1:8080</strong>. SSH більше не потрібен для звичайного користування.</p>
               </div>
               <div class="note danger">
                 <strong>Безпека</strong>
@@ -905,7 +905,7 @@ cd imitator</code></pre>
               </li>
               <li class="step">
                 <div class="step-content">
-                  <p>Запусти скрипт встановлення. Він сам встановить пакети, створить .venv, налаштує composite-вихід, systemd service, GPIO17/MOSFET і перезавантажить пристрій.</p>
+                  <p>Запусти скрипт встановлення. Він сам встановить пакети, створить .venv, налаштує Wi-Fi точку, composite-вихід, systemd service, GPIO17/MOSFET і перезавантажить пристрій.</p>
                   <div class="code-card">
                     <div class="code-top">
                       <span>Встановлення</span>
@@ -924,23 +924,24 @@ cd imitator</code></pre>
                   <p>Зачекай 1–2 хвилини, поки Raspberry Pi завантажиться після перезавантаження.</p>
                   <div class="result">
                     <strong>Очікуваний результат</strong>
-                    <p>Raspberry Pi підключається до Wi-Fi, який ти задав у Imager, і запускає веб-панель.</p>
+                    <p>Raspberry Pi створює Wi-Fi точку VTX-SETUP і запускає веб-панель.</p>
                   </div>
                 </div>
               </li>
               <li class="step">
                 <div class="step-content">
-                  <p>На телефоні або ноутбуці підключись до тієї самої Wi-Fi мережі, яку ти задав для Raspberry Pi в Imager.</p>
+                  <p>На телефоні або ноутбуці підключись до Wi-Fi точки Raspberry Pi.</p>
                   <div class="code-card">
                     <div class="code-top">
                       <span>Wi-Fi</span>
                       <button class="copy-btn" type="button" data-copy>Копіювати</button>
                     </div>
-                    <pre><code>та сама мережа, що в Raspberry Pi Imager</code></pre>
+                    <pre><code>SSID: VTX-SETUP
+Password: vtxplayer</code></pre>
                   </div>
                   <div class="note">
                     <strong>Нормальна поведінка</strong>
-                    <p>Wi-Fi Access Point ще не реалізований. Якщо потрібна автономна мережа без роутера, це наступний окремий етап.</p>
+                    <p>Після встановлення зовнішній роутер для керування не потрібен. Raspberry Pi сама роздає локальну Wi-Fi мережу для веб-панелі.</p>
                   </div>
                 </div>
               </li>
@@ -952,8 +953,7 @@ cd imitator</code></pre>
                       <span>Панель керування</span>
                       <button class="copy-btn" type="button" data-copy>Копіювати</button>
                     </div>
-                    <pre><code>http://vtxpi.local:8080
-http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
+                    <pre><code>http://10.42.0.1:8080</code></pre>
                   </div>
                   <div class="result">
                     <strong>Фінальний результат</strong>
@@ -979,8 +979,8 @@ http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
             <h3>Замінити відео пізніше</h3>
             <ul>
               <li>Увімкни пристрій.</li>
-              <li>Підключись до тієї самої Wi-Fi мережі, де Raspberry Pi.</li>
-              <li>Відкрий http://vtxpi.local:8080 або http://&lt;raspberry-pi-ip&gt;:8080.</li>
+              <li>Підключись до Wi-Fi VTX-SETUP.</li>
+              <li>Відкрий http://10.42.0.1:8080.</li>
               <li>Завантаж нове відео і дочекайся конвертації.</li>
               <li>Старе відео автоматично заміниться новим.</li>
             </ul>
@@ -990,8 +990,8 @@ http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
             <ul>
               <li>Перевір, чи пристрій увімкнений.</li>
               <li>Перевір, чи пройшло 1-2 хвилини після подачі живлення.</li>
-              <li>Переконайся, що телефон або ноутбук у тій самій Wi-Fi мережі, що Raspberry Pi.</li>
-              <li>Перевір адресу: http://vtxpi.local:8080 або IP Raspberry Pi.</li>
+              <li>Переконайся, що телефон або ноутбук підключений до Wi-Fi VTX-SETUP.</li>
+              <li>Перевір адресу: http://10.42.0.1:8080.</li>
               <li>Онови сторінку або перезапусти живлення після паузи 10 секунд.</li>
             </ul>
           </article>
@@ -1018,8 +1018,8 @@ http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
           <article class="diag-card">
             <h3>Швидкі значення</h3>
             <ul>
-              <li>Wi-Fi: мережа, задана в Raspberry Pi Imager.</li>
-              <li>Панель: http://vtxpi.local:8080 або http://&lt;raspberry-pi-ip&gt;:8080.</li>
+              <li>Wi-Fi: VTX-SETUP, пароль vtxplayer.</li>
+              <li>Панель: http://10.42.0.1:8080.</li>
               <li>Сторінка має назву VTX Video Control.</li>
             </ul>
           </article>
@@ -1206,7 +1206,7 @@ ssh pi@192.168.X.X</code></pre>
                 <div>
                   <p class="phase-kicker">Фаза 3</p>
                   <h2 class="phase-title">Запустити install.sh і перевірити перший boot</h2>
-                  <p class="phase-summary">Composite, Python .venv, залежності, systemd service, runtime folders і GPIO self-check налаштовує install.sh. Вручну системні файли не редагуються.</p>
+                  <p class="phase-summary">Wi-Fi точку, Composite, Python .venv, залежності, systemd service, runtime folders і GPIO self-check налаштовує install.sh. Вручну системні файли не редагуються.</p>
                 </div>
                 <button class="small-btn" type="button" data-copy-phase="phase-composite">Копіювати команди фази</button>
               </header>
@@ -1237,20 +1237,21 @@ cd imitator</code></pre>
                       </div>
                       <div class="note">
                         <strong>Що робить install.sh</strong>
-                        <p>Ставить apt-пакети, створює .venv з доступом до системних Python-пакетів, ставить Flask/Werkzeug через pip, ставить gpiozero/lgpio тільки через apt, створює uploads/videos/config.json, вимикає desktop/display manager якщо він є, налаштовує PAL Composite-1, встановлює vtx-player.service і запускає self-check.</p>
+                        <p>Ставить apt-пакети, створює .venv з доступом до системних Python-пакетів, ставить Flask/Werkzeug через pip, ставить gpiozero/lgpio тільки через apt, створює uploads/videos/config.json, налаштовує Wi-Fi точку VTX-SETUP, вимикає desktop/display manager якщо він є, налаштовує PAL Composite-1, встановлює vtx-player.service і запускає self-check.</p>
                       </div>
                     </div>
                   </li>
                   <li class="step">
                     <div class="step-content">
-                      <p>Якщо installer просить reboot або перезавантажує Raspberry Pi, дочекайся 1-2 хвилини після старту.</p>
+                      <p>Якщо installer просить reboot або перезавантажує Raspberry Pi, дочекайся 1-2 хвилини після старту, підключись до VTX-SETUP і відкрий панель.</p>
                       <div class="code-card">
                         <div class="code-top">
                           <span>Після reboot</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>http://vtxpi.local:8080
-http://&lt;raspberry-pi-ip&gt;:8080</code></pre>
+                        <pre><code>SSID: VTX-SETUP
+Password: vtxplayer
+http://10.42.0.1:8080</code></pre>
                       </div>
                     </div>
                   </li>
@@ -1367,14 +1368,13 @@ journalctl -u vtx-player.service -n 80 --no-pager</code></pre>
                   </li>
                   <li class="step">
                     <div class="step-content">
-                      <p>Відкрий read-only сторінку <strong>System Status</strong> і перевір Application, Playback, Video, Storage, Runtime, GPIO, MOSFET.</p>
+                      <p>Відкрий read-only сторінку <strong>System Status</strong> і перевір Application, Playback, Video, Wi-Fi, Storage, Runtime, GPIO, MOSFET.</p>
                       <div class="code-card">
                         <div class="code-top">
                           <span>System Status</span>
                           <button class="copy-btn" type="button" data-copy>Копіювати</button>
                         </div>
-                        <pre><code>http://vtxpi.local:8080/system
-http://&lt;raspberry-pi-ip&gt;:8080/system</code></pre>
+                        <pre><code>http://10.42.0.1:8080/system</code></pre>
                       </div>
                     </div>
                   </li>
@@ -1703,8 +1703,9 @@ cat /Volumes/bootfs/network-config</code></pre>
 
   <script>
     const commands = [
-      { title: "Адреса панелі VTX Video Control", phase: "Quickstart", code: "http://vtxpi.local:8080\nhttp://<raspberry-pi-ip>:8080" },
-      { title: "Адреса System Status", phase: "Quickstart", code: "http://vtxpi.local:8080/system\nhttp://<raspberry-pi-ip>:8080/system" },
+      { title: "Wi-Fi точка VTX", phase: "Quickstart", code: "SSID: VTX-SETUP\nPassword: vtxplayer" },
+      { title: "Адреса панелі VTX Video Control", phase: "Quickstart", code: "http://10.42.0.1:8080" },
+      { title: "Адреса System Status", phase: "Quickstart", code: "http://10.42.0.1:8080/system" },
       { title: "Приклади першого запуску", phase: "Quickstart", code: "0   = запустити одразу\n20  = запустити через 20 хвилин\n60  = запустити через 1 годину\n180 = запустити через 3 години" },
       { title: "Приклад інтервалу повтору", phase: "Quickstart", code: "20" },
       { title: "SSH до Raspberry Pi", phase: "OS і SSH", code: "ssh pi@vtxpi.local" },
@@ -1731,7 +1732,7 @@ cat /Volumes/bootfs/network-config</code></pre>
       "Pi GPIO17 підключений до MOSFET control input",
       "Battery GND спільний з Pi GND, MOSFET GND і VTX GND",
       "VTX/fan power branch живиться через MOSFET",
-      "Wi-Fi у Raspberry правильний",
+      "Wi-Fi VTX-SETUP доступний після reboot",
       "SSH працює",
       "sudo bash install.sh завершився без помилок",
       ".venv створений всередині проєкту",

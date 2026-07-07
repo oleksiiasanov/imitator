@@ -16,7 +16,9 @@ sudo bash install.sh
 6. After the reboot, open the web panel:
 
 ```text
-http://<raspberry-pi-ip>:8080
+Wi-Fi: VTX-SETUP
+Password: vtxplayer
+URL: http://10.42.0.1:8080
 ```
 
 Use the panel to upload a video, convert it for FPV playback, start or pause playback, and set autoplay timing.
@@ -69,6 +71,7 @@ The installer:
 - Creates a project-local Python environment in `.venv` with access to apt-installed Python packages.
 - Installs only web Python dependencies from `requirements.txt` into `.venv`.
 - Creates the upload and video directories.
+- Configures the Raspberry Pi Wi-Fi Access Point `VTX-SETUP`.
 - Enables composite video output for the Raspberry Pi.
 - Disables the graphical desktop/display manager when present so MPV can control DRM/Composite directly.
 - Installs and enables the `vtx-player` systemd service using `.venv/bin/python`.
@@ -77,14 +80,16 @@ The installer:
 After reboot, the web application starts automatically. Open:
 
 ```text
-http://<raspberry-pi-ip>:8080
+Wi-Fi: VTX-SETUP
+Password: vtxplayer
+URL: http://10.42.0.1:8080
 ```
 
 Upload a video in the web panel. The app converts it to `video_fpv.mp4`, enables GPIO17 MOSFET power before playback, starts MPV on Composite-1, disables MOSFET power after stop/exit, and keeps the configured autoplay settings in `config.json`.
 
 ## Changing Wi-Fi Later
 
-If the router or Wi-Fi password changes and the Raspberry Pi no longer appears on the network, do not rewrite the SD card unless you want a fresh install.
+After `install.sh`, normal access uses the device Wi-Fi Access Point `VTX-SETUP`. Use this recovery section only if you intentionally need router-client Wi-Fi again or cannot reach the AP.
 
 With the SD card inserted into a Mac, the visible boot partition is usually mounted as:
 

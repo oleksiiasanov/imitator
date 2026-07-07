@@ -20,9 +20,37 @@ Steps:
 Expected result:
 
 - Installer finishes with `Installation completed.`
+- Installer prints Wi-Fi `VTX-SETUP`, password `vtxplayer`, and `http://10.42.0.1:8080`.
 - `.venv`, `uploads/`, `videos/`, and `config.json` exist.
 - `vtx-player.service` is enabled.
-- Web UI opens at `http://<raspberry-pi-ip>:8080`.
+- After reboot, Web UI opens at `http://10.42.0.1:8080` from a device connected to `VTX-SETUP`.
+
+Pass/Fail:
+
+- [ ] Pass
+- [ ] Fail
+
+## Test 1A: Wi-Fi Access Point
+
+Preconditions:
+
+- `sudo bash install.sh` has completed.
+- Raspberry Pi has rebooted.
+- A phone or laptop with Wi-Fi is available.
+
+Steps:
+
+1. Open Wi-Fi settings on the phone or laptop.
+2. Join `VTX-SETUP` using password `vtxplayer`.
+3. Open `http://10.42.0.1:8080`.
+4. Open `http://10.42.0.1:8080/system`.
+
+Expected result:
+
+- `VTX-SETUP` is visible.
+- The browser device joins the AP successfully.
+- Main web UI opens.
+- `/system` shows Wi-Fi AP status.
 
 Pass/Fail:
 
@@ -333,8 +361,8 @@ Pass/Fail:
 
 Preconditions:
 
-- Phone or tablet is on the same Wi-Fi network.
-- Web UI is reachable from that device.
+- Phone or tablet is connected to Wi-Fi `VTX-SETUP`.
+- Web UI is reachable from that device at `http://10.42.0.1:8080`.
 
 Steps:
 

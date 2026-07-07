@@ -4,16 +4,25 @@ set -Eeuo pipefail
 # VTX Player production installer for Raspberry Pi OS Lite.
 # Safe to run more than once.
 
-TOTAL_STEPS=8
+TOTAL_STEPS=9
 STEP=0
 REBOOT_REQUIRED=0
 INSTALL_DONE=0
+WIFI_AP_TOUCHED=0
+WIFI_AP_EXISTED=0
 
 INSTALL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SERVICE_NAME="vtx-player"
 VENV="$INSTALL_DIR/.venv"
 UNIT_TEMPLATE="$INSTALL_DIR/services/$SERVICE_NAME.service"
 UNIT_DST="/etc/systemd/system/$SERVICE_NAME.service"
+AP_CONNECTION="vtx-hotspot"
+AP_INTERFACE="wlan0"
+AP_SSID="VTX-SETUP"
+AP_PASSWORD="vtxplayer"
+AP_ADDRESS="10.42.0.1"
+AP_PREFIX="24"
+AP_CHANNEL="6"
 BACKUP_DIR=""
 OS_NAME="unknown"
 OS_VERSION="unknown"
@@ -112,6 +121,22 @@ rollback() {
             rm -f "$UNIT_DST"
             systemctl daemon-reload >/dev/null 2>&1 || true
         fi
+
+        if [ "$WIFI_AP_TOUCHED" -eq 1 ] && command -v nmcli >/dev/null 2>&1; then
+            if [ "$WIFI_AP_EXISTED" -eq 1 ] && [ -f "$BACKUP_DIR/$AP_CONNECTION.nmconnection" ]; then
+                info "Restoring Wi-Fi AP NetworkManager profile..."
+                local ap_restore_path
+                ap_restore_path="$(cat "$BACKUP_DIR/$AP_CONNECTION.path" 2>/dev/null || true)"
+                if [ -n "$ap_restore_path" ]; then
+                    cp -a "$BACKUP_DIR/$AP_CONNECTION.nmconnection" "$ap_restore_path"
+                    chmod 600 "$ap_restore_path" || true
+                fi
+                nmcli connection reload >/dev/null 2>&1 || true
+            elif nmcli connection show "$AP_CONNECTION" >/dev/null 2>&1; then
+                info "Removing Wi-Fi AP profile created by this installer..."
+                nmcli connection delete "$AP_CONNECTION" >/dev/null 2>&1 || true
+            fi
+        fi
     fi
 
     printf '%sCheck logs above, fix the reported error, then run sudo bash install.sh again.%s\n' "$YELLOW" "$RESET" >&2
@@ -201,18 +226,52 @@ disable_graphical_desktop() {
     pkill -KILL -f 'labwc|wayfire|weston|Xorg|pcmanfm|wf-panel-pi|kanshi|lwrespawn' >/dev/null 2>&1 || true
 }
 
-panel_url() {
-    local ip_addr=""
+configure_wifi_ap() {
+    need_command nmcli
 
-    if command -v hostname >/dev/null 2>&1; then
-        ip_addr="$(hostname -I 2>/dev/null | awk '{print $1}')"
-    fi
+    systemctl enable NetworkManager >/dev/null 2>&1 || true
+    systemctl start NetworkManager >/dev/null 2>&1 || true
+    nmcli radio wifi on >/dev/null 2>&1 || true
 
-    if [ -n "$ip_addr" ]; then
-        printf 'http://%s:8080\n' "$ip_addr"
+    if nmcli connection show "$AP_CONNECTION" >/dev/null 2>&1; then
+        WIFI_AP_EXISTED=1
+        local filename
+        filename="$(nmcli -g connection.filename connection show "$AP_CONNECTION" 2>/dev/null || true)"
+        if [ -n "$filename" ] && [ -f "$filename" ]; then
+            cp -a "$filename" "$BACKUP_DIR/$AP_CONNECTION.nmconnection"
+            printf '%s\n' "$filename" > "$BACKUP_DIR/$AP_CONNECTION.path"
+        fi
     else
-        printf '%s\n' "http://<raspberry-pi-ip>:8080"
+        nmcli connection add \
+            type wifi \
+            ifname "$AP_INTERFACE" \
+            con-name "$AP_CONNECTION" \
+            autoconnect yes \
+            ssid "$AP_SSID" >/dev/null
+        REBOOT_REQUIRED=1
     fi
+
+    WIFI_AP_TOUCHED=1
+
+    nmcli connection modify "$AP_CONNECTION" \
+        connection.autoconnect yes \
+        connection.autoconnect-priority 100 \
+        connection.interface-name "$AP_INTERFACE" \
+        802-11-wireless.mode ap \
+        802-11-wireless.ssid "$AP_SSID" \
+        802-11-wireless.band bg \
+        802-11-wireless.channel "$AP_CHANNEL" \
+        wifi-sec.key-mgmt wpa-psk \
+        wifi-sec.psk "$AP_PASSWORD" \
+        ipv4.method shared \
+        ipv4.addresses "$AP_ADDRESS/$AP_PREFIX" \
+        ipv6.method disabled
+
+    nmcli connection reload >/dev/null
+}
+
+panel_url() {
+    printf 'http://%s:8080\n' "$AP_ADDRESS"
 }
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -247,11 +306,16 @@ step "Installing packages..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python3 python3-pip python3-venv \
-    ffmpeg mpv procps \
+    ffmpeg mpv procps network-manager \
     gpiod python3-gpiozero python3-lgpio
 
 need_command ffmpeg
 need_command mpv
+need_command nmcli
+ok
+
+step "Configuring Wi-Fi Access Point..."
+configure_wifi_ap
 ok
 
 step "Configuring Composite..."
@@ -329,7 +393,7 @@ for check in diagnostics["checks"]:
     marker = "OK" if check["ok"] else "FAIL"
     print(f"{marker}: {check['label']} - {check['message']}")
 
-required_before_reboot = {"ffmpeg", "mpv", "GPIO17", "uploads", "videos", "config.json"}
+required_before_reboot = {"ffmpeg", "mpv", "GPIO17", "Wi-Fi AP", "uploads", "videos", "config.json"}
 failed = [
     check["label"]
     for check in diagnostics["checks"]
@@ -363,6 +427,10 @@ log ""
 log "Open:"
 log ""
 log "$(panel_url)"
+log ""
+log "Wi-Fi:"
+log "SSID: $AP_SSID"
+log "Password: $AP_PASSWORD"
 log ""
 log "System:"
 log "$OS_NAME (version: $OS_VERSION, codename: $OS_CODENAME)"

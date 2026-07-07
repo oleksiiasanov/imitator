@@ -180,10 +180,12 @@ Current stack:
 * gpiozero
 * lgpio
 * systemd
+* NetworkManager / nmcli
 * Raspberry Pi composite TV output
 * JavaScript upload progress in `static/app.js`
 * CSS styling in `static/style.css`
 * Static production instruction page in root `index.html`
+* Wi-Fi Access Point `VTX-SETUP` for direct browser access at `http://10.42.0.1:8080`
 * SD-card Wi-Fi recovery FAQ in `index.html` and a README pointer for already installed systems that no longer join the router Wi-Fi; the verified recovery path uses cloud-init `network-config`, `meta-data`, `user-data`, and `cloudwifi.log`
 
 Current Python modules/files:
@@ -202,7 +204,6 @@ Current Python modules/files:
 
 Future:
 
-* Wi-Fi Access Point
 * Logs page
 * Health monitoring
 * OTA or remote update flow
@@ -246,6 +247,7 @@ Current `install.sh` owns:
 * runtime directory creation
 * `config.json` creation and ownership
 * Raspberry Pi composite boot configuration
+* Wi-Fi Access Point configuration through NetworkManager connection `vtx-hotspot`
 * graphical desktop/display manager disablement when present, because MPV DRM playback needs DRM master access
 * systemd service installation and enablement
 * systemd configuration to run `.venv/bin/python`
@@ -254,13 +256,18 @@ Current `install.sh` owns:
 * clear success/failure output
 * rollback for boot config and service file when possible
 
-Current `install.sh` does not configure:
+Current Wi-Fi Access Point settings:
 
-* Wi-Fi Access Point
-* `hostapd`
-* `dnsmasq`
+```text
+Connection: vtx-hotspot
+Interface: wlan0
+SSID: VTX-SETUP
+Password: vtxplayer
+Address: 10.42.0.1/24
+URL: http://10.42.0.1:8080
+```
 
-Those are planned future features.
+The AP is configured with NetworkManager `nmcli`, not raw `hostapd`/`dnsmasq` files.
 
 ---
 
@@ -383,6 +390,7 @@ Current `/system` status page shows:
 * Composite output status
 * free disk space
 * application uptime
+* Wi-Fi/AP configured SSID, connection name, interface, IP, and status
 * GPIO17 availability, backend, and current power state
 * MOSFET power switching availability and current state
 
@@ -390,7 +398,6 @@ Future UI features:
 
 * Logs
 * Temperature
-* Wi-Fi/AP status
 
 ---
 
@@ -635,7 +642,6 @@ A change is complete only if:
 
 Planned features:
 
-* Wi-Fi Access Point
 * Logs page
 * Temperature display
 * OTA update
@@ -678,6 +684,7 @@ Implemented:
 * `config.json` persistence
 * startup/web self-diagnostics
 * read-only `/system` status page
+* Wi-Fi Access Point `VTX-SETUP` at `10.42.0.1`
 * GPIO17 control through `gpio.py`
 * MOSFET power on/off around MPV playback
 * safe MOSFET shutdown on stop, process exit, SIGTERM, SIGINT, and MPV exit
@@ -687,7 +694,6 @@ Implemented:
 
 Planned:
 
-* Wi-Fi Access Point
 * OTA updates
 * dedicated logs/health page beyond the current `/system` status page
 * temperature display

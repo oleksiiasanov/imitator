@@ -26,6 +26,10 @@ VERSION_PATH = APP_DIR / "VERSION"
 FPV_VIDEO = VIDEO_DIR / "video_fpv.mp4"
 APP_STARTED_AT = time.time()
 MOSFET_SETTLE_SECONDS = 0.3
+AP_CONNECTION = "vtx-hotspot"
+AP_INTERFACE = "wlan0"
+AP_SSID = "VTX-SETUP"
+AP_ADDRESS = "10.42.0.1"
 
 APP_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -190,6 +194,75 @@ def readonly_command_status(command):
     return status_item(False, command.upper(), "Missing", f"Install package: {command}")
 
 
+def run_readonly_command(args, timeout=3):
+    try:
+        return subprocess.run(
+            args,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        app.logger.debug("Read-only command failed: %s: %s", args, exc)
+        return None
+
+
+def nmcli_connection_value(field):
+    if not shutil.which("nmcli"):
+        return ""
+
+    result = run_readonly_command(["nmcli", "-g", field, "connection", "show", AP_CONNECTION])
+    if not result or result.returncode != 0:
+        return ""
+
+    return result.stdout.strip()
+
+
+def active_ap_connection():
+    if not shutil.which("nmcli"):
+        return False, ""
+
+    result = run_readonly_command(["nmcli", "-t", "-f", "NAME,DEVICE", "connection", "show", "--active"])
+    if not result or result.returncode != 0:
+        return False, ""
+
+    for line in result.stdout.splitlines():
+        name, _, device = line.partition(":")
+        if name == AP_CONNECTION:
+            return True, device or AP_INTERFACE
+
+    return False, ""
+
+
+def readonly_wifi_ap_status():
+    if not shutil.which("nmcli"):
+        return status_item(False, "Wi-Fi AP", "Missing", "NetworkManager nmcli command is not installed.")
+
+    result = run_readonly_command(["nmcli", "connection", "show", AP_CONNECTION])
+    if not result:
+        return status_item(False, "Wi-Fi AP", "Unknown", "Unable to run nmcli.")
+
+    if result.returncode != 0:
+        detail = result.stderr.strip() or f"Connection {AP_CONNECTION} was not found."
+        return status_item(False, "Wi-Fi AP", "Not configured", detail)
+
+    ssid = nmcli_connection_value("802-11-wireless.ssid") or "unknown"
+    mode = nmcli_connection_value("802-11-wireless.mode") or "unknown"
+    method = nmcli_connection_value("ipv4.method") or "unknown"
+    addresses = nmcli_connection_value("ipv4.addresses") or "unknown"
+    active, device = active_ap_connection()
+
+    value = "Active" if active else "Configured"
+    detail = (
+        f"SSID: {ssid}; connection: {AP_CONNECTION}; interface: {device or AP_INTERFACE}; "
+        f"mode: {mode}; IPv4: {method} {addresses}; URL: http://{AP_ADDRESS}:8080"
+    )
+
+    expected = ssid == AP_SSID and mode == "ap" and method == "shared" and AP_ADDRESS in addresses
+    return status_item(expected, "Wi-Fi AP", value if expected else "Misconfigured", detail)
+
+
 def readonly_composite_status():
     status_files = sorted(Path("/sys/class/drm").glob("card*-Composite-1/status"))
 
@@ -279,6 +352,12 @@ def collect_system_status():
             ],
         },
         {
+            "title": "Wi-Fi",
+            "items": [
+                readonly_wifi_ap_status(),
+            ],
+        },
+        {
             "title": "Storage",
             "items": [
                 readonly_free_disk_status(),
@@ -322,6 +401,18 @@ def command_check(command, package_name):
         False,
         command,
         f"Не знайдено команду {command}. Запусти: sudo bash install.sh або встанови пакет {package_name}."
+    )
+
+
+def wifi_ap_check():
+    status = readonly_wifi_ap_status()
+    if status["ok"]:
+        return diagnostic(True, "Wi-Fi AP", status["detail"])
+
+    return diagnostic(
+        False,
+        "Wi-Fi AP",
+        f"{status['value']}: {status['detail']}. Запусти sudo bash install.sh і перезавантаж Raspberry Pi."
     )
 
 
@@ -405,6 +496,7 @@ def collect_diagnostics():
     checks = [
         command_check("ffmpeg", "ffmpeg"),
         command_check("mpv", "mpv"),
+        wifi_ap_check(),
         composite_check(),
         gpio_check(),
         directory_check(UPLOAD_DIR, "uploads"),
