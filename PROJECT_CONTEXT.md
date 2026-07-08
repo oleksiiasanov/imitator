@@ -416,6 +416,13 @@ Current implementation:
 * settings save restarts the scheduler generation
 * autoplay is started on app boot if `config.json` enables it
 
+Automated coverage:
+
+* `tests/test_settings_scheduler.py` verifies that the `/settings` form stores autoplay, first delay, and repeat interval in `config.json` as seconds.
+* `tests/test_settings_scheduler.py` verifies invalid scheduler input normalization.
+* `tests/test_settings_scheduler.py` verifies scheduler generation restart wiring.
+* `tests/test_settings_scheduler.py` verifies that the scheduler loop consumes configured first delay and repeat interval timing values.
+
 ---
 
 ## GPIO
