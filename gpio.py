@@ -45,7 +45,7 @@ def _initialize():
             _device = OutputDevice(GPIO_PIN, active_high=True, initial_value=False)
             _backend = getattr(Device.pin_factory, "__class__", type(Device.pin_factory)).__name__
             _set_powered(False)
-        except backend_errors as exc:
+        except Exception as exc:
             _device = None
             _backend = "unavailable"
             _error = str(exc)
@@ -63,9 +63,18 @@ def _gpio_exception_types():
     try:
         from gpiozero.exc import GPIOZeroError
 
-        return errors + (GPIOZeroError,)
+        errors = errors + (GPIOZeroError,)
     except ImportError:
-        return errors
+        pass
+
+    try:
+        import lgpio
+
+        errors = errors + (lgpio.error,)
+    except (ImportError, AttributeError):
+        pass
+
+    return errors
 
 
 def is_available():

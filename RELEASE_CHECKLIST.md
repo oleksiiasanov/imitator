@@ -36,6 +36,7 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] No desktop compositor holds `/dev/dri/card0` during playback.
 - [ ] Installer creates `uploads/`, `videos/`, and `config.json`.
 - [ ] Installer installs and enables `vtx-player.service`.
+- [ ] Installer stops an existing `vtx-player.service` before self-check so GPIO17 is not busy.
 - [ ] Installer self-check reports ffmpeg, mpv, Wi-Fi AP, GPIO17, uploads, videos, and config.json as OK.
 - [ ] Installer prints SSID `VTX-SETUP`, password `vtxplayer`, web URL, and journal command.
 - [ ] Running `sudo bash install.sh` a second time succeeds without breaking the service.

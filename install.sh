@@ -226,6 +226,16 @@ disable_graphical_desktop() {
     pkill -KILL -f 'labwc|wayfire|weston|Xorg|pcmanfm|wf-panel-pi|kanshi|lwrespawn' >/dev/null 2>&1 || true
 }
 
+stop_existing_service() {
+    if systemctl list-unit-files "$SERVICE_NAME.service" >/dev/null 2>&1; then
+        if systemctl is-active --quiet "$SERVICE_NAME.service"; then
+            info "Stopping existing $SERVICE_NAME service before self-check..."
+            systemctl stop "$SERVICE_NAME.service"
+            sleep 1
+        fi
+    fi
+}
+
 configure_wifi_ap() {
     need_command nmcli
 
@@ -296,6 +306,7 @@ backup_file "$BOOT_CMDLINE"
 if [ -f "$UNIT_DST" ]; then
     cp -a "$UNIT_DST" "$BACKUP_DIR/unit"
 fi
+stop_existing_service
 info "Install directory: $INSTALL_DIR"
 info "Application user: $APP_USER"
 info "Detected OS: $OS_NAME"
