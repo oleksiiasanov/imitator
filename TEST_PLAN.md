@@ -117,7 +117,7 @@ Steps:
 
 1. Press Play in the web UI.
 2. Watch the FPV receiver.
-3. Check MOSFET/GPIO17 state.
+3. Check relay/GPIO17 state.
 
 Expected result:
 
@@ -141,7 +141,7 @@ Steps:
 
 1. Press Pause in the web UI.
 2. Watch the FPV receiver.
-3. Check MOSFET/GPIO17 state.
+3. Check relay/GPIO17 state.
 
 Expected result:
 
@@ -239,8 +239,10 @@ Pass/Fail:
 
 Preconditions:
 
-- GPIO17 is wired to the MOSFET control input.
-- A tester can measure GPIO17 or observe MOSFET state.
+- GPIO17 is wired to relay IN.
+- Relay DC+ is connected to Raspberry Pi 5V.
+- Relay DC- is connected to Raspberry Pi GND.
+- A tester can measure GPIO17 or observe relay state.
 
 Steps:
 
@@ -261,11 +263,16 @@ Pass/Fail:
 - [ ] Pass
 - [ ] Fail
 
-## Test 10: MOSFET
+## Test 10: Relay Power Switch
 
 Preconditions:
 
-- MOSFET branch is wired to VTX/fan power.
+- Relay module is wired to VTX/fan power.
+- Relay trigger jumper is set to HIGH trigger.
+- 12V buck OUT+ is connected to relay COM.
+- Relay NO is connected to VTX/fan positive.
+- 12V buck OUT- is connected to VTX/fan negative.
+- Relay NC is not used.
 - VTX antenna is connected.
 
 Steps:

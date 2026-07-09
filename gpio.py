@@ -12,7 +12,7 @@ _powered = False
 
 
 class GPIOError(RuntimeError):
-    """Raised when MOSFET GPIO control is not available."""
+    """Raised when GPIO17 power-switch control is not available."""
 
 
 def _initialize():

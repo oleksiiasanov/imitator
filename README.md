@@ -30,9 +30,10 @@ Use the panel to upload a video, convert it for FPV playback, start or pause pla
 - Analog 5.8GHz VTX.
 - VTX antenna.
 - FPV receiver or SDR receiver.
-- Logic-level MOSFET module for VTX/fan power switching.
+- 5V relay module with HIGH trigger support for VTX/fan power switching.
 - 5V USB power for initial setup.
 - Step-down buck converter set to 5.1V if powering the Raspberry Pi from a flight battery later.
+- Step-down buck converter set to the VTX/fan voltage, currently 12V in the verified relay wiring.
 - Wires and soldering tools.
 
 ## Wiring
@@ -42,19 +43,25 @@ Connect the video signal and ground before powering the VTX.
 ```text
 Raspberry Pi TV pad -> VTX VIDEO IN
 Raspberry Pi GND    -> VTX GND
-Raspberry Pi GPIO17 -> MOSFET control input
-Battery +           -> MOSFET input
-MOSFET output       -> VTX/fan power branch
-Battery -           -> VTX GND / MOSFET GND
+
+Raspberry Pi 5V     -> Relay DC+
+Raspberry Pi GND    -> Relay DC-
+Raspberry Pi GPIO17 -> Relay IN
+Relay trigger       -> HIGH trigger
+
+12V buck OUT+       -> Relay COM
+Relay NO            -> VTX + / Fan +
+12V buck OUT-       -> VTX - / Fan -
 ```
 
 Important:
 
 - Always connect the VTX antenna before powering the VTX.
 - Do not power the Raspberry Pi directly from a 6S battery.
-- Battery GND, VTX GND, and Raspberry Pi GND must be common.
-- For first setup, power the Raspberry Pi from USB and power the VTX through the MOSFET branch.
-- The Raspberry Pi controls only the MOSFET gate. It must not power the VTX directly.
+- 5V buck OUT-, 12V buck OUT-, VTX GND, relay DC-, and Raspberry Pi GND must be common.
+- For first setup, power the Raspberry Pi from USB or the 5V buck, and power the VTX/fan through the relay branch.
+- The Raspberry Pi controls only the relay input. It must not power the VTX directly.
+- Use relay `NO`, not `NC`, so VTX/fan are off when GPIO17 is LOW.
 
 ## Installation and First Boot
 
@@ -85,7 +92,7 @@ Password: vtxplayer
 URL: http://10.42.0.1:8080
 ```
 
-Upload a video in the web panel. The app converts it to `video_fpv.mp4`, enables GPIO17 MOSFET power before playback, starts MPV on Composite-1, disables MOSFET power after stop/exit, and keeps the configured autoplay settings in `config.json`.
+Upload a video in the web panel. The app converts it to `video_fpv.mp4`, enables GPIO17 relay/power-switch output before playback, starts MPV on Composite-1, disables the relay/power-switch output after stop/exit, and keeps the configured autoplay settings in `config.json`.
 
 ## Changing Wi-Fi Later
 

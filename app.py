@@ -25,7 +25,7 @@ VERSION_PATH = APP_DIR / "VERSION"
 
 FPV_VIDEO = VIDEO_DIR / "video_fpv.mp4"
 APP_STARTED_AT = time.time()
-MOSFET_SETTLE_SECONDS = 0.3
+POWER_SWITCH_SETTLE_SECONDS = 0.3
 AP_CONNECTION = "vtx-hotspot"
 AP_INTERFACE = "wlan0"
 AP_SSID = "VTX-SETUP"
@@ -317,13 +317,13 @@ def readonly_gpio_status():
     return status_item(True, "GPIO17", value, detail)
 
 
-def readonly_mosfet_status():
+def readonly_power_switch_status():
     state = gpio.status()
     if not state["ok"]:
         return status_item(False, "Power switching", "Unavailable", state["error"])
 
     value = "Enabled" if state["powered"] else "Ready"
-    detail = "GPIO17 controls the MOSFET gate and is turned off on stop or application exit."
+    detail = "GPIO17 controls the relay/power switch and is turned off on stop or application exit."
     return status_item(True, "Power switching", value, detail)
 
 
@@ -376,9 +376,9 @@ def collect_system_status():
             ],
         },
         {
-            "title": "MOSFET",
+            "title": "Power Switch",
             "items": [
-                readonly_mosfet_status(),
+                readonly_power_switch_status(),
             ],
         },
     ]
@@ -481,13 +481,13 @@ def gpio_check():
         return diagnostic(
             True,
             "GPIO17",
-            f"GPIO17 доступний через {state['backend']}. MOSFET зараз {power_state}."
+            f"GPIO17 доступний через {state['backend']}. Power switch зараз {power_state}."
         )
 
     return diagnostic(
         False,
         "GPIO17",
-        "GPIO17 недоступний для MOSFET: "
+        "GPIO17 недоступний для power switch: "
         f"{state['error']}. Запусти sudo bash install.sh і перевір, що це Raspberry Pi."
     )
 
@@ -571,28 +571,28 @@ def run(cmd):
 def safe_power_on():
     try:
         gpio.power_on()
-        app.logger.info("GPIO17 MOSFET power enabled")
-        time.sleep(MOSFET_SETTLE_SECONDS)
+        app.logger.info("GPIO17 relay/power-switch output enabled")
+        time.sleep(POWER_SWITCH_SETTLE_SECONDS)
         return True, ""
     except gpio.GPIOError as exc:
         safe_power_off("failed power-on")
-        app.logger.error("GPIO17 MOSFET power-on failed: %s", exc)
-        return False, f"GPIO17/MOSFET недоступний: {exc}"
+        app.logger.error("GPIO17 power-switch enable failed: %s", exc)
+        return False, f"GPIO17/power switch недоступний: {exc}"
     except (gpio.GPIOError, RuntimeError, OSError) as exc:
         safe_power_off("failed power-on")
-        app.logger.exception("Unexpected GPIO17 MOSFET power-on error")
-        return False, f"Помилка GPIO17/MOSFET: {exc}"
+        app.logger.exception("Unexpected GPIO17 power-switch enable error")
+        return False, f"Помилка GPIO17/power switch: {exc}"
 
 
 def safe_power_off(reason=""):
     try:
         gpio.power_off()
         if reason:
-            app.logger.info("GPIO17 MOSFET power disabled: %s", reason)
+            app.logger.info("GPIO17 relay/power-switch output disabled: %s", reason)
         else:
-            app.logger.info("GPIO17 MOSFET power disabled")
+            app.logger.info("GPIO17 relay/power-switch output disabled")
     except (gpio.GPIOError, RuntimeError, OSError):
-        app.logger.exception("Failed to disable GPIO17 MOSFET power")
+        app.logger.exception("Failed to disable GPIO17 power-switch output")
 
 
 def watch_player_process(proc, label):
@@ -1140,7 +1140,7 @@ def register_shutdown_handlers():
     shutdown_handlers_registered = True
 
     def shutdown_from_signal(signum, _frame):
-        app.logger.info("Received signal %s; stopping playback and disabling MOSFET", signum)
+        app.logger.info("Received signal %s; stopping playback and disabling power switch", signum)
         stop_player()
         raise SystemExit(0)
 
@@ -1153,7 +1153,7 @@ def register_shutdown_handlers():
             sys.__excepthook__(exc_type, exc, tb)
             return
 
-        app.logger.critical("Unhandled exception; disabling MOSFET", exc_info=(exc_type, exc, tb))
+        app.logger.critical("Unhandled exception; disabling power switch", exc_info=(exc_type, exc, tb))
         safe_power_off("unhandled exception")
         sys.__excepthook__(exc_type, exc, tb)
 

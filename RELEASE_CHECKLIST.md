@@ -9,15 +9,20 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] Boot Raspberry Pi Zero 2 W and confirm SSH access works.
 - [ ] Clone or copy this repository to the Raspberry Pi.
 - [ ] Confirm the VTX antenna is connected before powering the VTX.
-- [ ] Confirm Raspberry Pi GND, battery GND, VTX GND, and MOSFET GND share a common ground.
+- [ ] Confirm 5V buck OUT-, 12V buck OUT-, Raspberry Pi GND, VTX GND, and relay DC- share a common ground.
 
 ## Wiring
 
 - [ ] Pi TV pad is connected to VTX VIDEO IN.
 - [ ] Pi GND is connected to VTX GND.
-- [ ] Pi GPIO17 is connected to the MOSFET control input.
-- [ ] Battery positive feeds the MOSFET input.
-- [ ] MOSFET output feeds the VTX/fan power branch.
+- [ ] Raspberry Pi 5V is connected to relay DC+.
+- [ ] Raspberry Pi GND is connected to relay DC-.
+- [ ] Pi GPIO17 is connected to relay IN.
+- [ ] Relay trigger jumper is set to HIGH trigger.
+- [ ] 12V buck OUT+ feeds relay COM.
+- [ ] Relay NO feeds the VTX/fan positive power branch.
+- [ ] 12V buck OUT- feeds VTX/fan negative.
+- [ ] Relay NC is not used for the VTX/fan branch.
 - [ ] Raspberry Pi is powered from USB 5V or a 5.1V buck converter, not directly from battery voltage.
 
 ## install.sh
@@ -52,7 +57,7 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] `/system` shows Wi-Fi/AP status clearly.
 - [ ] Composite output status is shown clearly.
 - [ ] GPIO17 status is shown clearly.
-- [ ] MOSFET status is shown clearly.
+- [ ] Power switch status is shown clearly.
 - [ ] Journal logs include the application version and startup self-check.
 
 ## Wi-Fi
@@ -101,22 +106,24 @@ Use this checklist before tagging or handing off a release candidate.
 - [ ] Scheduler waits the configured interval before repeating.
 - [ ] Disabling autoplay stops future scheduled playback.
 
-## GPIO And MOSFET
+## GPIO And Relay Power Switch
 
 - [ ] GPIO17 is LOW when the app is idle.
 - [ ] GPIO17 goes HIGH before MPV playback starts.
-- [ ] Playback starts after the MOSFET settle delay.
+- [ ] Playback starts after the relay/power-switch settle delay.
+- [ ] Relay closes COM to NO before MPV playback starts.
 - [ ] GPIO17 goes LOW after manual Pause.
 - [ ] GPIO17 goes LOW after scheduled playback ends.
 - [ ] GPIO17 goes LOW if MPV exits unexpectedly.
 - [ ] GPIO17 goes LOW when `systemctl stop vtx-player` is run.
 - [ ] GPIO17 goes LOW during reboot.
 - [ ] GPIO17 goes LOW after application crash or Ctrl+C in foreground testing.
+- [ ] Relay opens COM to NO after stop, service stop, reboot, and app crash.
 
 ## Shutdown And Power Loss
 
 - [ ] Reboot during idle state recovers cleanly.
-- [ ] Reboot during playback recovers cleanly and does not leave MOSFET power enabled.
+- [ ] Reboot during playback recovers cleanly and does not leave relay power enabled.
 - [ ] Power loss during idle state recovers cleanly on next boot.
 - [ ] Power loss during playback recovers cleanly on next boot.
 - [ ] Web UI is reachable again after power returns.

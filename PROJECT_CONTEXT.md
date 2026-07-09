@@ -16,7 +16,7 @@ The current system lets a first-time Raspberry Pi user:
 
 No manual Linux configuration should be required after `install.sh` completes.
 
-The repository also contains `index.html`, the production static instruction page for assembling, installing, and validating the device. That page must describe the current implementation only. Do not document planned Wi-Fi AP or OTA behavior as already available.
+The repository also contains `index.html`, the production static instruction page for assembling, installing, and validating the device. That page must describe the current implementation only. Do not document planned OTA behavior as already available.
 
 ---
 
@@ -51,8 +51,9 @@ Current supported hardware:
 * VTX antenna
 * FPV receiver or SDR receiver
 * Buck converter set to 5.1V if powering Raspberry Pi from a battery
+* Buck converter set to the VTX/fan voltage, currently 12V in the verified relay wiring
 * Composite video output from the Raspberry Pi TV pad
-* Logic-level MOSFET module controlled from GPIO17 for VTX/fan power switching
+* 5V relay module controlled from GPIO17 for VTX/fan power switching
 
 Planned hardware support:
 
@@ -66,21 +67,26 @@ Future hardware support must remain backward compatible with the current composi
 
 Current implementation:
 
-Battery or external power feeds the VTX through a logic-level MOSFET branch according to the VTX hardware requirements.
+Battery or external power feeds the VTX/fan branch through a 5V relay module according to the VTX hardware requirements.
 
 The Raspberry Pi is powered separately from USB 5V during setup, or from a buck converter set to 5.1V in an autonomous build.
 
-The Raspberry Pi controls only the MOSFET gate on GPIO17. The Raspberry Pi must never power the VTX directly.
+The Raspberry Pi controls only the relay input on GPIO17. The Raspberry Pi must never power the VTX directly.
 
 Required current wiring:
 
 ```text
 Raspberry Pi TV pad -> VTX VIDEO IN
 Raspberry Pi GND    -> VTX GND
-GPIO17              -> MOSFET control input
-Battery +           -> MOSFET input
-MOSFET output       -> VTX/fan power branch
-Battery -           -> VTX GND / MOSFET GND
+
+Raspberry Pi 5V     -> Relay DC+
+Raspberry Pi GND    -> Relay DC-
+GPIO17              -> Relay IN
+Relay trigger       -> HIGH trigger
+
+12V buck OUT+       -> Relay COM
+Relay NO            -> VTX + / Fan +
+12V buck OUT-       -> VTX - / Fan -
 ```
 
 Important:
@@ -88,18 +94,18 @@ Important:
 All grounds must share a common reference.
 
 ```text
-Battery GND = Raspberry Pi GND = VTX GND
+5V buck OUT- = 12V buck OUT- = Raspberry Pi GND = VTX GND = Relay DC-
 ```
 
-MOSFET architecture:
+Relay power-switch architecture:
 
 ```text
 Battery
-├── Buck Converter -> Raspberry Pi
-└── MOSFET -> VTX and Cooling Fan
+├── 5V Buck Converter -> Raspberry Pi and relay module DC+
+└── 12V Buck Converter -> Relay COM/NO -> VTX and Cooling Fan
 ```
 
-The Raspberry Pi role is to control only the MOSFET gate. The Raspberry Pi must never power the VTX directly.
+The Raspberry Pi role is to control only the relay input. The Raspberry Pi must never power the VTX directly.
 
 ---
 
@@ -110,18 +116,24 @@ Current required wiring:
 ```text
 Pi TV OUT -> VTX VIDEO IN
 Pi GND    -> VTX VIDEO GND / VTX GND
-Pi GPIO17 -> MOSFET control input
+Pi 5V     -> Relay DC+
+Pi GND    -> Relay DC-
+Pi GPIO17 -> Relay IN
+Relay NO  -> VTX/fan positive branch
 ```
 
 VTX power depends on the specific VTX module. If the VTX supports VBAT/6S, it may be powered from the battery according to its datasheet.
 
 The Raspberry Pi must not be powered directly from 6S. Use a 5.1V buck converter when running from a battery.
 
-MOSFET wiring:
+Relay wiring:
 
 ```text
-GPIO17 -> MOSFET control input
-MOSFET output -> VTX and fan power branch
+GPIO17 -> Relay IN
+Pi 5V  -> Relay DC+
+Pi GND -> Relay DC-
+12V buck OUT+ -> Relay COM
+Relay NO -> VTX + / Fan +
 ```
 
 ---
@@ -137,10 +149,10 @@ Raspberry Pi boots
 -> user uploads video
 -> FFmpeg converts it to videos/video_fpv.mp4
 -> user presses Play or upload auto-starts playback
--> GPIO17 enables MOSFET power
+-> GPIO17 enables the relay/power-switch output
 -> app waits 300 ms for hardware to settle
 -> MPV plays video on Composite-1
--> playback stop/exit disables GPIO17 MOSFET power
+-> playback stop/exit disables GPIO17 relay/power-switch output
 ```
 
 Autoplay uses the same playback function as manual one-shot playback. The scheduler controls timing only.
@@ -149,19 +161,19 @@ Current GPIO behaviour:
 
 `gpio.power_on()` and `gpio.power_off()` control GPIO17 through `gpiozero` with the `lgpio` backend where available.
 
-MOSFET power sequence:
+Relay/power-switch sequence:
 
 ```text
 User presses Play or scheduler requests playback
 -> GPIO17 HIGH
--> MOSFET ON
+-> relay closes COM to NO
 -> fan ON
 -> VTX ON
 -> short hardware settle delay
 -> MPV starts playback
 -> playback ends or is stopped
 -> GPIO17 LOW
--> MOSFET OFF
+-> relay opens COM to NO
 ```
 
 Application exit, service stop, SIGTERM, SIGINT, MPV exit, playback stop, and startup failures all attempt to force GPIO17 LOW.
@@ -191,7 +203,7 @@ Current stack:
 Current Python modules/files:
 
 * `app.py` owns Flask routes, config persistence, diagnostics, upload, conversion, playback, and scheduler.
-* `gpio.py` owns GPIO17/MOSFET control and all GPIO backend details.
+* `gpio.py` owns GPIO17 relay/power-switch control and all GPIO backend details.
 * `templates/index.html` owns the web UI HTML.
 * `static/app.js` owns upload progress and AJAX upload behaviour.
 * `install.sh` owns OS detection, OS package install, `.venv` setup, composite boot configuration, runtime directories, service install, and self-check.
@@ -251,7 +263,7 @@ Current `install.sh` owns:
 * graphical desktop/display manager disablement when present, because MPV DRM playback needs DRM master access
 * systemd service installation and enablement
 * systemd configuration to run `.venv/bin/python`
-* GPIO package installation for GPIO17/MOSFET control through apt: `gpiod`, `python3-gpiozero`, and `python3-lgpio`
+* GPIO package installation for GPIO17 relay/power-switch control through apt: `gpiod`, `python3-gpiozero`, and `python3-lgpio`
 * application self-check
 * clear success/failure output
 * rollback for boot config and service file when possible
@@ -392,7 +404,7 @@ Current `/system` status page shows:
 * application uptime
 * Wi-Fi/AP configured SSID, connection name, interface, IP, and status
 * GPIO17 availability, backend, and current power state
-* MOSFET power switching availability and current state
+* relay/power-switch availability and current state
 
 Future UI features:
 
@@ -483,7 +495,7 @@ Current checks:
 * `ffmpeg` command exists
 * `mpv` command exists
 * `/sys/class/drm/...Composite-1/status` exists and is connected
-* GPIO17/MOSFET control is available
+* GPIO17 relay/power-switch control is available
 * upload directory exists and is writable
 * video directory exists and is writable
 * `config.json` can be read and written
@@ -509,7 +521,7 @@ Current known behaviour:
 * Upload errors return JSON.
 * FFmpeg errors return JSON and are logged.
 * MPV process start errors return JSON or are logged.
-* GPIO/MOSFET errors are logged, shown in diagnostics, and block playback.
+* GPIO relay/power-switch errors are logged, shown in diagnostics, and block playback.
 * Playback and self-check errors after redirects are shown in the web UI runtime error banner.
 * Diagnostics failures are visible in the browser.
 * Install failures print a clear error and restore modified boot/service files where possible.
@@ -526,7 +538,7 @@ Current log categories in `app.py`:
 * conversion progress/result
 * FFmpeg conversion success/failure
 * MPV start failure
-* GPIO17/MOSFET power on/off
+* GPIO17 relay/power-switch on/off
 * application shutdown and signal cleanup
 * scheduler restart
 * settings save
@@ -561,7 +573,7 @@ Current service behaviour:
 * verifies `.venv/bin/python` and `app.py` before start
 * restarts on failure
 * waits 5 seconds between restarts
-* sends SIGTERM on stop so the app can disable MOSFET power
+* sends SIGTERM on stop so the app can disable the relay/power-switch output
 * uses a 10 second stop timeout
 * uses `vtx-player` as the journal/syslog identifier
 * writes stdout and stderr to journal
@@ -638,7 +650,7 @@ A change is complete only if:
 * FFmpeg conversion still works
 * MPV playback still works
 * scheduler still works
-* GPIO17/MOSFET power switching works and fails safely
+* GPIO17 relay/power-switching works and fails safely
 * diagnostics still show clear status
 * no manual Linux configuration is required after installation
 * `PROJECT_CONTEXT.md` is updated when architecture or behaviour changes
@@ -675,7 +687,7 @@ Hardware status:
 Tested on Raspberry Pi Zero 2 W
 ```
 
-Current version is `1.0.0-rc.1`, a release candidate for composite-video playback with GPIO17/MOSFET power switching.
+Current version is `1.0.0-rc.1`, a release candidate for composite-video playback with GPIO17 relay/power-switching.
 
 The current system supports:
 
@@ -693,8 +705,8 @@ Implemented:
 * read-only `/system` status page
 * Wi-Fi Access Point `VTX-SETUP` at `10.42.0.1`
 * GPIO17 control through `gpio.py`
-* MOSFET power on/off around MPV playback
-* safe MOSFET shutdown on stop, process exit, SIGTERM, SIGINT, and MPV exit
+* relay/power-switch output on/off around MPV playback
+* safe relay/power-switch shutdown on stop, process exit, SIGTERM, SIGINT, and MPV exit
 * systemd autostart and restart
 * repeatable installation through `install.sh`
 * project-local Python virtual environment at `.venv`

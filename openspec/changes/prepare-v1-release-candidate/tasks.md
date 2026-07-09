@@ -1,8 +1,8 @@
-## 1. RC-1 GPIO/MOSFET
+## 1. RC-1 GPIO Relay Power Switch
 - [x] 1.1 Choose GPIO backend (`gpiozero` with lgpio backend or direct `lgpio`) and document the choice.
 - [x] 1.2 Add required apt/Python dependencies to `install.sh` and/or `requirements.txt`.
 - [x] 1.3 Implement GPIO17 control in `gpio.py`.
-- [x] 1.4 Ensure `gpio.py` initializes the MOSFET output to off.
+- [x] 1.4 Ensure `gpio.py` initializes the relay/power-switch output to off.
 - [x] 1.5 Keep GPIO imports and pin operations isolated to `gpio.py`.
 - [x] 1.6 Before MPV playback, call `gpio.power_on()` and wait 300 ms.
 - [x] 1.7 After playback completion or stop, call `gpio.power_off()`.
@@ -12,10 +12,10 @@
 - [x] 2.1 Add shutdown handling for normal application exit.
 - [x] 2.2 Add SIGTERM handling for systemd service stop/reboot.
 - [x] 2.3 Add Ctrl+C/SIGINT handling for development runs.
-- [x] 2.4 Add `finally` blocks around playback paths that can leave MOSFET on.
+- [x] 2.4 Add `finally` blocks around playback paths that can leave relay/power-switch output on.
 - [x] 2.5 Ensure unexpected exceptions call `gpio.power_off()` where safe.
-- [x] 2.6 Verify MOSFET is off after service stop.
-- [x] 2.7 Verify MOSFET is off after reboot.
+- [x] 2.6 Verify relay/power-switch output is off after service stop.
+- [x] 2.7 Verify relay/power-switch output is off after reboot.
 
 ## 3. RC-3 Web UI Polish
 - [x] 3.1 Improve existing spacing without changing layout.
@@ -45,18 +45,18 @@
 ## 6. RC-6 Final Install Review
 - [x] 6.1 Review install failures for missing apt, network, permissions, boot files, venv, pip, service, GPIO backend, FFmpeg, MPV.
 - [x] 6.2 Review startup failures after reboot.
-- [x] 6.3 Review runtime failures during upload, conversion, playback, stop, scheduler, GPIO, MOSFET, and power loss.
+- [x] 6.3 Review runtime failures during upload, conversion, playback, stop, scheduler, GPIO, relay/power-switch, and power loss.
 - [x] 6.4 Fix production readiness issues without adding unrelated features.
 
 ## 7. RC-7 Release Checklist
 - [x] 7.1 Create `RELEASE_CHECKLIST.md`.
 - [x] 7.2 Cover fresh Raspberry Pi OS installation.
-- [x] 7.3 Cover `install.sh`, reboot, Wi-Fi, Web UI, upload, conversion, playback, scheduler, GPIO, MOSFET, shutdown, and power loss recovery.
+- [x] 7.3 Cover `install.sh`, reboot, Wi-Fi, Web UI, upload, conversion, playback, scheduler, GPIO, relay/power-switch, shutdown, and power loss recovery.
 
 ## 8. RC-8 Test Plan
 - [x] 8.1 Create `TEST_PLAN.md`.
 - [x] 8.2 Each test includes Preconditions, Steps, Expected result, and Pass/Fail checkbox.
-- [x] 8.3 Cover clean install, upload, overwrite upload, playback, stop, scheduler, reboot, power loss, GPIO, MOSFET, invalid video, large video, browser refresh, and mobile browser.
+- [x] 8.3 Cover clean install, upload, overwrite upload, playback, stop, scheduler, reboot, power loss, GPIO, relay/power-switch, invalid video, large video, browser refresh, and mobile browser.
 
 ## 9. Documentation And Validation
 - [x] 9.1 Update `PROJECT_CONTEXT.md` to match final V1 RC behavior.
@@ -66,4 +66,4 @@
 - [x] 9.5 Run Flask route smoke tests where possible.
 - [ ] 9.6 Run real Raspberry Pi hardware validation before release.
 
-Note: 9.6 requires physical Raspberry Pi/VTX/MOSFET hardware and is covered by `RELEASE_CHECKLIST.md` and `TEST_PLAN.md`.
+Note: 9.6 requires physical Raspberry Pi/VTX/relay hardware and is covered by `RELEASE_CHECKLIST.md` and `TEST_PLAN.md`.

@@ -30,7 +30,7 @@ VTX Player is a Raspberry Pi Zero 2 W analog FPV video playback controller. It p
 - Validate Python syntax with `py_compile`.
 - Validate installer syntax with `bash -n install.sh`.
 - Use Flask test client for route behavior where hardware is not required.
-- Validate GPIO/MOSFET, composite output, reboot, power loss, and first boot on real Raspberry Pi hardware before release.
+- Validate GPIO relay/power-switching, composite output, reboot, power loss, and first boot on real Raspberry Pi hardware before release.
 
 ## Important Constraints
 - A non-technical user should not need terminal access after installation.

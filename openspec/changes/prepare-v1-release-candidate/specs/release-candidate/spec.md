@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
-### Requirement: GPIO17 MOSFET Control
-The system SHALL control MOSFET power through GPIO17 for VTX/fan power switching during playback.
+### Requirement: GPIO17 Relay Power Switch Control
+The system SHALL control relay/power-switch output through GPIO17 for VTX/fan power switching during playback.
 
 #### Scenario: Power on before playback
 - **WHEN** playback is requested manually, by upload auto-start, or by scheduler
@@ -16,8 +16,8 @@ The system SHALL control MOSFET power through GPIO17 for VTX/fan power switching
 - **WHEN** GPIO hardware is accessed
 - **THEN** all GPIO backend imports and pin operations SHALL be contained in `gpio.py`.
 
-### Requirement: Safe MOSFET Shutdown
-The system SHALL disable MOSFET power whenever the application or playback exits unexpectedly or intentionally.
+### Requirement: Safe Relay Power Switch Shutdown
+The system SHALL disable relay/power-switch output whenever the application or playback exits unexpectedly or intentionally.
 
 #### Scenario: Service stop
 - **WHEN** systemd stops the service with SIGTERM
@@ -34,7 +34,7 @@ The system SHALL disable MOSFET power whenever the application or playback exits
 
 #### Scenario: Reboot or power loss recovery
 - **WHEN** the device reboots after normal shutdown or power loss
-- **THEN** GPIO initialization SHALL default MOSFET power to off.
+- **THEN** GPIO initialization SHALL default relay/power-switch output to off.
 
 ### Requirement: Existing UI Polish
 The system SHALL improve the current web UI without changing the layout or primary workflows.
@@ -70,7 +70,7 @@ The system SHALL be reachable immediately after `install.sh` completes and the R
 The system SHALL report runtime and installation failures clearly to the user and journal.
 
 #### Scenario: Web-visible runtime failure
-- **WHEN** upload, conversion, playback, scheduler, GPIO, MOSFET, or diagnostics fail
+- **WHEN** upload, conversion, playback, scheduler, GPIO, relay/power-switch, or diagnostics fail
 - **THEN** the failure SHALL be visible in the Web UI or API response
 - **AND** logged to the journal.
 
@@ -91,7 +91,7 @@ The repository SHALL provide a release checklist for manual validation before V1
 
 #### Scenario: Checklist coverage
 - **WHEN** `RELEASE_CHECKLIST.md` is opened
-- **THEN** it SHALL cover fresh Raspberry Pi OS installation, `install.sh`, reboot, Wi-Fi, Web UI, upload, conversion, playback, scheduler, GPIO, MOSFET, shutdown, and power loss recovery.
+- **THEN** it SHALL cover fresh Raspberry Pi OS installation, `install.sh`, reboot, Wi-Fi, Web UI, upload, conversion, playback, scheduler, GPIO, relay/power-switch, shutdown, and power loss recovery.
 
 ### Requirement: Test Plan
 The repository SHALL provide a test plan usable by a person with no project knowledge.
@@ -102,4 +102,4 @@ The repository SHALL provide a test plan usable by a person with no project know
 
 #### Scenario: Test coverage
 - **WHEN** `TEST_PLAN.md` is reviewed
-- **THEN** it SHALL cover clean install, upload, overwrite upload, playback, stop, scheduler, reboot, power loss, GPIO, MOSFET, invalid video, large video, browser refresh, and mobile browser.
+- **THEN** it SHALL cover clean install, upload, overwrite upload, playback, stop, scheduler, reboot, power loss, GPIO, relay/power-switch, invalid video, large video, browser refresh, and mobile browser.

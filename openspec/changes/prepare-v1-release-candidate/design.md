@@ -1,9 +1,9 @@
 ## Context
-VTX Player currently has a stable prototype base with no-op GPIO methods. V1 RC introduces actual power switching through GPIO17 and a MOSFET, which creates hardware safety requirements that are stricter than ordinary web application behavior.
+VTX Player currently has a stable prototype base with no-op GPIO methods. V1 RC introduces actual power switching through GPIO17 and a 5V relay module, which creates hardware safety requirements that are stricter than ordinary web application behavior.
 
 ## Goals / Non-Goals
 Goals:
-- Make MOSFET power control deterministic and fail-safe.
+- Make relay/power-switch control deterministic and fail-safe.
 - Keep GPIO implementation isolated in `gpio.py`.
 - Preserve current upload, conversion, playback, scheduler, systemd, and composite behavior.
 - Make first boot and install failures understandable to a non-technical user.
@@ -16,7 +16,8 @@ Non-Goals:
 - Do not add playlist support or new playback features.
 
 ## Decisions
-- Decision: Use GPIO17 as the only supported MOSFET control pin for V1 RC.
+- Decision: Use GPIO17 as the only supported relay/power-switch control pin for V1 RC.
+- Decision: Use a 5V relay module in HIGH trigger mode for the current validated hardware wiring.
 - Decision: Keep all GPIO backend imports and pin operations inside `gpio.py`.
 - Decision: Playback code calls `gpio.power_on()`, waits 300 ms, starts MPV, and calls `gpio.power_off()` in all stop/completion/error paths.
 - Decision: Application shutdown hooks and signal handlers must call `gpio.power_off()`.
@@ -32,7 +33,7 @@ Non-Goals:
 ## Risks / Trade-offs
 - Risk: GPIO backend differences between Raspberry Pi OS versions.
   Mitigation: install and document the chosen backend, and expose clear diagnostics when GPIO initialization fails.
-- Risk: MOSFET stays on after crash or service stop.
+- Risk: Relay/power-switch output stays on after crash or service stop.
   Mitigation: use `finally`, signal handlers, `atexit`, systemd stop behavior, and conservative GPIO default-off initialization.
 - Risk: first boot failures are hard for non-technical users.
   Mitigation: installer checks, journal logs, `/system`, web-visible status, and release checklist validation.
@@ -51,5 +52,5 @@ Non-Goals:
 
 ## Open Questions
 - Final GPIO backend choice: `gpiozero` with lgpio backend, or direct `lgpio`.
-- Whether VTX and fan share the same MOSFET branch for V1 hardware validation.
+- Whether VTX and fan share the same relay branch for V1 hardware validation.
 - Whether the release version should become `1.0.0-rc.1` in `VERSION`.
