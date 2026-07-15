@@ -1072,7 +1072,15 @@ Password: vtxplayer</code></pre>
                   <span>Що саме паяти</span>
                   <button class="copy-btn" type="button" data-copy>Копіювати</button>
                 </div>
-                <pre><code>Raspberry Pi TV pad                                  -> VTX VIDEO IN
+                <pre><code>Battery +                                            -> 5V buck IN+
+Battery -                                            -> 5V buck IN-
+Battery +                                            -> 12V buck IN+
+Battery -                                            -> 12V buck IN-
+
+5V buck OUT+                                         -> Raspberry Pi 5V pin, physical 2/4
+5V buck OUT-                                         -> Raspberry Pi GND pad
+
+Raspberry Pi TV pad                                  -> VTX VIDEO IN
 Raspberry Pi GND pad -> VTX GND
 
 Raspberry Pi 5V pin, physical 2/4                    -> Relay DC+
@@ -1086,38 +1094,6 @@ Relay NO                                             -> Fan +     якщо fan �
 12V buck OUT-                                        -> VTX -
 12V buck OUT-                                        -> Fan -     якщо fan є
 12V buck OUT-                                        -> Raspberry Pi GND pad / Relay DC-</code></pre>
-              </div>
-
-              <p><strong>Головна схема</strong></p>
-
-              <div class="code-card">
-                <div class="code-top">
-                  <span>Головна схема</span>
-                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                </div>
-                <pre><code>Raspberry Pi Zero 2 W
----------------------
-Raspberry Pi TV pad                                  -> VTX VIDEO IN / yellow video wire
-Raspberry Pi GND pad -> VTX GND / video ground / black wire
-
-Raspberry Pi 5V pin, physical 2/4                    -> Relay DC+
-Raspberry Pi GND pad -> Relay DC-
-Raspberry Pi GPIO17 pin, physical 11                 -> Relay IN
-
-Relay module
-------------
-Trigger mode                            -> HIGH trigger
-COM                                     -> 12V buck OUT+
-NO                                      -> VTX + / Fan +
-NC                                      -> НЕ підключати
-
-Power
------
-Battery / supply                        -> 5.1V buck -> Raspberry Pi 5V + Raspberry Pi GND pad
-Battery / supply                        -> 12V buck  -> VTX/Fan branch через relay
-
-12V buck OUT-                           -> VTX - / Fan -
-12V buck OUT-                           -> Raspberry Pi GND pad / Relay DC- / VTX GND</code></pre>
               </div>
 
               <p><strong>ASCII-діаграма</strong></p>
@@ -1139,11 +1115,15 @@ Raspberry Pi GPIO17 pin 11 -----------------> Relay IN
 
 Battery / PSU
    |
-   +--> 5.1V buck + -----> Raspberry Pi 5V pin 2/4
-   |              - -----> Raspberry Pi GND pad
+   +--> Battery + -> 5V buck IN+
+   |    Battery - -> 5V buck IN-
+   |    5V buck OUT+ -> Raspberry Pi 5V pin 2/4
+   |    5V buck OUT- -> Raspberry Pi GND pad
    |
-   +--> 12V buck + -----> Relay COM
-                  - -----> VTX - / Fan - / common GND
+   +--> Battery + -> 12V buck IN+
+        Battery - -> 12V buck IN-
+        12V buck OUT+ -> Relay COM
+        12V buck OUT- -> VTX - / Fan - / Raspberry Pi GND pad / Relay DC-
 
 Relay NO ----------------> VTX + / Fan +
 Relay NC ----------------> not used</code></pre>
