@@ -330,6 +330,59 @@
       gap: 12px;
     }
 
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .equipment-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 12px;
+    }
+
+    .equipment-photo {
+      display: grid;
+      place-items: center;
+      aspect-ratio: 16 / 10;
+      border: 1px dashed #c8c0b1;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #f8fafc, #f7efe0);
+      color: #64748b;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .equipment-card h4 {
+      margin: 0 0 6px;
+      color: #202b3a;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .equipment-card p {
+      margin: 0;
+      color: #4b5563;
+      font-size: .92rem;
+    }
+
+    .equipment-card .equipment-specs {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #4b5563;
+      font-size: .9rem;
+    }
+
+    .equipment-card .button {
+      width: 100%;
+    }
+
     .note {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -473,6 +526,94 @@
     .copy-btn.is-copied {
       border-color: #7dd3a5;
       background: rgba(22, 128, 60, .35);
+    }
+
+    .soldering-preview {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      margin: 0;
+    }
+
+    .soldering-preview button {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: #111827;
+    }
+
+    .soldering-preview img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+
+    .soldering-preview figcaption {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      color: #384453;
+      font-size: .9rem;
+      font-weight: 850;
+    }
+
+    .soldering-preview .zoom-label {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--accent-dark);
+      padding: 5px 8px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .image-dialog {
+      width: min(1180px, calc(100vw - 28px));
+      max-width: none;
+      border: 0;
+      border-radius: var(--radius);
+      background: #0f172a;
+      padding: 0;
+      box-shadow: 0 28px 80px rgba(15, 23, 42, .45);
+    }
+
+    .image-dialog::backdrop {
+      background: rgba(15, 23, 42, .72);
+      backdrop-filter: blur(3px);
+    }
+
+    .image-dialog-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      color: #f8fafc;
+      font-weight: 850;
+    }
+
+    .image-dialog-top button {
+      min-height: 34px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .1);
+      color: #fff;
+      padding: 6px 10px;
+      font-weight: 900;
+    }
+
+    .image-dialog img {
+      display: block;
+      width: 100%;
+      max-height: calc(100vh - 110px);
+      object-fit: contain;
+      background: #020617;
     }
 
     pre {
@@ -777,6 +918,7 @@
       .topbar-inner,
       .hero-inner,
       .info-grid,
+      .equipment-grid,
       .diagnostics,
       .wire-step {
         grid-template-columns: 1fr;
@@ -843,7 +985,7 @@
           <div class="brand-text">Raspberry Pi Zero 2 W + 5.8GHz VTX</div>
         </div>
         <nav class="tabs" aria-label="Розділи інструкції">
-          <button class="tab is-active" type="button" data-view="quickstart">Quickstart</button>
+          <button class="tab is-active" type="button" data-view="quickstart">Інструкція</button>
           <button class="tab" type="button" data-view="diagnostics">FAQ</button>
           <button class="tab" type="button" data-view="commands">Команди</button>
         </nav>
@@ -853,10 +995,10 @@
     <section class="hero">
       <div class="hero-inner">
         <div>
-          <h1>Quickstart для першого запуску VTX Video Control</h1>
-          <p class="lead">Запиши Raspberry Pi OS Lite, підключись по SSH, запусти install.sh — скрипт сам встановить залежності, налаштує Composite, service, GPIO17 relay/power switch і перезавантажить пристрій.</p>
+          <h1>Інструкція для збірки VTX Video Control</h1>
+          <p class="lead">Підготуй обладнання, спаяй підключення, запиши Raspberry Pi OS Lite і запусти install.sh — далі пристрій сам створить Wi-Fi точку та веб-панель.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#quickstart-start">Почати Quickstart</a>
+            <a class="button primary" href="#instruction-start">Почати інструкцію</a>
             <a class="button" href="#view-diagnostics" data-jump-view="diagnostics">FAQ</a>
           </div>
         </div>
@@ -886,200 +1028,169 @@
     </section>
 
     <main class="container">
-      <section class="view is-active" id="view-quickstart" aria-label="Quickstart першого запуску">
-        <article class="phase-card" id="quickstart-start">
-          <header class="phase-head">
-            <div>
-              <p class="phase-kicker">Quickstart</p>
-              <h2 class="phase-title">Перший запуск після збірки</h2>
-              <p class="phase-summary">Проводка зібрана, VTX підключений, антена встановлена. Запиши чистий Raspberry Pi OS Lite, один раз підключись по SSH і запусти install.sh — більше нічого вручну налаштовувати не потрібно.</p>
-            </div>
-          </header>
-          <div class="phase-body">
-            <div class="info-grid">
-              <div class="note success">
-                <strong>Результат</strong>
-                <p>Після install.sh пристрій сам створює Wi-Fi точку <strong>VTX-SETUP</strong> і запускає веб-панель на <strong>10.42.0.1:8080</strong>. SSH більше не потрібен для звичайного користування.</p>
-              </div>
-              <div class="note danger">
-                <strong>Безпека</strong>
-                <p>VTX не можна вмикати без антени. Не вимикай живлення під час завантаження або конвертації відео.</p>
-              </div>
-            </div>
-
-            <ol class="steps">
-              <li class="step">
-                <div class="step-content">
-                  <p>Запиши <strong>Raspberry Pi OS Lite</strong> на microSD через Raspberry Pi Imager. В налаштуваннях Imager увімкни SSH і встанови логін/пароль.</p>
-                  <div>
-                    <a class="button primary" href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener noreferrer">Завантажити Raspberry Pi Imager</a>
-                  </div>
-                  <div class="note warning">
-                    <strong>Перед записом</strong>
-                    <p>Переконайся, що обрав правильний носій — всі дані на ньому буде стерто.</p>
-                  </div>
-                </div>
-              </li>
-              <li class="step">
-                <div class="step-content">
-                  <p>Встав microSD в Raspberry Pi, подай живлення і підключись по SSH з ноутбука.</p>
-                  <div class="code-card">
-                    <div class="code-top">
-                      <span>SSH</span>
-                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                    </div>
-                    <pre><code>ssh pi@vtxpi.local</code></pre>
-                  </div>
-                </div>
-              </li>
-              <li class="step">
-                <div class="step-content">
-                  <p>Склонуй репозиторій і перейди в папку проєкту.</p>
-                  <div class="code-card">
-                    <div class="code-top">
-                      <span>Клонування</span>
-                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                    </div>
-                    <pre><code>git clone https://github.com/oleksiiasanov/imitator.git
-cd imitator</code></pre>
-                  </div>
-                </div>
-              </li>
-              <li class="step">
-                <div class="step-content">
-                  <p>Запусти скрипт встановлення. Він сам встановить пакети, створить .venv, налаштує Wi-Fi точку, composite-вихід, systemd service, GPIO17 relay/power switch і перезавантажить пристрій.</p>
-                  <div class="code-card">
-                    <div class="code-top">
-                      <span>Встановлення</span>
-                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                    </div>
-                    <pre><code>chmod +x install.sh &amp;&amp; sudo bash install.sh</code></pre>
-                  </div>
-                  <div class="note">
-                    <strong>Автоматичне перезавантаження</strong>
-                    <p>Після завершення скрипт перезавантажить Raspberry Pi самостійно. SSH-з'єднання обірветься — це нормально.</p>
-                  </div>
-                </div>
-              </li>
-              <li class="step">
-                <div class="step-content">
-                  <p>Зачекай 1–2 хвилини, поки Raspberry Pi завантажиться після перезавантаження.</p>
-                  <div class="result">
-                    <strong>Очікуваний результат</strong>
-                    <p>Raspberry Pi створює Wi-Fi точку VTX-SETUP і запускає веб-панель.</p>
-                  </div>
-                </div>
-              </li>
-              <li class="step">
-                <div class="step-content">
-                  <p>На телефоні або ноутбуці підключись до Wi-Fi точки Raspberry Pi.</p>
-                  <div class="code-card">
-                    <div class="code-top">
-                      <span>Wi-Fi</span>
-                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                    </div>
-                    <pre><code>SSID: VTX-SETUP
-Password: vtxplayer</code></pre>
-                  </div>
-                  <div class="note">
-                    <strong>Нормальна поведінка</strong>
-                    <p>Після встановлення зовнішній роутер для керування не потрібен. Raspberry Pi сама роздає локальну Wi-Fi мережу для веб-панелі.</p>
-                  </div>
-                </div>
-              </li>
-              <li class="step">
-                <div class="step-content">
-                  <p>Відкрий браузер і перейди в панель керування.</p>
-                  <div class="code-card">
-                    <div class="code-top">
-                      <span>Панель керування</span>
-                      <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                    </div>
-                    <pre><code>http://10.42.0.1:8080</code></pre>
-                  </div>
-                  <div class="result">
-                    <strong>Фінальний результат</strong>
-                    <p>Відкривається сторінка VTX Video Control. Далі відео, scheduler і playback керуються з браузера.</p>
-                  </div>
-                </div>
-              </li>
-            </ol>
-          </div>
-        </article>
-
-        <div class="diagnostics">
-          <article class="diag-card">
-            <h3>Як працює автозапуск</h3>
-            <ul>
-              <li>Raspberry Pi увімкнеться і завантажить систему.</li>
-              <li>Веб-інтерфейс запуститься автоматично.</li>
-              <li>Пристрій почекає задану кількість хвилин до першого запуску.</li>
-              <li>Запустить відео, дочекається завершення і повторить запуск після заданого інтервалу.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Замінити відео пізніше</h3>
-            <ul>
-              <li>Увімкни пристрій.</li>
-              <li>Підключись до Wi-Fi VTX-SETUP.</li>
-              <li>Відкрий http://10.42.0.1:8080.</li>
-              <li>Завантаж нове відео і дочекайся конвертації.</li>
-              <li>Старе відео автоматично заміниться новим.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Сторінка не відкривається</h3>
-            <ul>
-              <li>Перевір, чи пристрій увімкнений.</li>
-              <li>Перевір, чи пройшло 1-2 хвилини після подачі живлення.</li>
-              <li>Переконайся, що телефон або ноутбук підключений до Wi-Fi VTX-SETUP.</li>
-              <li>Перевір адресу: http://10.42.0.1:8080.</li>
-              <li>Онови сторінку або перезапусти живлення після паузи 10 секунд.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Відео не видно на приймачі</h3>
-            <ul>
-              <li>Перевір антену VTX, живлення VTX і частоту приймача.</li>
-              <li>Перевір, чи відео точно завантажилось через веб-інтерфейс.</li>
-              <li>Подивись, чи інтерфейс показує наявність файлу.</li>
-              <li>Натисни Пуск / Пауза для ручного запуску.</li>
-              <li>Якщо видно login Raspberry Pi, VTX і відеовихід працюють, проблема в запуску або файлі відео.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Що не можна робити</h3>
-            <ul>
-              <li>Не вмикати VTX без антени.</li>
-              <li>Не вимикати живлення під час завантаження відео.</li>
-              <li>Не вимикати живлення під час конвертації відео.</li>
-              <li>Не подавати 6S напряму на Raspberry Pi.</li>
-              <li>Не змінювати дроти, якщо система вже працює.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Швидкі значення</h3>
-            <ul>
-              <li>Wi-Fi: VTX-SETUP, пароль vtxplayer.</li>
-              <li>Панель: http://10.42.0.1:8080.</li>
-              <li>Сторінка має назву VTX Video Control.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="view" id="view-commands" aria-label="Всі команди">
-        <div class="command-search">
-          <input class="search-input" id="commandSearch" type="search" placeholder="Пошук: ssh, mpv, ffmpeg, systemctl..." autocomplete="off">
-          <div class="command-count" id="commandCount">0 команд</div>
-        </div>
-        <div class="command-panel" id="commandList"></div>
-      </section>
-
-      <section class="view" id="view-diagnostics" aria-label="FAQ і діагностика">
-        <div class="diagnostics faq-list">
+      <section class="view is-active" id="view-quickstart" aria-label="Інструкція збірки і налаштування">
+        <div class="diagnostics faq-list" id="instruction-start">
           <details class="faq-item">
-            <summary><h3>Як спаяти повну актуальну схему підключень?</h3></summary>
+            <summary><h3>Перелік обладнання</h3></summary>
+            <div class="faq-answer">
+              <div class="equipment-grid">
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>Buck 5V</h4>
+                    <p>LM2596S понижуючий DC-DC модуль для живлення Raspberry Pi.</p>
+                    <ul class="equipment-specs">
+                      <li>OUT налаштувати на 5V до підключення Raspberry Pi.</li>
+                      <li>IN підключається до Battery + / Battery -.</li>
+                      <li>OUT+ йде на Raspberry Pi 5V pad, OUT- на Raspberry Pi GND pad.</li>
+                    </ul>
+                  </div>
+                  <a class="button" href="https://prom.ua/ua/m5274543873677601818-modul-lm2596s-ponizhayuschij.html?p=1863365688" target="_blank" rel="noopener noreferrer">Де купити</a>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>Buck 12V</h4>
+                    <p>XL4016 PWM понижуючий DC-DC модуль для живлення VTX/Fan.</p>
+                    <ul class="equipment-specs">
+                      <li>OUT налаштувати під напругу VTX/Fan.</li>
+                      <li>IN підключається до Battery + / Battery -.</li>
+                      <li>OUT+ комутується через relay, OUT- йде на VTX - / Fan -.</li>
+                    </ul>
+                  </div>
+                  <a class="button" href="https://prom.ua/ua/p1819097027-modul-xl4016-pwm.html" target="_blank" rel="noopener noreferrer">Де купити</a>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>Реле</h4>
+                    <p>1-канальний relay module для вмикання живлення VTX/Fan з GPIO17.</p>
+                    <ul class="equipment-specs">
+                      <li>DC+ / DC- живляться від Raspberry Pi 5V / GND.</li>
+                      <li>IN підключається до Raspberry Pi GPIO17 pad.</li>
+                      <li>COM / NO комутують плюсову лінію від 12V buck.</li>
+                    </ul>
+                  </div>
+                  <a class="button" href="https://prom.ua/ua/p2764543121-bestep-kanalnyj-relejnyj.html" target="_blank" rel="noopener noreferrer">Де купити</a>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>VTX</h4>
+                    <p>Будь-який analog 5.8GHz VTX. Приклад: RUSHFPV RUSH MAX SOLO 5.8GHz 2.5W.</p>
+                    <ul class="equipment-specs">
+                      <li>Потрібні контакти VIDEO IN, GND і живлення + / -.</li>
+                      <li>Напруга живлення має відповідати налаштуванню 12V buck.</li>
+                      <li>Антена обов'язково підключена до подачі живлення.</li>
+                    </ul>
+                  </div>
+                  <a class="button" href="https://www.aliexpress.com/item/1005006067128597.html" target="_blank" rel="noopener noreferrer">Де купити</a>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>Battery 15+V</h4>
+                    <p>Будь-яка батарея 15+V. Приклад: 6S2P 24V battery pack.</p>
+                    <ul class="equipment-specs">
+                      <li>Потрібні Battery + і Battery -.</li>
+                      <li>Має витримувати струм VTX/Fan і buck converters.</li>
+                      <li>Не підключати батарею напряму до Raspberry Pi.</li>
+                    </ul>
+                  </div>
+                  <a class="button" href="https://prom.ua/ua/m2029888407506809595-batarejnaya-sborka-6s2p.html?p=2295667744" target="_blank" rel="noopener noreferrer">Де купити</a>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>Raspberry Pi Zero 2W</h4>
+                    <p>Основний контролер: веб-панель, composite video out і GPIO17 для relay.</p>
+                    <ul class="equipment-specs">
+                      <li>Використовуються 5V pad, GND pad, TV pad і GPIO17 pad.</li>
+                      <li>Живиться тільки від 5V buck.</li>
+                      <li>Потрібен Wi-Fi для локальної точки VTX-SETUP.</li>
+                    </ul>
+                  </div>
+                  <a class="button" href="https://prom.ua/ua/p2662132288-modul-raspberry-zero.html" target="_blank" rel="noopener noreferrer">Де купити</a>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div>
+                    <h4>SD картка пам'яті Class 10</h4>
+                    <p>microSD для Raspberry Pi OS Lite, проєкту і відеофайлів.</p>
+                    <ul class="equipment-specs">
+                      <li>Мінімум: 16GB.</li>
+                      <li>Рекомендовано: 32GB або більше, якщо відео будуть довгі.</li>
+                      <li>Class 10 / U1 або краще.</li>
+                    </ul>
+                  </div>
+                  <span class="button" aria-disabled="true">Посилання placeholder</span>
+                </article>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Передумови</h3></summary>
+            <div class="faq-answer">
+              <div class="info-grid">
+                <div class="note success">
+                  <strong>Що має бути готово</strong>
+                  <ul>
+                    <li>Raspberry Pi Imager встановлений на ноутбуці.</li>
+                    <li>microSD Class 10 мінімум 16GB, краще 32GB+.</li>
+                    <li>Термінал Linux/macOS або WSL на Windows.</li>
+                    <li>Доступ до інтернету для клонування репозиторію та встановлення пакетів.</li>
+                  </ul>
+                </div>
+                <div class="note danger">
+                  <strong>Безпека</strong>
+                  <p>VTX не можна вмикати без антени. Raspberry Pi не можна живити напряму від 6S, VBAT або 12V buck.</p>
+                </div>
+              </div>
+
+              <ol class="steps">
+                <li class="step">
+                  <div class="step-content">
+                    <p>Завантаж і встанови <strong>Raspberry Pi Imager</strong>.</p>
+                    <div>
+                      <a class="button primary" href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener noreferrer">Завантажити Raspberry Pi Imager</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Підготуй термінал. На macOS/Linux використовуй стандартний Terminal. На Windows використовуй WSL або інший Linux shell з доступом до <code>ssh</code> і <code>git</code>.</p>
+                    <div class="code-card">
+                      <div class="code-top">
+                        <span>Перевірка термінала</span>
+                        <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                      </div>
+                      <pre><code>ssh -V
+git --version</code></pre>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Перед записом образу переконайся, що обрав правильну microSD. Raspberry Pi Imager повністю стирає вибраний носій.</p>
+                    <div class="note warning">
+                      <strong>Перед записом</strong>
+                      <p>У налаштуваннях Imager увімкни SSH, задай hostname <code>vtxpi</code> і встанови логін/пароль для першого входу.</p>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Пайка</h3></summary>
             <div class="faq-answer">
               <p>Ось актуальна схема під поточний код: Raspberry Pi Zero 2 W керує живленням VTX/Fan через <code>GPIO17</code>, логіка <code>HIGH = увімкнути</code>, <code>LOW = вимкнути</code>.</p>
               <p><strong>Важливо:</strong> спільна земля тут виходить через ланцюг <code>Raspberry Pi GND pad -> VTX GND</code> і <code>12V buck OUT- -> VTX -</code>. Це працює, якщо на твоєму VTX <code>VTX GND</code> і <code>VTX -</code> є спільною землею. Перевір мультиметром continuity між ними.</p>
@@ -1241,6 +1352,16 @@ Relay NO -> VTX + / Fan +
 Relay NC -> not used</code></pre>
               </div>
 
+              <figure class="soldering-preview">
+                <button type="button" data-open-soldering aria-label="Збільшити схему пайки">
+                  <img src="assets/soldering.png" alt="Детальна схема пайки Raspberry Pi, buck converters, relay, VTX і fan" loading="lazy">
+                </button>
+                <figcaption>
+                  <span>Схема пайки</span>
+                  <span class="zoom-label">Збільшити</span>
+                </figcaption>
+              </figure>
+
               <p><strong>Важливо перед увімкненням</strong></p>
 
               <ol>
@@ -1256,6 +1377,169 @@ Relay NC -> not used</code></pre>
             </div>
           </details>
 
+          <details class="faq-item">
+            <summary><h3>Налаштування</h3></summary>
+            <div class="faq-answer">
+              <div class="info-grid">
+                <div class="note success">
+                  <strong>Результат</strong>
+                  <p>Після install.sh пристрій сам створює Wi-Fi точку <strong>VTX-SETUP</strong> і запускає веб-панель на <strong>10.42.0.1:8080</strong>. SSH більше не потрібен для звичайного користування.</p>
+                </div>
+                <div class="note danger">
+                  <strong>Безпека</strong>
+                  <p>VTX не можна вмикати без антени. Не вимикай живлення під час завантаження або конвертації відео.</p>
+                </div>
+              </div>
+
+              <ol class="steps">
+                <li class="step">
+                  <div class="step-content">
+                    <p>Запиши <strong>Raspberry Pi OS Lite</strong> на microSD через Raspberry Pi Imager. В налаштуваннях Imager увімкни SSH і встанови логін/пароль.</p>
+                    <div class="note warning">
+                      <strong>Перед записом</strong>
+                      <p>Переконайся, що обрав правильний носій — всі дані на ньому буде стерто.</p>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Встав microSD в Raspberry Pi, подай живлення і підключись по SSH з ноутбука.</p>
+                    <div class="code-card">
+                      <div class="code-top">
+                        <span>SSH</span>
+                        <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                      </div>
+                      <pre><code>ssh pi@vtxpi.local</code></pre>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Склонуй репозиторій і перейди в папку проєкту.</p>
+                    <div class="code-card">
+                      <div class="code-top">
+                        <span>Клонування</span>
+                        <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                      </div>
+                      <pre><code>git clone https://github.com/oleksiiasanov/imitator.git
+cd imitator</code></pre>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Запусти скрипт встановлення. Він сам встановить пакети, створить .venv, налаштує Wi-Fi точку, composite-вихід, systemd service, GPIO17 relay/power switch і перезавантажить пристрій.</p>
+                    <div class="code-card">
+                      <div class="code-top">
+                        <span>Встановлення</span>
+                        <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                      </div>
+                      <pre><code>chmod +x install.sh &amp;&amp; sudo bash install.sh</code></pre>
+                    </div>
+                    <div class="note">
+                      <strong>Автоматичне перезавантаження</strong>
+                      <p>Після завершення скрипт перезавантажить Raspberry Pi самостійно. SSH-з'єднання обірветься — це нормально.</p>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Зачекай 1–2 хвилини, поки Raspberry Pi завантажиться після перезавантаження.</p>
+                    <div class="result">
+                      <strong>Очікуваний результат</strong>
+                      <p>Raspberry Pi створює Wi-Fi точку VTX-SETUP і запускає веб-панель.</p>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>На телефоні або ноутбуці підключись до Wi-Fi точки Raspberry Pi.</p>
+                    <div class="code-card">
+                      <div class="code-top">
+                        <span>Wi-Fi</span>
+                        <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                      </div>
+                      <pre><code>SSID: VTX-SETUP
+Password: vtxplayer</code></pre>
+                    </div>
+                    <div class="note">
+                      <strong>Нормальна поведінка</strong>
+                      <p>Після встановлення зовнішній роутер для керування не потрібен. Raspberry Pi сама роздає локальну Wi-Fi мережу для веб-панелі.</p>
+                    </div>
+                  </div>
+                </li>
+                <li class="step">
+                  <div class="step-content">
+                    <p>Відкрий браузер і перейди в панель керування.</p>
+                    <div class="code-card">
+                      <div class="code-top">
+                        <span>Панель керування</span>
+                        <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                      </div>
+                      <pre><code>http://10.42.0.1:8080</code></pre>
+                    </div>
+                    <div class="result">
+                      <strong>Фінальний результат</strong>
+                      <p>Відкривається сторінка VTX Video Control. Далі відео, scheduler і playback керуються з браузера.</p>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+
+              <div class="diagnostics">
+                <article class="diag-card">
+                  <h3>Як працює автозапуск</h3>
+                  <ul>
+                    <li>Raspberry Pi увімкнеться і завантажить систему.</li>
+                    <li>Веб-інтерфейс запуститься автоматично.</li>
+                    <li>Пристрій почекає задану кількість хвилин до першого запуску.</li>
+                    <li>Запустить відео, дочекається завершення і повторить запуск після заданого інтервалу.</li>
+                  </ul>
+                </article>
+                <article class="diag-card">
+                  <h3>Замінити відео пізніше</h3>
+                  <ul>
+                    <li>Увімкни пристрій.</li>
+                    <li>Підключись до Wi-Fi VTX-SETUP.</li>
+                    <li>Відкрий http://10.42.0.1:8080.</li>
+                    <li>Завантаж нове відео і дочекайся конвертації.</li>
+                    <li>Старе відео автоматично заміниться новим.</li>
+                  </ul>
+                </article>
+                <article class="diag-card">
+                  <h3>Швидкі значення</h3>
+                  <ul>
+                    <li>Wi-Fi: VTX-SETUP, пароль vtxplayer.</li>
+                    <li>Панель: http://10.42.0.1:8080.</li>
+                    <li>Сторінка має назву VTX Video Control.</li>
+                  </ul>
+                </article>
+                <article class="diag-card">
+                  <h3>Що не можна робити</h3>
+                  <ul>
+                    <li>Не вмикати VTX без антени.</li>
+                    <li>Не вимикати живлення під час завантаження відео.</li>
+                    <li>Не вимикати живлення під час конвертації відео.</li>
+                    <li>Не подавати 6S напряму на Raspberry Pi.</li>
+                    <li>Не змінювати дроти, якщо система вже працює.</li>
+                  </ul>
+                </article>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="view" id="view-commands" aria-label="Всі команди">
+        <div class="command-search">
+          <input class="search-input" id="commandSearch" type="search" placeholder="Пошук: ssh, mpv, ffmpeg, systemctl..." autocomplete="off">
+          <div class="command-count" id="commandCount">0 команд</div>
+        </div>
+        <div class="command-panel" id="commandList"></div>
+      </section>
+
+      <section class="view" id="view-diagnostics" aria-label="FAQ і діагностика">
+        <div class="diagnostics faq-list">
           <details class="faq-item">
             <summary><h3>FAQ: змінити Wi-Fi без перезапису SD</h3></summary>
             <div class="faq-answer">
@@ -1468,15 +1752,23 @@ cat /Volumes/bootfs/network-config</code></pre>
     </main>
   </div>
 
+  <dialog class="image-dialog" id="solderingDialog" aria-label="Збільшена схема пайки">
+    <div class="image-dialog-top">
+      <span>Схема пайки</span>
+      <button type="button" data-close-soldering>Закрити</button>
+    </div>
+    <img src="assets/soldering.png" alt="Збільшена детальна схема пайки Raspberry Pi, buck converters, relay, VTX і fan">
+  </dialog>
+
   <div class="toast" id="toast" role="status" aria-live="polite">Скопійовано</div>
 
   <script>
     const commands = [
-      { title: "Wi-Fi точка VTX", phase: "Quickstart", code: "SSID: VTX-SETUP\nPassword: vtxplayer" },
-      { title: "Адреса панелі VTX Video Control", phase: "Quickstart", code: "http://10.42.0.1:8080" },
-      { title: "Адреса System Status", phase: "Quickstart", code: "http://10.42.0.1:8080/system" },
-      { title: "Приклади першого запуску", phase: "Quickstart", code: "0   = запустити одразу\n20  = запустити через 20 хвилин\n60  = запустити через 1 годину\n180 = запустити через 3 години" },
-      { title: "Приклад інтервалу повтору", phase: "Quickstart", code: "20" },
+      { title: "Wi-Fi точка VTX", phase: "Налаштування", code: "SSID: VTX-SETUP\nPassword: vtxplayer" },
+      { title: "Адреса панелі VTX Video Control", phase: "Налаштування", code: "http://10.42.0.1:8080" },
+      { title: "Адреса System Status", phase: "Налаштування", code: "http://10.42.0.1:8080/system" },
+      { title: "Приклади першого запуску", phase: "Налаштування", code: "0   = запустити одразу\n20  = запустити через 20 хвилин\n60  = запустити через 1 годину\n180 = запустити через 3 години" },
+      { title: "Приклад інтервалу повтору", phase: "Налаштування", code: "20" },
       { title: "SSH до Raspberry Pi", phase: "OS і SSH", code: "ssh pi@vtxpi.local" },
       { title: "Скинути старий SSH-ключ і зайти знову", phase: "OS і SSH", code: "ssh-keygen -R vtxpi.local\nssh pi@vtxpi.local" },
       { title: "Знайти IP і підключитись по IP", phase: "OS і SSH", code: "arp -a\nssh pi@192.168.X.X" },
@@ -1614,6 +1906,29 @@ cat /Volumes/bootfs/network-config</code></pre>
       const jump = event.target.closest("[data-jump-view]");
       if (jump) {
         setView(jump.dataset.jumpView);
+        return;
+      }
+
+      const openSoldering = event.target.closest("[data-open-soldering]");
+      if (openSoldering) {
+        const dialog = document.getElementById("solderingDialog");
+        if (dialog.showModal) {
+          dialog.showModal();
+        } else {
+          dialog.setAttribute("open", "");
+        }
+        return;
+      }
+
+      const closeSoldering = event.target.closest("[data-close-soldering]");
+      if (closeSoldering) {
+        document.getElementById("solderingDialog").close();
+      }
+    });
+
+    document.getElementById("solderingDialog").addEventListener("click", event => {
+      if (event.target === event.currentTarget) {
+        event.currentTarget.close();
       }
     });
 
