@@ -472,6 +472,86 @@
       margin-top: 2px;
     }
 
+    .setup-step-details {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .setup-step-details summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    .setup-step-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .setup-step-details summary::after {
+      content: "+";
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 900;
+    }
+
+    .setup-step-details[open] summary {
+      border-bottom: 1px solid var(--line);
+      background: #fbf7ee;
+    }
+
+    .setup-step-details[open] summary::after {
+      content: "-";
+    }
+
+    .setup-step-body {
+      display: grid;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .imager-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .imager-shot {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .imager-shot img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1.2 / 1;
+      object-fit: cover;
+      object-position: top center;
+      background: #fff;
+    }
+
+    .imager-shot figcaption {
+      padding: 9px 10px;
+      border-top: 1px solid var(--line);
+      color: #384453;
+      font-size: .88rem;
+      font-weight: 800;
+    }
+
     .step-figure {
       margin: 0;
       overflow: hidden;
@@ -919,6 +999,7 @@
       .hero-inner,
       .info-grid,
       .equipment-grid,
+      .imager-gallery,
       .diagnostics,
       .wire-step {
         grid-template-columns: 1fr;
@@ -1394,11 +1475,76 @@ Relay NC -> not used</code></pre>
               <ol class="steps">
                 <li class="step">
                   <div class="step-content">
-                    <p>Запиши <strong>Raspberry Pi OS Lite</strong> на microSD через Raspberry Pi Imager. В налаштуваннях Imager увімкни SSH і встанови логін/пароль.</p>
-                    <div class="note warning">
-                      <strong>Перед записом</strong>
-                      <p>Переконайся, що обрав правильний носій — всі дані на ньому буде стерто.</p>
-                    </div>
+                    <details class="setup-step-details">
+                      <summary>Прошити microSD через Raspberry Pi Imager</summary>
+                      <div class="setup-step-body">
+                        <p>Відкрий Raspberry Pi Imager і пройди setup steps у такому порядку. На скрінах показано приклад: Raspberry Pi Zero 2 W, Raspberry Pi OS Lite 64-bit, hostname <code>vtxpi</code>, user <code>pi</code>. Пароль для user і Wi-Fi впиши свій.</p>
+                        <div>
+                          <a class="button primary" href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener noreferrer">Завантажити Raspberry Pi Imager</a>
+                        </div>
+
+                        <div class="note warning">
+                          <strong>Перед записом</strong>
+                          <p>Переконайся, що обрав саме microSD. Raspberry Pi Imager повністю стирає вибраний носій.</p>
+                        </div>
+
+                        <div class="imager-gallery">
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/1step.png" alt="Raspberry Pi Imager: вибір Raspberry Pi Zero 2 W" loading="lazy">
+                            <figcaption>1. Device: вибери <strong>Raspberry Pi Zero 2 W</strong>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/2step.png" alt="Raspberry Pi Imager: вибір Raspberry Pi OS other" loading="lazy">
+                            <figcaption>2. OS: відкрий <strong>Raspberry Pi OS (other)</strong>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/3step.png" alt="Raspberry Pi Imager: вибір Raspberry Pi OS Lite 64-bit" loading="lazy">
+                            <figcaption>3. OS: вибери <strong>Raspberry Pi OS Lite (64-bit)</strong>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/4step.png" alt="Raspberry Pi Imager: вибір storage device" loading="lazy">
+                            <figcaption>4. Storage: вибери microSD. Назва може відрізнятись від прикладу.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/5step.png" alt="Raspberry Pi Imager: hostname vtxpi" loading="lazy">
+                            <figcaption>5. Customisation: hostname постав <code>vtxpi</code>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/6step.png" alt="Raspberry Pi Imager: localisation Kyiv Europe Kyiv keyboard us" loading="lazy">
+                            <figcaption>6. Localisation: <code>Kyiv (Ukraine)</code>, <code>Europe/Kyiv</code>, keyboard <code>us</code>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/7step.png" alt="Raspberry Pi Imager: username pi and password" loading="lazy">
+                            <figcaption>7. User: username <code>pi</code>, пароль введи свій і запам'ятай його.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/8step.png" alt="Raspberry Pi Imager: Wi-Fi credentials" loading="lazy">
+                            <figcaption>8. Wi-Fi: введи SSID і пароль своєї 2.4GHz Wi-Fi мережі.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/9.png" alt="Raspberry Pi Imager: enable SSH password authentication" loading="lazy">
+                            <figcaption>9. Remote access: увімкни SSH і вибери <strong>Use password authentication</strong>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/10.png" alt="Raspberry Pi Imager: Raspberry Pi Connect disabled" loading="lazy">
+                            <figcaption>10. Raspberry Pi Connect: залиш вимкненим, він тут не потрібен.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/11.png" alt="Raspberry Pi Imager: summary before write" loading="lazy">
+                            <figcaption>11. Writing: перевір summary і натисни <strong>WRITE</strong>.</figcaption>
+                          </figure>
+                          <figure class="imager-shot">
+                            <img src="assets/imager-use/12.png" alt="Raspberry Pi Imager: erase and write confirmation" loading="lazy">
+                            <figcaption>12. Підтверди <strong>I UNDERSTAND, ERASE AND WRITE</strong>.</figcaption>
+                          </figure>
+                        </div>
+
+                        <div class="result">
+                          <strong>Результат кроку 1</strong>
+                          <p>Після завершення запису витягни microSD з ноутбука, встав її в Raspberry Pi і переходь до SSH-підключення.</p>
+                        </div>
+                      </div>
+                    </details>
                   </div>
                 </li>
                 <li class="step">
