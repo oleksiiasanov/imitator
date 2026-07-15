@@ -321,55 +321,6 @@
       display: block;
     }
 
-    .phase-layout {
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
-    }
-
-    .phase-nav {
-      position: sticky;
-      top: 76px;
-      display: grid;
-      gap: 8px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-    }
-
-    .phase-link {
-      display: grid;
-      grid-template-columns: 28px minmax(0, 1fr);
-      gap: 8px;
-      align-items: center;
-      border: 1px solid transparent;
-      border-radius: 6px;
-      background: transparent;
-      color: #3f4a56;
-      padding: 8px;
-      text-align: left;
-      font-weight: 750;
-    }
-
-    .phase-link.is-current {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-    }
-
-    .phase-num {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 6px;
-      background: #e9e2d4;
-      font-size: .84rem;
-      font-weight: 900;
-    }
-
     .phase-card {
       margin-bottom: 16px;
       border: 1px solid var(--line);
@@ -783,7 +734,6 @@
     @media (max-width: 900px) {
       .topbar-inner,
       .hero-inner,
-      .phase-layout,
       .info-grid,
       .check-grid,
       .diagnostics {
@@ -798,10 +748,6 @@
         overflow-x: auto;
       }
 
-      .phase-nav {
-        position: static;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
     }
 
     @media (max-width: 560px) {
@@ -832,9 +778,6 @@
         width: 100%;
       }
 
-      .phase-nav {
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </head>
@@ -848,10 +791,9 @@
         </div>
         <nav class="tabs" aria-label="Розділи інструкції">
           <button class="tab is-active" type="button" data-view="quickstart">Quickstart</button>
-          <button class="tab" type="button" data-view="guide">Повна інструкція</button>
+          <button class="tab" type="button" data-view="diagnostics">FAQ</button>
           <button class="tab" type="button" data-view="commands">Команди</button>
           <button class="tab" type="button" data-view="checklist">Чекліст</button>
-          <button class="tab" type="button" data-view="diagnostics">FAQ</button>
         </nav>
       </div>
     </header>
@@ -863,7 +805,7 @@
           <p class="lead">Запиши Raspberry Pi OS Lite, підключись по SSH, запусти install.sh — скрипт сам встановить залежності, налаштує Composite, service, GPIO17 relay/power switch і перезавантажить пристрій.</p>
           <div class="hero-actions">
             <a class="button primary" href="#quickstart-start">Почати Quickstart</a>
-            <a class="button" href="#phase-setup" data-jump-view="guide">Повна інструкція</a>
+            <a class="button" href="#view-diagnostics" data-jump-view="diagnostics">FAQ</a>
             <a class="button" href="#final-checklist" data-jump-view="checklist">Відкрити чекліст</a>
           </div>
         </div>
@@ -1088,449 +1030,6 @@ Password: vtxplayer</code></pre>
               <li>Сторінка має назву VTX Video Control.</li>
             </ul>
           </article>
-        </div>
-      </section>
-
-      <section class="view" id="view-guide" aria-label="Повна інструкція налаштування">
-        <div class="phase-layout">
-          <aside class="phase-nav" aria-label="Фази">
-            <button class="phase-link is-current" type="button" data-target="phase-setup"><span class="phase-num">1</span><span>Підготовка</span></button>
-            <button class="phase-link" type="button" data-target="phase-flash"><span class="phase-num">2</span><span>OS і SSH</span></button>
-            <button class="phase-link" type="button" data-target="phase-composite"><span class="phase-num">3</span><span>Composite</span></button>
-            <button class="phase-link" type="button" data-target="phase-video"><span class="phase-num">4</span><span>Відео</span></button>
-            <button class="phase-link" type="button" data-target="phase-autostart"><span class="phase-num">5</span><span>Автозапуск</span></button>
-            <button class="phase-link" type="button" data-target="phase-power"><span class="phase-num">6</span><span>Живлення</span></button>
-          </aside>
-
-          <div>
-            <article class="phase-card" id="phase-setup">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Фаза 1</p>
-                  <h2 class="phase-title">Підготувати залізо перед першим запуском</h2>
-                  <p class="phase-summary">На цьому етапі важливо перевірити живлення, антену VTX, relay module і спільну землю перед подачею живлення.</p>
-                </div>
-                <button class="small-btn" type="button" data-copy-phase="phase-setup">Копіювати нотатки</button>
-              </header>
-              <div class="phase-body">
-                <div class="info-grid">
-                  <div class="note">
-                    <strong>Що потрібно</strong>
-                    <ul>
-                      <li>Raspberry Pi Zero 2 W, microSD, Wi-Fi 2.4GHz.</li>
-                      <li>Analog 5.8GHz VTX, антена, FPV/SDR receiver.</li>
-                      <li>5V relay module з HIGH trigger для VTX/fan power branch.</li>
-                      <li>USB-C 5V для Pi або стабільний 5.1V buck converter.</li>
-                      <li>Buck converter 6S до 5.1V для майбутнього живлення від акумулятора.</li>
-                    </ul>
-                  </div>
-                  <div class="note danger">
-                    <strong>Критично</strong>
-                    <p>Перед увімкненням VTX підключи антену. Не вмикай VTX без антени.</p>
-                  </div>
-                </div>
-
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Підключи антену до VTX до будь-якої подачі живлення.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Перевір, що Raspberry Pi не живиться напряму від 6S або VBAT.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Перевір, що VTX/Fan не живляться від 5V Raspberry Pi.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Relay module має бути в HIGH trigger mode, бо застосунок вмикає power branch через GPIO17 HIGH.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Повну актуальну схему підключень відкрий у першому розділі FAQ.</p>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="result">
-                  <strong>Результат фази</strong>
-                  <p>Залізо готове до першого запуску, VTX не залишиться без антени, Raspberry Pi має безпечне живлення, а детальна схема підключень винесена в FAQ.</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="phase-card" id="phase-flash">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Фаза 2</p>
-                  <h2 class="phase-title">Записати Raspberry Pi OS і зайти по SSH</h2>
-                  <p class="phase-summary">Найпростіший шлях для початківця: одразу задати Wi-Fi, hostname, користувача і SSH в Raspberry Pi Imager.</p>
-                </div>
-                <a class="button" href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener noreferrer">Завантажити Imager</a>
-              </header>
-              <div class="phase-body">
-                <div class="info-grid">
-                  <div class="note">
-                    <strong>В Imager вибери</strong>
-                    <p>Raspberry Pi OS Lite 64-bit. Якщо Lite не видно, можна Raspberry Pi OS 64-bit.</p>
-                  </div>
-                  <div class="note warning">
-                    <strong>Wi-Fi</strong>
-                    <p>SSID має бути саме тієї мережі, до якої підключений ноутбук. Country: UA, Enable SSH: yes.</p>
-                  </div>
-                </div>
-
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>У Raspberry Pi Imager задай Hostname: <strong>vtxpi</strong>, Username: <strong>pi</strong>, пароль, Wi-Fi SSID і Wi-Fi Password.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Встав microSD у Raspberry Pi.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Живи Pi через USB-C 5V. Не підключай одразу складне живлення через DC-DC.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Почекай 2-5 хвилин після першого boot.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Підключись по SSH з Mac або Linux.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Основне SSH-підключення</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>ssh pi@vtxpi.local</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Якщо macOS/Linux свариться на старий SSH-ключ, видали старий запис і підключись знову.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Оновити SSH-ключ для vtxpi.local</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>ssh-keygen -R vtxpi.local
-ssh pi@vtxpi.local</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Якщо .local не працює, знайди IP Raspberry Pi і підключись по IP.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Підключення по IP</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>arp -a
-ssh pi@192.168.X.X</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="result">
-                  <strong>Результат фази</strong>
-                  <p>Ти бачиш shell Raspberry Pi через SSH. Якщо Wi-Fi змінився після першого старту, SD не треба переписувати: можна оновити Wi-Fi через bootfs recovery зі вставленої microSD.</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="phase-card" id="phase-composite">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Фаза 3</p>
-                  <h2 class="phase-title">Запустити install.sh і перевірити перший boot</h2>
-                  <p class="phase-summary">Wi-Fi точку, Composite, Python .venv, залежності, systemd service, runtime folders і GPIO self-check налаштовує install.sh. Вручну системні файли не редагуються.</p>
-                </div>
-                <button class="small-btn" type="button" data-copy-phase="phase-composite">Копіювати команди фази</button>
-              </header>
-              <div class="phase-body">
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Склонуй репозиторій на Raspberry Pi і перейди в папку проєкту.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Код проєкту</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>git clone https://github.com/oleksiiasanov/imitator.git
-cd imitator</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Запусти інсталятор. Його можна запускати повторно: він оновить залежності, service і перевірки без ручних кроків.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Встановлення</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>sudo bash install.sh</code></pre>
-                      </div>
-                      <div class="note">
-                        <strong>Що робить install.sh</strong>
-                        <p>Ставить apt-пакети, створює .venv з доступом до системних Python-пакетів, ставить Flask/Werkzeug через pip, ставить gpiozero/lgpio тільки через apt, створює uploads/videos/config.json, налаштовує Wi-Fi точку VTX-SETUP, вимикає desktop/display manager якщо він є, налаштовує PAL Composite-1, встановлює vtx-player.service і запускає self-check.</p>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Якщо installer просить reboot або перезавантажує Raspberry Pi, дочекайся 1-2 хвилини після старту, підключись до VTX-SETUP і відкрий панель.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Після reboot</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>SSID: VTX-SETUP
-Password: vtxplayer
-http://10.42.0.1:8080</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Якщо сторінка не відкривається, перевір service і логи.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Service і journal</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>systemctl status vtx-player.service
-journalctl -u vtx-player.service -n 80 --no-pager</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="result">
-                  <strong>Результат фази</strong>
-                  <p>Веб-панель відкривається в браузері, service активний, а стартова діагностика показує статус FFmpeg, MPV, Composite-1, GPIO17, uploads, videos і config.json.</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="phase-card" id="phase-video">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Фаза 4</p>
-                  <h2 class="phase-title">Завантажити відео через Web UI</h2>
-                  <p class="phase-summary">Відео більше не заливається через scp і не конвертується вручну. Web UI приймає файл, показує upload progress, конвертує через FFmpeg і запускає MPV.</p>
-                </div>
-                <button class="small-btn" type="button" data-copy-phase="phase-video">Копіювати команди фази</button>
-              </header>
-              <div class="phase-body">
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Відкрий головну сторінку VTX Video Control у браузері.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>У блоці <strong>1. Завантаження відео</strong> вибери файл MP4/MOV/MKV/WEBM/AVI/MPEG/TS і натисни <strong>Завантажити нове відео</strong>.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Дочекайся upload progress і conversion progress. Під час конвертації кнопка playback заблокована.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Після успішної конвертації app створює <strong>videos/video_fpv.mp4</strong>, вмикає GPIO17 relay/power switch, чекає 300 мс і стартує MPV на Composite-1.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Для ручного запуску або зупинки використовуй кнопку <strong>Пуск / Пауза</strong>. При stop app зупиняє MPV і вимикає GPIO17 relay/power switch.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Якщо upload або conversion падає, повідомлення видно в Web UI, а деталі є в journal.</p>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="result">
-                  <strong>Результат фази</strong>
-                  <p>FPV receiver показує конвертоване відео, GPIO17 керує relay power branch, а Web UI показує зрозумілий статус.</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="phase-card" id="phase-autostart">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Фаза 5</p>
-                  <h2 class="phase-title">Налаштувати scheduler і перевірити /system</h2>
-                  <p class="phase-summary">systemd service вже встановлений install.sh. У цій фазі ти налаштовуєш тільки поведінку autoplay у Web UI і дивишся read-only діагностику.</p>
-                </div>
-                <button class="small-btn" type="button" data-copy-phase="phase-autostart">Копіювати команди фази</button>
-              </header>
-              <div class="phase-body">
-                <div class="note warning">
-                  <strong>Перед стартом</strong>
-                  <p>Спочатку завантаж і конвертуй відео через Web UI. Scheduler працює з поточним файлом videos/video_fpv.mp4.</p>
-                </div>
-
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>У блоці <strong>3. Автозапуск після подачі живлення</strong> увімкни галочку <strong>Увімкнути автозапуск</strong>.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Задай перший запуск через N хвилин і інтервал повтору після завершення попереднього відео.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Приклад</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>Перший запуск через: 180 хв
-Повторювати через: 20 хв</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Натисни <strong>Зберегти налаштування</strong>. App запише config.json атомарно і перезапустить scheduler generation.</p>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Відкрий read-only сторінку <strong>System Status</strong> і перевір Application, Playback, Video, Wi-Fi, Storage, Runtime, GPIO, Power Switch.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>System Status</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>http://10.42.0.1:8080/system</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Для production-перевірки після reboot service має підняти Flask сам, а scheduler має прочитати config.json і працювати без SSH.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Логи за потреби</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>journalctl -u vtx-player.service -f</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="result">
-                  <strong>Результат фази</strong>
-                  <p>Autoplay налаштований у Web UI, systemd запускає Flask після reboot, а scheduler стартує відео за збереженим графіком.</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="phase-card" id="phase-power">
-              <header class="phase-head">
-                <div>
-                  <p class="phase-kicker">Фаза 6</p>
-                  <h2 class="phase-title">Перейти на акумуляторне живлення</h2>
-                  <p class="phase-summary">Коли вся система працює від USB-C або 5V buck і relay branch перевірений, можна переходити на акумуляторне живлення через правильні buck converters.</p>
-                </div>
-                <button class="small-btn" type="button" data-copy-phase="phase-power">Копіювати нотатки</button>
-              </header>
-              <div class="phase-body">
-                <div class="info-grid">
-                  <div class="note success">
-                    <strong>Для тестів</strong>
-                    <p>Pi живити від USB-C 5V або окремого 5V buck, VTX/fan branch живити через Relay COM/NO. Це найспокійніший режим для першого налаштування.</p>
-                  </div>
-                  <div class="note danger">
-                    <strong>Для 6S</strong>
-                    <p>Raspberry Pi не можна живити напряму від 6S. Потрібен step-down / buck converter на 5.1V.</p>
-                  </div>
-                </div>
-
-                <ol class="steps">
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Живи VTX/fan через relay branch, а не напряму від Raspberry Pi. У перевіреній схемі 12V buck OUT+ проходить через Relay COM/NO.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Живлення VTX/Fan через relay</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>Battery -> 5V buck + -> Raspberry Pi 5V pin, physical 2/4
-Battery -> 5V buck - -> Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39
-Battery -> 12V buck OUT+ -> Relay COM
-12V buck OUT- -> VTX - / Fan - / Raspberry Pi GND pin
-Relay NO -> VTX + / Fan +
-Raspberry Pi GPIO17 pin, physical 11 -> Relay IN
-Raspberry Pi 5V pin, physical 2/4 -> Relay DC+
-Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 -> Relay DC-
-All grounds common</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="step">
-                    <div class="step-content">
-                      <p>Raspberry Pi живи тільки через step-down / buck converter на 5.1V.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Живлення Raspberry Pi через buck converter</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>6S battery -> buck converter -> 5.1V -> Raspberry Pi</code></pre>
-                      </div>
-                    </div>
-                  </li>
-                </ol>
-
-                <div class="note warning">
-                  <strong>Перед підключенням Pi</strong>
-                  <p>Обов'язково перевір мультиметром 5.1V на виході converter. Не використовуй step-up converter для 6S до Pi.</p>
-                </div>
-
-                <div class="info-grid">
-                  <div class="note">
-                    <strong>6S1P</strong>
-                    <p>Li-Ion 3500 mAh приблизно 75 Wh. При споживанні 5W це орієнтовно 12-15 годин.</p>
-                  </div>
-                  <div class="note">
-                    <strong>6S2P</strong>
-                    <p>Li-Ion 3500 mAh cells приблизно 150 Wh. При споживанні 5W це орієнтовно 24-30 годин.</p>
-                  </div>
-                </div>
-
-                <div class="result">
-                  <strong>Результат фази</strong>
-                  <p>Система працює автономно, GPIO17 керує relay branch, VTX не перегрівається, Pi отримує стабільні 5.1V, акумулятор має BMS або контроль розряду.</p>
-                </div>
-              </div>
-            </article>
-          </div>
         </div>
       </section>
 
@@ -1936,7 +1435,6 @@ cat /Volumes/bootfs/network-config</code></pre>
     ];
 
     const checklistKey = "vtx-guide-checklist-v1";
-    const phaseLinks = document.querySelectorAll(".phase-link");
     const tabs = document.querySelectorAll(".tab");
     const views = document.querySelectorAll(".view");
     const toast = document.getElementById("toast");
@@ -2045,13 +1543,6 @@ cat /Volumes/bootfs/network-config</code></pre>
       updateProgress();
     }
 
-    function phaseText(phaseId) {
-      const phase = document.getElementById(phaseId);
-      const title = phase.querySelector(".phase-title")?.textContent.trim() || "";
-      const codes = [...phase.querySelectorAll("pre code")].map(code => code.textContent.trim()).join("\n\n");
-      return `${title}\n\n${codes}`.trim();
-    }
-
     document.addEventListener("click", event => {
       const copyButton = event.target.closest("[data-copy]");
       if (copyButton) {
@@ -2064,20 +1555,6 @@ cat /Volumes/bootfs/network-config</code></pre>
       if (commandCopy) {
         const command = commands[Number(commandCopy.dataset.commandCopy)];
         copyText(command.code, commandCopy);
-        return;
-      }
-
-      const phaseCopy = event.target.closest("[data-copy-phase]");
-      if (phaseCopy) {
-        copyText(phaseText(phaseCopy.dataset.copyPhase), phaseCopy);
-        return;
-      }
-
-      const phaseLink = event.target.closest(".phase-link");
-      if (phaseLink) {
-        setView("guide");
-        document.getElementById(phaseLink.dataset.target).scrollIntoView({ behavior: "smooth", block: "start" });
-        phaseLinks.forEach(link => link.classList.toggle("is-current", link === phaseLink));
         return;
       }
 
@@ -2120,18 +1597,6 @@ cat /Volumes/bootfs/network-config</code></pre>
     document.getElementById("copyFinalCommand").addEventListener("click", event => {
       copyText(commands[commands.length - 1].code, event.currentTarget);
     });
-
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      phaseLinks.forEach(link => {
-        link.classList.toggle("is-current", link.dataset.target === visible.target.id);
-      });
-    }, { rootMargin: "-20% 0px -55% 0px", threshold: [0.1, 0.35, 0.6] });
-
-    document.querySelectorAll(".phase-card[id^='phase-']").forEach(phase => observer.observe(phase));
 
     renderCommands();
     renderChecklist();
