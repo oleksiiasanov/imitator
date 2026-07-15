@@ -347,16 +347,77 @@
       padding: 12px;
     }
 
-    .equipment-photo {
+    .equipment-gallery {
+      position: relative;
+      overflow: hidden;
       display: grid;
       place-items: center;
       aspect-ratio: 16 / 10;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fafc;
+    }
+
+    .equipment-photo {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .equipment-photo[hidden] {
+      display: none;
+    }
+
+    .equipment-placeholder {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
       border: 1px dashed #c8c0b1;
       border-radius: var(--radius);
       background: linear-gradient(135deg, #f8fafc, #f7efe0);
       color: #64748b;
       font-weight: 900;
       text-align: center;
+    }
+
+    .equipment-gallery-controls {
+      position: absolute;
+      inset: auto 8px 8px;
+      display: grid;
+      grid-template-columns: 34px minmax(42px, auto) 34px;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .equipment-gallery-controls button,
+    .equipment-gallery-counter {
+      min-height: 30px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 6px;
+      background: rgba(15, 23, 42, .78);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 5px 16px rgba(15, 23, 42, .18);
+      pointer-events: auto;
+    }
+
+    .equipment-gallery-controls button {
+      width: 34px;
+      padding: 0;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .equipment-gallery-counter {
+      display: grid;
+      place-items: center;
+      padding: 4px 8px;
+      font-size: .78rem;
     }
 
     .equipment-card h4 {
@@ -1116,7 +1177,15 @@
             <div class="faq-answer">
               <div class="equipment-grid">
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery" data-equipment-gallery>
+                    <img class="equipment-photo" src="assets/product-list/buck-5v/1.png" alt="Buck 5V LM2596S модуль фото 1" data-equipment-photo>
+                    <img class="equipment-photo" src="assets/product-list/buck-5v/Screenshot%202026-07-15%20at%2015.29.13.png" alt="Buck 5V LM2596S модуль фото 2" data-equipment-photo hidden>
+                    <div class="equipment-gallery-controls" aria-label="Фото Buck 5V">
+                      <button type="button" data-equipment-prev aria-label="Попереднє фото Buck 5V">&lsaquo;</button>
+                      <span class="equipment-gallery-counter" data-equipment-counter>1 / 2</span>
+                      <button type="button" data-equipment-next aria-label="Наступне фото Buck 5V">&rsaquo;</button>
+                    </div>
+                  </div>
                   <div>
                     <h4>Buck 5V</h4>
                     <p>LM2596S понижуючий DC-DC модуль для живлення Raspberry Pi.</p>
@@ -1130,7 +1199,15 @@
                 </article>
 
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery" data-equipment-gallery>
+                    <img class="equipment-photo" src="assets/product-list/buck-12-v/Screenshot%202026-07-15%20at%2015.29.33.png" alt="Buck 12V XL4016 модуль фото 1" data-equipment-photo>
+                    <img class="equipment-photo" src="assets/product-list/buck-12-v/Screenshot%202026-07-15%20at%2015.29.55.png" alt="Buck 12V XL4016 модуль фото 2" data-equipment-photo hidden>
+                    <div class="equipment-gallery-controls" aria-label="Фото Buck 12V">
+                      <button type="button" data-equipment-prev aria-label="Попереднє фото Buck 12V">&lsaquo;</button>
+                      <span class="equipment-gallery-counter" data-equipment-counter>1 / 2</span>
+                      <button type="button" data-equipment-next aria-label="Наступне фото Buck 12V">&rsaquo;</button>
+                    </div>
+                  </div>
                   <div>
                     <h4>Buck 12V</h4>
                     <p>XL4016 PWM понижуючий DC-DC модуль для живлення VTX/Fan.</p>
@@ -1144,7 +1221,9 @@
                 </article>
 
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery">
+                    <img class="equipment-photo" src="assets/product-list/relay/Screenshot%202026-07-15%20at%2015.30.07.png" alt="1-канальний relay module">
+                  </div>
                   <div>
                     <h4>Реле</h4>
                     <p>1-канальний relay module для вмикання живлення VTX/Fan з GPIO17.</p>
@@ -1158,7 +1237,9 @@
                 </article>
 
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery">
+                    <img class="equipment-photo" src="assets/product-list/vtx/Screenshot%202026-07-15%20at%2015.30.30.png" alt="Analog 5.8GHz VTX">
+                  </div>
                   <div>
                     <h4>VTX</h4>
                     <p>Будь-який analog 5.8GHz VTX. Приклад: RUSHFPV RUSH MAX SOLO 5.8GHz 2.5W.</p>
@@ -1172,7 +1253,9 @@
                 </article>
 
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery">
+                    <img class="equipment-photo" src="assets/product-list/battery/Screenshot%202026-07-15%20at%2015.28.56.png" alt="Battery 15+V приклад 6S2P 24V">
+                  </div>
                   <div>
                     <h4>Battery 15+V</h4>
                     <p>Будь-яка батарея 15+V. Приклад: 6S2P 24V battery pack.</p>
@@ -1186,7 +1269,9 @@
                 </article>
 
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery">
+                    <img class="equipment-photo" src="assets/product-list/raspberry/Screenshot%202026-07-15%20at%2015.30.16.png" alt="Raspberry Pi Zero 2W модуль">
+                  </div>
                   <div>
                     <h4>Raspberry Pi Zero 2W</h4>
                     <p>Основний контролер: веб-панель, composite video out і GPIO17 для relay.</p>
@@ -1200,7 +1285,25 @@
                 </article>
 
                 <article class="equipment-card">
-                  <div class="equipment-photo">Фото<br>placeholder</div>
+                  <div class="equipment-gallery">
+                    <img class="equipment-photo" src="assets/product-list/fan/Screenshot%202026-07-15%20at%2015.30.39.png" alt="Fan для охолодження VTX">
+                  </div>
+                  <div>
+                    <h4>Fan</h4>
+                    <p>Опційний вентилятор для охолодження VTX або корпусу.</p>
+                    <ul class="equipment-specs">
+                      <li>Живиться від 12V buck через Relay NO разом із VTX.</li>
+                      <li>Fan + йде на Relay NO, Fan - на 12V buck OUT-.</li>
+                      <li>Потрібен, якщо VTX гріється або працює довго.</li>
+                    </ul>
+                  </div>
+                  <span class="button" aria-disabled="true">Посилання placeholder</span>
+                </article>
+
+                <article class="equipment-card">
+                  <div class="equipment-gallery">
+                    <div class="equipment-placeholder">Фото<br>placeholder</div>
+                  </div>
                   <div>
                     <h4>SD картка пам'яті Class 10</h4>
                     <p>microSD для Raspberry Pi OS Lite, проєкту і відеофайлів.</p>
@@ -2028,6 +2131,20 @@ cat /Volumes/bootfs/network-config</code></pre>
       });
     }
 
+    function rotateEquipmentPhoto(gallery, direction) {
+      const photos = [...gallery.querySelectorAll("[data-equipment-photo]")];
+      if (photos.length < 2) return;
+      const currentIndex = Math.max(0, photos.findIndex(photo => !photo.hidden));
+      const nextIndex = (currentIndex + direction + photos.length) % photos.length;
+      photos.forEach((photo, index) => {
+        photo.hidden = index !== nextIndex;
+      });
+      const counter = gallery.querySelector("[data-equipment-counter]");
+      if (counter) {
+        counter.textContent = `${nextIndex + 1} / ${photos.length}`;
+      }
+    }
+
     document.addEventListener("click", event => {
       const copyButton = event.target.closest("[data-copy]");
       if (copyButton) {
@@ -2052,6 +2169,18 @@ cat /Volumes/bootfs/network-config</code></pre>
       const jump = event.target.closest("[data-jump-view]");
       if (jump) {
         setView(jump.dataset.jumpView);
+        return;
+      }
+
+      const equipmentPrev = event.target.closest("[data-equipment-prev]");
+      if (equipmentPrev) {
+        rotateEquipmentPhoto(equipmentPrev.closest("[data-equipment-gallery]"), -1);
+        return;
+      }
+
+      const equipmentNext = event.target.closest("[data-equipment-next]");
+      if (equipmentNext) {
+        rotateEquipmentPhoto(equipmentNext.closest("[data-equipment-gallery]"), 1);
         return;
       }
 
