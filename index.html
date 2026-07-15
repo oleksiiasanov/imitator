@@ -1063,7 +1063,7 @@ Password: vtxplayer</code></pre>
             <summary><h3>Як спаяти повну актуальну схему підключень?</h3></summary>
             <div class="faq-answer">
               <p>Ось актуальна схема під поточний код: Raspberry Pi Zero 2 W керує живленням VTX/Fan через <code>GPIO17</code>, логіка <code>HIGH = увімкнути</code>, <code>LOW = вимкнути</code>.</p>
-              <p><strong>Важливо:</strong> коли в схемі написано <code>Raspberry Pi GND pin</code>, це будь-який GND-пін на 40-pin header Raspberry Pi: фізичний pin <code>6</code>, <code>9</code>, <code>14</code>, <code>20</code>, <code>25</code>, <code>30</code>, <code>34</code> або <code>39</code>. Найпростіше взяти <code>physical pin 6</code> як головну землю і від нього/спільної GND-шини вести землю на VTX, relay і buck converter.</p>
+              <p><strong>Важливо:</strong> коли в схемі написано <code>Raspberry Pi GND pad</code>, це земля Raspberry Pi. Найпростіше взяти один контакт GND як головну землю і від нього/спільної GND-шини вести землю на VTX, relay і buck converter.</p>
 
               <p><strong>Що саме паяти</strong></p>
 
@@ -1073,10 +1073,10 @@ Password: vtxplayer</code></pre>
                   <button class="copy-btn" type="button" data-copy>Копіювати</button>
                 </div>
                 <pre><code>Raspberry Pi TV pad                                  -> VTX VIDEO IN
-Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 -> VTX GND
+Raspberry Pi GND pad -> VTX GND
 
 Raspberry Pi 5V pin, physical 2/4                    -> Relay DC+
-Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 -> Relay DC-
+Raspberry Pi GND pad -> Relay DC-
 Raspberry Pi GPIO17 pin, physical 11                 -> Relay IN
 
 12V buck OUT+                                        -> Relay COM
@@ -1085,7 +1085,7 @@ Relay NO                                             -> Fan +     якщо fan �
 
 12V buck OUT-                                        -> VTX -
 12V buck OUT-                                        -> Fan -     якщо fan є
-12V buck OUT-                                        -> Raspberry Pi GND pin / Relay DC-</code></pre>
+12V buck OUT-                                        -> Raspberry Pi GND pad / Relay DC-</code></pre>
               </div>
 
               <p><strong>Головна схема</strong></p>
@@ -1098,10 +1098,10 @@ Relay NO                                             -> Fan +     якщо fan �
                 <pre><code>Raspberry Pi Zero 2 W
 ---------------------
 Raspberry Pi TV pad                                  -> VTX VIDEO IN / yellow video wire
-Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 -> VTX GND / video ground / black wire
+Raspberry Pi GND pad -> VTX GND / video ground / black wire
 
 Raspberry Pi 5V pin, physical 2/4                    -> Relay DC+
-Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 -> Relay DC-
+Raspberry Pi GND pad -> Relay DC-
 Raspberry Pi GPIO17 pin, physical 11                 -> Relay IN
 
 Relay module
@@ -1113,11 +1113,11 @@ NC                                      -> НЕ підключати
 
 Power
 -----
-Battery / supply                        -> 5.1V buck -> Raspberry Pi 5V + Raspberry Pi GND pin
+Battery / supply                        -> 5.1V buck -> Raspberry Pi 5V + Raspberry Pi GND pad
 Battery / supply                        -> 12V buck  -> VTX/Fan branch через relay
 
 12V buck OUT-                           -> VTX - / Fan -
-12V buck OUT-                           -> Raspberry Pi GND pin / Relay DC- / VTX GND</code></pre>
+12V buck OUT-                           -> Raspberry Pi GND pad / Relay DC- / VTX GND</code></pre>
               </div>
 
               <p><strong>ASCII-діаграма</strong></p>
@@ -1131,16 +1131,16 @@ Battery / supply                        -> 12V buck  -> VTX/Fan branch чере�
                  | Raspberry Pi Zero 2W |
                  |                      |
 Raspberry Pi TV pad -------------------------> VTX VIDEO IN
-Raspberry Pi GND pin 6/9/14/20/25/30/34/39 --> VTX GND
+Raspberry Pi GND pad --> VTX GND
 Raspberry Pi 5V pin 2/4 --------------------> Relay DC+
-Raspberry Pi GND pin 6/9/14/20/25/30/34/39 -> Relay DC-
+Raspberry Pi GND pad -> Relay DC-
 Raspberry Pi GPIO17 pin 11 -----------------> Relay IN
                  +----------------------+
 
 Battery / PSU
    |
    +--> 5.1V buck + -----> Raspberry Pi 5V pin 2/4
-   |              - -----> Raspberry Pi GND pin 6/9/14/20/25/30/34/39
+   |              - -----> Raspberry Pi GND pad
    |
    +--> 12V buck + -----> Relay COM
                   - -----> VTX - / Fan - / common GND
@@ -1404,14 +1404,14 @@ cat /Volumes/bootfs/network-config</code></pre>
     const checklist = [
       "VTX antenna connected",
       "Raspberry Pi TV pad підключений до VTX VIDEO IN",
-      "Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 спільний з VTX GND",
+      "Raspberry Pi GND pad спільний з VTX GND",
       "Raspberry Pi 5V pin, physical 2/4 підключений до Relay DC+",
-      "Raspberry Pi GND pin, physical 6/9/14/20/25/30/34/39 підключений до Relay DC-",
+      "Raspberry Pi GND pad підключений до Relay DC-",
       "Raspberry Pi GPIO17 pin, physical 11 підключений до Relay IN",
       "Relay jumper встановлений у HIGH trigger",
       "12V buck OUT+ підключений до Relay COM",
       "Relay NO живить VTX+/Fan+",
-      "12V buck OUT-, Raspberry Pi GND pin, Relay DC- і VTX GND спільні",
+      "12V buck OUT-, Raspberry Pi GND pad, Relay DC- і VTX GND спільні",
       "Wi-Fi VTX-SETUP доступний після reboot",
       "SSH працює",
       "sudo bash install.sh завершився без помилок",
