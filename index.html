@@ -1103,30 +1103,24 @@ Relay NO                                             -> Fan +     якщо fan �
                   <span>ASCII-діаграма</span>
                   <button class="copy-btn" type="button" data-copy>Копіювати</button>
                 </div>
-                <pre><code>                 +----------------------+
-                 | Raspberry Pi Zero 2W |
-                 |                      |
-Raspberry Pi TV pad -------------------------> VTX VIDEO IN
-Raspberry Pi GND pad --> VTX GND
-Raspberry Pi 5V pin 2/4 --------------------> Relay DC+
+                <pre><code>Battery + -> 5V buck IN+
+Battery - -> 5V buck IN-
+5V buck OUT+ -> Raspberry Pi 5V pin 2/4
+5V buck OUT- -> Raspberry Pi GND pad
+
+Battery + -> 12V buck IN+
+Battery - -> 12V buck IN-
+12V buck OUT+ -> Relay COM
+12V buck OUT- -> VTX - / Fan - / Raspberry Pi GND pad / Relay DC-
+
+Raspberry Pi TV pad -> VTX VIDEO IN
+Raspberry Pi GND pad -> VTX GND
+Raspberry Pi 5V pin 2/4 -> Relay DC+
 Raspberry Pi GND pad -> Relay DC-
-Raspberry Pi GPIO17 pin 11 -----------------> Relay IN
-                 +----------------------+
+Raspberry Pi GPIO17 pin 11 -> Relay IN
 
-Battery / PSU
-   |
-   +--> Battery + -> 5V buck IN+
-   |    Battery - -> 5V buck IN-
-   |    5V buck OUT+ -> Raspberry Pi 5V pin 2/4
-   |    5V buck OUT- -> Raspberry Pi GND pad
-   |
-   +--> Battery + -> 12V buck IN+
-        Battery - -> 12V buck IN-
-        12V buck OUT+ -> Relay COM
-        12V buck OUT- -> VTX - / Fan - / Raspberry Pi GND pad / Relay DC-
-
-Relay NO ----------------> VTX + / Fan +
-Relay NC ----------------> not used</code></pre>
+Relay NO -> VTX + / Fan +
+Relay NC -> not used</code></pre>
               </div>
 
               <p><strong>Важливо перед увімкненням</strong></p>
