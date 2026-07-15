@@ -250,53 +250,6 @@
       padding: 28px 20px 56px;
     }
 
-    .status-strip {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 22px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-    }
-
-    .progress-wrap {
-      min-width: 0;
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-      color: var(--muted);
-      font-size: .92rem;
-      font-weight: 800;
-    }
-
-    .progress-track {
-      height: 10px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #e6ded0;
-    }
-
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), #26956c);
-      transition: width .2s ease;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
     .small-btn {
       min-height: 36px;
       border: 1px solid var(--line);
@@ -584,41 +537,6 @@
       font-weight: 850;
     }
 
-    .check-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .check-item {
-      display: grid;
-      grid-template-columns: 24px minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      min-height: 48px;
-      padding: 11px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-    }
-
-    .check-item input {
-      width: 18px;
-      height: 18px;
-      margin-top: 3px;
-      accent-color: var(--accent);
-    }
-
-    .check-item span {
-      color: #384453;
-      font-weight: 650;
-    }
-
-    .check-item:has(input:checked) {
-      border-color: #9bd7b2;
-      background: #f0fbf3;
-    }
-
     .diagnostics {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -709,6 +627,144 @@
       color: #485363;
     }
 
+    .wiring-panel {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffdf8;
+      padding: 12px;
+    }
+
+    .wiring-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: #384453;
+      font-weight: 850;
+    }
+
+    .wiring-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .wire-step {
+      --wire: #64748b;
+      --wire-soft: #f8fafc;
+      display: grid;
+      grid-template-columns: 24px 34px minmax(150px, 1fr) minmax(54px, .45fr) minmax(150px, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 52px;
+      padding: 10px;
+      border: 1px solid #e6dfd2;
+      border-radius: var(--radius);
+      background: var(--panel);
+      cursor: pointer;
+    }
+
+    .wire-step[data-wire-color="red"] {
+      --wire: #dc2626;
+      --wire-soft: #fff1f2;
+    }
+
+    .wire-step[data-wire-color="black"] {
+      --wire: #111827;
+      --wire-soft: #f3f4f6;
+    }
+
+    .wire-step[data-wire-color="yellow"] {
+      --wire: #f59e0b;
+      --wire-soft: #fffbeb;
+    }
+
+    .wire-step[data-wire-color="blue"] {
+      --wire: #2563eb;
+      --wire-soft: #eff6ff;
+    }
+
+    .wire-step[data-wire-color="gray"] {
+      --wire: #64748b;
+      --wire-soft: #f8fafc;
+    }
+
+    .wire-step input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+
+    .wire-num {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--wire-soft);
+      color: var(--wire);
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .wire-end {
+      min-width: 0;
+      color: #283245;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .9rem;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .wire-line {
+      position: relative;
+      min-width: 54px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--wire);
+      box-shadow: 0 0 0 1px rgba(31, 41, 51, .05), 0 0 10px color-mix(in srgb, var(--wire) 22%, transparent);
+    }
+
+    .wire-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -1px;
+      width: 9px;
+      height: 9px;
+      border-top: 3px solid var(--wire);
+      border-right: 3px solid var(--wire);
+      transform: translateY(-50%) rotate(45deg);
+      background: transparent;
+    }
+
+    .wire-label {
+      justify-self: end;
+      min-width: 82px;
+      border: 1px solid color-mix(in srgb, var(--wire) 34%, #ffffff);
+      border-radius: 6px;
+      background: var(--wire-soft);
+      color: var(--wire);
+      padding: 4px 7px;
+      text-align: center;
+      font-size: .78rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .wire-step:has(input:checked) {
+      border-color: #9bd7b2;
+      background: #f0fbf3;
+    }
+
+    .wire-step:has(input:checked) .wire-end,
+    .wire-step:has(input:checked) .wire-label {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
+
     .toast {
       position: fixed;
       right: 18px;
@@ -735,9 +791,23 @@
       .topbar-inner,
       .hero-inner,
       .info-grid,
-      .check-grid,
-      .diagnostics {
+      .diagnostics,
+      .wire-step {
         grid-template-columns: 1fr;
+      }
+
+      .wire-step {
+        gap: 8px;
+      }
+
+      .wire-step input,
+      .wire-num,
+      .wire-label {
+        justify-self: start;
+      }
+
+      .wire-line {
+        width: 100%;
       }
 
       .topbar-inner {
@@ -762,13 +832,11 @@
         white-space: normal;
       }
 
-      .status-strip,
       .command-search,
       .phase-head {
         grid-template-columns: 1fr;
       }
 
-      .toolbar,
       .hero-actions {
         justify-content: stretch;
       }
@@ -793,7 +861,6 @@
           <button class="tab is-active" type="button" data-view="quickstart">Quickstart</button>
           <button class="tab" type="button" data-view="diagnostics">FAQ</button>
           <button class="tab" type="button" data-view="commands">Команди</button>
-          <button class="tab" type="button" data-view="checklist">Чекліст</button>
         </nav>
       </div>
     </header>
@@ -806,7 +873,6 @@
           <div class="hero-actions">
             <a class="button primary" href="#quickstart-start">Почати Quickstart</a>
             <a class="button" href="#view-diagnostics" data-jump-view="diagnostics">FAQ</a>
-            <a class="button" href="#final-checklist" data-jump-view="checklist">Відкрити чекліст</a>
           </div>
         </div>
 
@@ -835,22 +901,6 @@
     </section>
 
     <main class="container">
-      <section class="status-strip" aria-label="Прогрес">
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Прогрес фінального чекліста</span>
-            <span id="progressText">0 з 26</span>
-          </div>
-          <div class="progress-track" aria-hidden="true">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-        </div>
-        <div class="toolbar">
-          <button class="small-btn" type="button" id="copyFinalCommand">Копіювати фінальну команду</button>
-          <button class="small-btn danger" type="button" id="resetProgress">Скинути прогрес</button>
-        </div>
-      </section>
-
       <section class="view is-active" id="view-quickstart" aria-label="Quickstart першого запуску">
         <article class="phase-card" id="quickstart-start">
           <header class="phase-head">
@@ -1041,22 +1091,6 @@ Password: vtxplayer</code></pre>
         <div class="command-panel" id="commandList"></div>
       </section>
 
-      <section class="view" id="view-checklist" aria-label="Фінальний чекліст">
-        <div class="phase-card" id="final-checklist">
-          <header class="phase-head">
-            <div>
-              <p class="phase-kicker">Фінальна перевірка</p>
-              <h2 class="phase-title">Чекліст перед автономною роботою</h2>
-              <p class="phase-summary">Позначай пункти по мірі виконання. Прогрес зберігається в цьому браузері.</p>
-            </div>
-            <button class="small-btn" type="button" id="copyChecklist">Копіювати чекліст</button>
-          </header>
-          <div class="phase-body">
-            <div class="check-grid" id="checklist"></div>
-          </div>
-        </div>
-      </section>
-
       <section class="view" id="view-diagnostics" aria-label="FAQ і діагностика">
         <div class="diagnostics faq-list">
           <details class="faq-item">
@@ -1067,33 +1101,157 @@ Password: vtxplayer</code></pre>
 
               <p><strong>Що саме паяти</strong></p>
 
-              <div class="code-card">
-                <div class="code-top">
-                  <span>Що саме паяти</span>
-                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+              <div class="wiring-panel" id="wiringChecklist">
+                <div class="wiring-head">
+                  <span>Паяй по одному рядку і відмічай готове</span>
+                  <button class="small-btn" type="button" id="resetWiringChecklist">Скинути пайку</button>
                 </div>
-                <pre><code>Battery +                                            -> 5V buck IN+
-Battery -                                            -> 5V buck IN-
-Battery +                                            -> 12V buck IN+
-Battery -                                            -> 12V buck IN-
-
-5V buck OUT+                                         -> Raspberry Pi 5V pin, physical 2/4
-5V buck OUT-                                         -> Raspberry Pi GND pad
-
-Raspberry Pi TV pad                                  -> VTX VIDEO IN
-Raspberry Pi GND pad -> VTX GND
-
-Raspberry Pi 5V pin, physical 2/4                    -> Relay DC+
-Raspberry Pi GND pad -> Relay DC-
-Raspberry Pi GPIO17 pin, physical 11                 -> Relay IN
-
-12V buck OUT+                                        -> Relay COM
-Relay NO                                             -> VTX +
-Relay NO                                             -> Fan +     якщо fan є
-
-12V buck OUT-                                        -> VTX -
-12V buck OUT-                                        -> Fan -     якщо fan є
-12V buck OUT-                                        -> Raspberry Pi GND pad / Relay DC-</code></pre>
+                <div class="wiring-list">
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="0">
+                    <span class="wire-num">1</span>
+                    <span class="wire-end">Battery +</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">5V buck IN+</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="1">
+                    <span class="wire-num">2</span>
+                    <span class="wire-end">Battery -</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">5V buck IN-</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="2">
+                    <span class="wire-num">3</span>
+                    <span class="wire-end">Battery +</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">12V buck IN+</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="3">
+                    <span class="wire-num">4</span>
+                    <span class="wire-end">Battery -</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">12V buck IN-</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="4">
+                    <span class="wire-num">5</span>
+                    <span class="wire-end">5V buck OUT+</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Raspberry Pi 5V pin, physical 2/4</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="5">
+                    <span class="wire-num">6</span>
+                    <span class="wire-end">5V buck OUT-</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Raspberry Pi GND pad</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="yellow">
+                    <input type="checkbox" data-wire-check="6">
+                    <span class="wire-num">7</span>
+                    <span class="wire-end">Raspberry Pi TV pad</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">VTX VIDEO IN</span>
+                    <span class="wire-label">жовтий</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="7">
+                    <span class="wire-num">8</span>
+                    <span class="wire-end">Raspberry Pi GND pad</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">VTX GND</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="8">
+                    <span class="wire-num">9</span>
+                    <span class="wire-end">Raspberry Pi 5V pin, physical 2/4</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Relay DC+</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="9">
+                    <span class="wire-num">10</span>
+                    <span class="wire-end">Raspberry Pi GND pad</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Relay DC-</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="blue">
+                    <input type="checkbox" data-wire-check="10">
+                    <span class="wire-num">11</span>
+                    <span class="wire-end">Raspberry Pi GPIO17 pin, physical 11</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Relay IN</span>
+                    <span class="wire-label">синій</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="11">
+                    <span class="wire-num">12</span>
+                    <span class="wire-end">12V buck OUT+</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Relay COM</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="12">
+                    <span class="wire-num">13</span>
+                    <span class="wire-end">Relay NO</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">VTX +</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="red">
+                    <input type="checkbox" data-wire-check="13">
+                    <span class="wire-num">14</span>
+                    <span class="wire-end">Relay NO</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Fan + якщо fan є</span>
+                    <span class="wire-label">червоний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="14">
+                    <span class="wire-num">15</span>
+                    <span class="wire-end">12V buck OUT-</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">VTX -</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="15">
+                    <span class="wire-num">16</span>
+                    <span class="wire-end">12V buck OUT-</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Fan - якщо fan є</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="black">
+                    <input type="checkbox" data-wire-check="16">
+                    <span class="wire-num">17</span>
+                    <span class="wire-end">12V buck OUT-</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">Raspberry Pi GND pad / Relay DC-</span>
+                    <span class="wire-label">чорний</span>
+                  </label>
+                  <label class="wire-step" data-wire-color="gray">
+                    <input type="checkbox" data-wire-check="17">
+                    <span class="wire-num">18</span>
+                    <span class="wire-end">Relay NC</span>
+                    <span class="wire-line" aria-hidden="true"></span>
+                    <span class="wire-end">not used</span>
+                    <span class="wire-label">не паяти</span>
+                  </label>
+                </div>
               </div>
 
               <p><strong>ASCII-діаграма</strong></p>
@@ -1375,40 +1533,7 @@ cat /Volumes/bootfs/network-config</code></pre>
       { title: "Перевірити install.sh syntax", phase: "Validation", code: "bash -n install.sh" }
     ];
 
-    const checklist = [
-      "VTX antenna connected",
-      "Raspberry Pi TV pad підключений до VTX VIDEO IN",
-      "Raspberry Pi GND pad спільний з VTX GND",
-      "Raspberry Pi 5V pin, physical 2/4 підключений до Relay DC+",
-      "Raspberry Pi GND pad підключений до Relay DC-",
-      "Raspberry Pi GPIO17 pin, physical 11 підключений до Relay IN",
-      "Relay jumper встановлений у HIGH trigger",
-      "12V buck OUT+ підключений до Relay COM",
-      "Relay NO живить VTX+/Fan+",
-      "12V buck OUT-, Raspberry Pi GND pad, Relay DC- і VTX GND спільні",
-      "Wi-Fi VTX-SETUP доступний після reboot",
-      "SSH працює",
-      "sudo bash install.sh завершився без помилок",
-      ".venv створений всередині проєкту",
-      "vtx-player.service enabled",
-      "Web UI відкривається в браузері",
-      "/system показує FFmpeg і MPV available",
-      "/system показує Composite-1 status",
-      "/system показує GPIO17 status",
-      "Upload progress працює",
-      "Conversion progress працює",
-      "videos/video_fpv.mp4 створений після upload",
-      "Пуск / Пауза керує playback",
-      "GPIO17 relay/power switch вимикається після stop",
-      "Scheduler settings зберігаються в config.json",
-      "VTX не в PIT mode",
-      "VTX не перегрівається",
-      "buck converter видає 5.1V",
-      "акумулятор має BMS / контроль розряду",
-      "антена і канал receiver перевірені перед польовим тестом"
-    ];
-
-    const checklistKey = "vtx-guide-checklist-v1";
+    const wiringChecklistKey = "vtx-guide-wiring-checklist-v1";
     const tabs = document.querySelectorAll(".tab");
     const views = document.querySelectorAll(".view");
     const toast = document.getElementById("toast");
@@ -1485,36 +1610,23 @@ cat /Volumes/bootfs/network-config</code></pre>
         .replaceAll('"', "&quot;");
     }
 
-    function readChecklistState() {
+    function readWiringState() {
       try {
-        return JSON.parse(localStorage.getItem(checklistKey)) || {};
+        return JSON.parse(localStorage.getItem(wiringChecklistKey)) || {};
       } catch (error) {
         return {};
       }
     }
 
-    function writeChecklistState(state) {
-      localStorage.setItem(checklistKey, JSON.stringify(state));
+    function writeWiringState(state) {
+      localStorage.setItem(wiringChecklistKey, JSON.stringify(state));
     }
 
-    function updateProgress() {
-      const checked = document.querySelectorAll("#checklist input:checked").length;
-      const total = checklist.length;
-      const percent = total ? Math.round((checked / total) * 100) : 0;
-      document.getElementById("progressText").textContent = `${checked} з ${total}`;
-      document.getElementById("progressBar").style.width = `${percent}%`;
-    }
-
-    function renderChecklist() {
-      const state = readChecklistState();
-      const holder = document.getElementById("checklist");
-      holder.innerHTML = checklist.map((item, index) => `
-        <label class="check-item">
-          <input type="checkbox" data-check="${index}" ${state[index] ? "checked" : ""}>
-          <span>${escapeHtml(item)}</span>
-        </label>
-      `).join("");
-      updateProgress();
+    function restoreWiringChecklist() {
+      const state = readWiringState();
+      document.querySelectorAll("[data-wire-check]").forEach(input => {
+        input.checked = Boolean(state[input.dataset.wireCheck]);
+      });
     }
 
     document.addEventListener("click", event => {
@@ -1548,32 +1660,24 @@ cat /Volumes/bootfs/network-config</code></pre>
       renderCommands(event.target.value);
     });
 
-    document.getElementById("checklist").addEventListener("change", event => {
-      const input = event.target.closest("input[data-check]");
+    document.getElementById("wiringChecklist").addEventListener("change", event => {
+      const input = event.target.closest("input[data-wire-check]");
       if (!input) return;
-      const state = readChecklistState();
-      state[input.dataset.check] = input.checked;
-      writeChecklistState(state);
-      updateProgress();
+      const state = readWiringState();
+      state[input.dataset.wireCheck] = input.checked;
+      writeWiringState(state);
     });
 
-    document.getElementById("resetProgress").addEventListener("click", () => {
-      localStorage.removeItem(checklistKey);
-      renderChecklist();
-      showToast("Прогрес скинуто");
-    });
-
-    document.getElementById("copyChecklist").addEventListener("click", event => {
-      const text = checklist.map(item => `[ ] ${item}`).join("\n");
-      copyText(text, event.currentTarget);
-    });
-
-    document.getElementById("copyFinalCommand").addEventListener("click", event => {
-      copyText(commands[commands.length - 1].code, event.currentTarget);
+    document.getElementById("resetWiringChecklist").addEventListener("click", () => {
+      localStorage.removeItem(wiringChecklistKey);
+      document.querySelectorAll("[data-wire-check]").forEach(input => {
+        input.checked = false;
+      });
+      showToast("Пайку скинуто");
     });
 
     renderCommands();
-    renderChecklist();
+    restoreWiringChecklist();
   </script>
 </body>
 </html>
