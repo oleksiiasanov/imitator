@@ -654,7 +654,7 @@
       --wire: #64748b;
       --wire-soft: #f8fafc;
       display: grid;
-      grid-template-columns: 24px 34px minmax(150px, 1fr) minmax(54px, .45fr) minmax(150px, 1fr) auto;
+      grid-template-columns: 24px 34px minmax(150px, 1fr) minmax(54px, .45fr) minmax(150px, 1fr);
       gap: 10px;
       align-items: center;
       min-height: 52px;
@@ -702,9 +702,10 @@
       height: 28px;
       display: grid;
       place-items: center;
+      border: 1px solid #d1d5db;
       border-radius: 6px;
-      background: var(--wire-soft);
-      color: var(--wire);
+      background: #f3f4f6;
+      color: #475569;
       font-size: .82rem;
       font-weight: 900;
     }
@@ -740,27 +741,12 @@
       background: transparent;
     }
 
-    .wire-label {
-      justify-self: end;
-      min-width: 82px;
-      border: 1px solid color-mix(in srgb, var(--wire) 34%, #ffffff);
-      border-radius: 6px;
-      background: var(--wire-soft);
-      color: var(--wire);
-      padding: 4px 7px;
-      text-align: center;
-      font-size: .78rem;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
     .wire-step:has(input:checked) {
       border-color: #9bd7b2;
       background: #f0fbf3;
     }
 
-    .wire-step:has(input:checked) .wire-end,
-    .wire-step:has(input:checked) .wire-label {
+    .wire-step:has(input:checked) .wire-end {
       text-decoration: line-through;
       text-decoration-thickness: 2px;
     }
@@ -801,8 +787,7 @@
       }
 
       .wire-step input,
-      .wire-num,
-      .wire-label {
+      .wire-num {
         justify-self: start;
       }
 
@@ -1113,7 +1098,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Battery +</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">5V buck IN+</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="1">
@@ -1121,7 +1105,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Battery -</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">5V buck IN-</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="2">
@@ -1129,7 +1112,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Battery +</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">12V buck IN+</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="3">
@@ -1137,7 +1119,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Battery -</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">12V buck IN-</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="4">
@@ -1145,7 +1126,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">5V buck OUT+</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Raspberry Pi 5V pin, physical 2/4</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="5">
@@ -1153,7 +1133,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">5V buck OUT-</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Raspberry Pi GND pad</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="yellow">
                     <input type="checkbox" data-wire-check="6">
@@ -1161,7 +1140,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Raspberry Pi TV pad</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">VTX VIDEO IN</span>
-                    <span class="wire-label">жовтий</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="7">
@@ -1169,7 +1147,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Raspberry Pi GND pad</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">VTX GND</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="8">
@@ -1177,7 +1154,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Raspberry Pi 5V pin, physical 2/4</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Relay DC+</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="9">
@@ -1185,7 +1161,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Raspberry Pi GND pad</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Relay DC-</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="blue">
                     <input type="checkbox" data-wire-check="10">
@@ -1193,7 +1168,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Raspberry Pi GPIO17 pin, physical 11</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Relay IN</span>
-                    <span class="wire-label">синій</span>
                   </label>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="11">
@@ -1201,7 +1175,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">12V buck OUT+</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Relay COM</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="12">
@@ -1209,7 +1182,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Relay NO</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">VTX +</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="13">
@@ -1217,7 +1189,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Relay NO</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Fan + якщо fan є</span>
-                    <span class="wire-label">червоний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="14">
@@ -1225,7 +1196,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">12V buck OUT-</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">VTX -</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="15">
@@ -1233,7 +1203,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">12V buck OUT-</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Fan - якщо fan є</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="16">
@@ -1241,7 +1210,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">12V buck OUT-</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Raspberry Pi GND pad / Relay DC-</span>
-                    <span class="wire-label">чорний</span>
                   </label>
                   <label class="wire-step" data-wire-color="gray">
                     <input type="checkbox" data-wire-check="17">
@@ -1249,7 +1217,6 @@ Password: vtxplayer</code></pre>
                     <span class="wire-end">Relay NC</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">not used</span>
-                    <span class="wire-label">не паяти</span>
                   </label>
                 </div>
               </div>
