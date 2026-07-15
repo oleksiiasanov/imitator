@@ -1082,7 +1082,7 @@ Password: vtxplayer</code></pre>
             <summary><h3>Як спаяти повну актуальну схему підключень?</h3></summary>
             <div class="faq-answer">
               <p>Ось актуальна схема під поточний код: Raspberry Pi Zero 2 W керує живленням VTX/Fan через <code>GPIO17</code>, логіка <code>HIGH = увімкнути</code>, <code>LOW = вимкнути</code>.</p>
-              <p><strong>Важливо:</strong> коли в схемі написано <code>Raspberry Pi GND pad</code>, це земля Raspberry Pi. Найпростіше взяти один контакт GND як головну землю і від нього/спільної GND-шини вести землю на VTX, relay і buck converter.</p>
+              <p><strong>Важливо:</strong> спільна земля тут виходить через ланцюг <code>Raspberry Pi GND pad -> VTX GND</code> і <code>12V buck OUT- -> VTX -</code>. Це працює, якщо на твоєму VTX <code>VTX GND</code> і <code>VTX -</code> є спільною землею. Перевір мультиметром continuity між ними.</p>
 
               <p><strong>Що саме паяти</strong></p>
 
@@ -1204,16 +1204,9 @@ Password: vtxplayer</code></pre>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Fan - якщо fan є</span>
                   </label>
-                  <label class="wire-step" data-wire-color="black">
+                  <label class="wire-step" data-wire-color="gray">
                     <input type="checkbox" data-wire-check="16">
                     <span class="wire-num">17</span>
-                    <span class="wire-end">12V buck OUT-</span>
-                    <span class="wire-line" aria-hidden="true"></span>
-                    <span class="wire-end">Raspberry Pi GND pad / Relay DC-</span>
-                  </label>
-                  <label class="wire-step" data-wire-color="gray">
-                    <input type="checkbox" data-wire-check="17">
-                    <span class="wire-num">18</span>
                     <span class="wire-end">Relay NC</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">not used</span>
@@ -1236,7 +1229,7 @@ Battery - -> 5V buck IN-
 Battery + -> 12V buck IN+
 Battery - -> 12V buck IN-
 12V buck OUT+ -> Relay COM
-12V buck OUT- -> VTX - / Fan - / Raspberry Pi GND pad / Relay DC-
+12V buck OUT- -> VTX - / Fan -
 
 Raspberry Pi TV pad -> VTX VIDEO IN
 Raspberry Pi GND pad -> VTX GND
@@ -1256,6 +1249,7 @@ Relay NC -> not used</code></pre>
                 <li>VTX/Fan не живити від Raspberry Pi 5V.</li>
                 <li>Використовувати <code>Relay NO</code>, не <code>NC</code>, щоб VTX був вимкнений при старті.</li>
                 <li>Relay module має спрацьовувати від <code>3.3V HIGH</code> на <code>IN</code>. Якщо твій модуль не спрацьовує від GPIO Raspberry Pi, потрібен драйвер/транзисторний ключ між <code>GPIO17</code> і <code>Relay IN</code>.</li>
+                <li>Перевір мультиметром, що <code>VTX GND</code> і <code>VTX -</code> дзвоняться між собою. Якщо ні, потрібен окремий зв'язок <code>12V buck OUT- -> Raspberry Pi GND pad</code>.</li>
               </ol>
 
               <p>Поточний софт робить так: перед playback ставить <code>GPIO17 HIGH</code>, чекає <code>300 ms</code>, запускає відео на Composite, після stop/exit ставить <code>GPIO17 LOW</code>.</p>
