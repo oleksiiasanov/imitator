@@ -674,22 +674,87 @@
       gap: 14px;
     }
 
-    .diag-card {
+    .diagnostics.faq-list {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .diag-card,
+    .faq-item {
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--panel);
       padding: 14px;
     }
 
-    .diag-card h3 {
+    .diag-card h3,
+    .faq-item h3 {
       margin: 0 0 8px;
       font-size: 1.02rem;
       letter-spacing: 0;
     }
 
-    .diag-card ul {
+    .diag-card ul,
+    .faq-item ul,
+    .faq-item ol {
       margin: 0;
       padding-left: 20px;
+      color: #485363;
+    }
+
+    .faq-item {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      cursor: pointer;
+      font-weight: 850;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: "+";
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 900;
+    }
+
+    .faq-item[open] summary {
+      border-bottom: 1px solid var(--line);
+      background: #fbf7ee;
+    }
+
+    .faq-item[open] summary::after {
+      content: "-";
+    }
+
+    .faq-item h3 {
+      margin: 0;
+    }
+
+    .faq-answer {
+      display: grid;
+      gap: 14px;
+      padding: 14px;
+    }
+
+    .faq-answer p {
+      margin: 0;
       color: #485363;
     }
 
@@ -850,7 +915,7 @@
             <div>
               <p class="phase-kicker">Quickstart</p>
               <h2 class="phase-title">Перший запуск після збірки</h2>
-              <p class="phase-summary">Дроти припаяні, VTX підключений, антена встановлена. Запиши чистий Raspberry Pi OS Lite, один раз підключись по SSH і запусти install.sh — більше нічого вручну налаштовувати не потрібно.</p>
+              <p class="phase-summary">Проводка зібрана, VTX підключений, антена встановлена. Запиши чистий Raspberry Pi OS Lite, один раз підключись по SSH і запусти install.sh — більше нічого вручну налаштовувати не потрібно.</p>
             </div>
           </header>
           <div class="phase-body">
@@ -1042,10 +1107,10 @@ Password: vtxplayer</code></pre>
               <header class="phase-head">
                 <div>
                   <p class="phase-kicker">Фаза 1</p>
-                  <h2 class="phase-title">Зібрати залізо і правильно підключити VTX</h2>
-                  <p class="phase-summary">На цьому етапі важливо зробити спільну землю, не переплутати TV pad і не вмикати VTX без антени.</p>
+                  <h2 class="phase-title">Підготувати залізо перед першим запуском</h2>
+                  <p class="phase-summary">На цьому етапі важливо перевірити живлення, антену VTX, relay module і спільну землю перед подачею живлення.</p>
                 </div>
-                <button class="small-btn" type="button" data-copy-phase="phase-setup">Копіювати схему</button>
+                <button class="small-btn" type="button" data-copy-phase="phase-setup">Копіювати нотатки</button>
               </header>
               <div class="phase-body">
                 <div class="info-grid">
@@ -1055,7 +1120,7 @@ Password: vtxplayer</code></pre>
                       <li>Raspberry Pi Zero 2 W, microSD, Wi-Fi 2.4GHz.</li>
                       <li>Analog 5.8GHz VTX, антена, FPV/SDR receiver.</li>
                       <li>5V relay module з HIGH trigger для VTX/fan power branch.</li>
-                      <li>Дроти, паяльник, USB-C 5V для Pi.</li>
+                      <li>USB-C 5V для Pi або стабільний 5.1V buck converter.</li>
                       <li>Buck converter 6S до 5.1V для майбутнього живлення від акумулятора.</li>
                     </ul>
                   </div>
@@ -1068,53 +1133,34 @@ Password: vtxplayer</code></pre>
                 <ol class="steps">
                   <li class="step">
                     <div class="step-content">
-                      <p>Pi TV pad припаяй до VTX VIDEO IN / yellow wire.</p>
+                      <p>Підключи антену до VTX до будь-якої подачі живлення.</p>
                     </div>
                   </li>
                   <li class="step">
                     <div class="step-content">
-                      <p>Pi GND припаяй до VTX GND / black wire.</p>
+                      <p>Перевір, що Raspberry Pi не живиться напряму від 6S або VBAT.</p>
                     </div>
                   </li>
                   <li class="step">
                     <div class="step-content">
-                      <p>Pi 5V підключи до Relay DC+, Pi GND до Relay DC-, а Pi GPIO17 до Relay IN.</p>
+                      <p>Перевір, що VTX/Fan не живляться від 5V Raspberry Pi.</p>
                     </div>
                   </li>
                   <li class="step">
                     <div class="step-content">
-                      <p>12V buck OUT+ підключи до Relay COM, Relay NO — до VTX+/Fan+, а 12V buck OUT- — до VTX-/Fan-.</p>
+                      <p>Relay module має бути в HIGH trigger mode, бо застосунок вмикає power branch через GPIO17 HIGH.</p>
                     </div>
                   </li>
                   <li class="step">
                     <div class="step-content">
-                      <p>Перевір правило: 5V buck OUT- = 12V buck OUT- = Relay DC- = VTX GND = Raspberry Pi GND.</p>
-                      <div class="code-card">
-                        <div class="code-top">
-                          <span>Перевірена схема підключення реле</span>
-                          <button class="copy-btn" type="button" data-copy>Копіювати</button>
-                        </div>
-                        <pre><code>Pi TV  -> VTX VIDEO IN
-Pi GND -> VTX GND
-
-Pi 5V     -> Relay DC+
-Pi GND    -> Relay DC-
-Pi GPIO17 -> Relay IN
-Relay jumper -> HIGH trigger
-
-12V buck OUT+ -> Relay COM
-Relay NO      -> VTX + / Fan +
-12V buck OUT- -> VTX - / Fan -
-
-5V buck OUT- = 12V buck OUT- = Pi GND = VTX GND = Relay DC-</code></pre>
-                      </div>
+                      <p>Повну актуальну схему підключень відкрий у першому розділі FAQ.</p>
                     </div>
                   </li>
                 </ol>
 
                 <div class="result">
                   <strong>Результат фази</strong>
-                  <p>VTX і fan отримують плюс через Relay COM/NO, антена підключена, VIDEO IN бере сигнал з TV pad, GPIO17 керує Relay IN, а всі землі об'єднані.</p>
+                  <p>Залізо готове до першого запуску, VTX не залишиться без антени, Raspberry Pi має безпечне живлення, а детальна схема підключень винесена в FAQ.</p>
                 </div>
               </div>
             </article>
@@ -1512,33 +1558,152 @@ All grounds common</code></pre>
       </section>
 
       <section class="view" id="view-diagnostics" aria-label="FAQ і діагностика">
-        <div class="diagnostics">
-          <article class="diag-card">
-            <h3>FAQ: змінити Wi-Fi без перезапису SD</h3>
-            <p>Використовуй це, якщо змінився роутер, SSID або пароль, і Raspberry Pi більше не з'являється в мережі. Не натискай Write в Raspberry Pi Imager: це перезапише всю SD-карту.</p>
-            <ul>
-              <li>Встав microSD у Mac.</li>
-              <li>Переконайся, що boot-розділ відкрився як /Volumes/bootfs.</li>
-              <li>Заміни YOUR_WIFI_NAME і YOUR_WIFI_PASSWORD на реальні дані Wi-Fi.</li>
-              <li>Raspberry Pi Zero 2 W підключається тільки до 2.4GHz Wi-Fi.</li>
-              <li>Перевірений спосіб для цієї збірки: cloud-init recovery через network-config, meta-data і user-data.</li>
-            </ul>
-            <div class="code-card">
-              <div class="code-top">
-                <span>Перевірити bootfs</span>
-                <button class="copy-btn" type="button" data-copy>Копіювати</button>
+        <div class="diagnostics faq-list">
+          <details class="faq-item">
+            <summary><h3>Як спаяти повну актуальну схему підключень?</h3></summary>
+            <div class="faq-answer">
+              <p>Ось актуальна схема під поточний код: Raspberry Pi Zero 2 W керує живленням VTX/Fan через <code>GPIO17</code>, логіка <code>HIGH = увімкнути</code>, <code>LOW = вимкнути</code>.</p>
+
+              <p><strong>Головна схема</strong></p>
+
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Головна схема</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>Raspberry Pi Zero 2 W
+---------------------
+TV pad                  -> VTX VIDEO IN / yellow video wire
+GND                     -> VTX GND / video ground / black wire
+
+5V pin, physical 2/4    -> Relay DC+
+GND pin, physical 6/9   -> Relay DC-
+GPIO17, physical 11     -> Relay IN
+
+Relay module
+------------
+Trigger mode            -> HIGH trigger
+COM                     -> 12V buck OUT+
+NO                      -> VTX + / Fan +
+NC                      -> НЕ підключати
+
+Power
+-----
+Battery / supply        -> 5.1V buck -> Raspberry Pi 5V + GND
+Battery / supply        -> 12V buck  -> VTX/Fan branch через relay
+
+12V buck OUT-           -> VTX - / Fan -
+12V buck OUT-           -> Raspberry Pi GND / Relay DC- / VTX GND</code></pre>
               </div>
-              <pre><code>ls -la /Volumes/bootfs
+
+              <p><strong>Спільна земля обов’язково</strong></p>
+
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Спільна земля</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>5V buck OUT-
+= 12V buck OUT-
+= Raspberry Pi GND
+= Relay DC-
+= VTX GND
+= Fan -</code></pre>
+              </div>
+
+              <p><strong>Що саме паяти</strong></p>
+
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Що саме паяти</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>Pi TV pad        -> VTX VIDEO IN
+Pi GND           -> VTX GND
+
+Pi 5V            -> Relay DC+
+Pi GND           -> Relay DC-
+Pi GPIO17        -> Relay IN
+
+12V buck OUT+    -> Relay COM
+Relay NO         -> VTX +
+Relay NO         -> Fan +     якщо fan є
+
+12V buck OUT-    -> VTX -
+12V buck OUT-    -> Fan -     якщо fan є
+12V buck OUT-    -> Pi GND / Relay DC-</code></pre>
+              </div>
+
+              <p><strong>ASCII-діаграма</strong></p>
+
+              <div class="code-card">
+                <div class="code-top">
+                  <span>ASCII-діаграма</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>                 +----------------------+
+                 | Raspberry Pi Zero 2W |
+                 |                      |
+TV pad ----------+---------------------------> VTX VIDEO IN
+GND -------------+---------------------------> VTX GND
+5V pin ----------+-----> Relay DC+
+GND pin ---------+-----> Relay DC-
+GPIO17 pin 11 ---+-----> Relay IN
+                 +----------------------+
+
+Battery / PSU
+   |
+   +--> 5.1V buck + -----> Pi 5V
+   |              - -----> Pi GND
+   |
+   +--> 12V buck + -----> Relay COM
+                  - -----> VTX - / Fan - / common GND
+
+Relay NO ----------------> VTX + / Fan +
+Relay NC ----------------> not used</code></pre>
+              </div>
+
+              <p><strong>Важливо перед увімкненням</strong></p>
+
+              <ol>
+                <li>Антена VTX має бути підключена до подачі живлення.</li>
+                <li>Не живити Raspberry Pi напряму від 6S або VBAT.</li>
+                <li>VTX/Fan не живити від Raspberry Pi 5V.</li>
+                <li>Використовувати <code>Relay NO</code>, не <code>NC</code>, щоб VTX був вимкнений при старті.</li>
+                <li>Relay module має спрацьовувати від <code>3.3V HIGH</code> на <code>IN</code>. Якщо твій модуль не спрацьовує від GPIO Raspberry Pi, потрібен драйвер/транзисторний ключ між <code>GPIO17</code> і <code>Relay IN</code>.</li>
+              </ol>
+
+              <p>Поточний софт робить так: перед playback ставить <code>GPIO17 HIGH</code>, чекає <code>300 ms</code>, запускає відео на Composite, після stop/exit ставить <code>GPIO17 LOW</code>.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>FAQ: змінити Wi-Fi без перезапису SD</h3></summary>
+            <div class="faq-answer">
+              <p>Використовуй це, якщо змінився роутер, SSID або пароль, і Raspberry Pi більше не з'являється в мережі. Не натискай Write в Raspberry Pi Imager: це перезапише всю SD-карту.</p>
+              <ul>
+                <li>Встав microSD у Mac.</li>
+                <li>Переконайся, що boot-розділ відкрився як /Volumes/bootfs.</li>
+                <li>Заміни YOUR_WIFI_NAME і YOUR_WIFI_PASSWORD на реальні дані Wi-Fi.</li>
+                <li>Raspberry Pi Zero 2 W підключається тільки до 2.4GHz Wi-Fi.</li>
+                <li>Перевірений спосіб для цієї збірки: cloud-init recovery через network-config, meta-data і user-data.</li>
+              </ul>
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Перевірити bootfs</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>ls -la /Volumes/bootfs
 cat /Volumes/bootfs/network-config
 cat /Volumes/bootfs/meta-data
 cat /Volumes/bootfs/cmdline.txt</code></pre>
-            </div>
-            <div class="code-card">
-              <div class="code-top">
-                <span>Оновити Wi-Fi через cloud-init</span>
-                <button class="copy-btn" type="button" data-copy>Копіювати</button>
               </div>
-              <pre><code>python3 - &lt;&lt;'PY'
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Оновити Wi-Fi через cloud-init</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>python3 - &lt;&lt;'PY'
 from pathlib import Path
 from datetime import datetime
 
@@ -1634,78 +1799,91 @@ for name in ['fixwifi.sh', 'fixwifi.log']:
     if target.exists():
         target.unlink()
 PY</code></pre>
-            </div>
-            <div class="code-card">
-              <div class="code-top">
-                <span>Перевірити перед вставленням у Pi</span>
-                <button class="copy-btn" type="button" data-copy>Копіювати</button>
               </div>
-              <pre><code>grep -n "YOUR_WIFI\|systemd.run\|ssid=\|psk=\|instance-id\|ds=nocloud" /Volumes/bootfs/cmdline.txt /Volumes/bootfs/meta-data /Volumes/bootfs/user-data /Volumes/bootfs/network-config
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Перевірити перед вставленням у Pi</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>grep -n "YOUR_WIFI\|systemd.run\|ssid=\|psk=\|instance-id\|ds=nocloud" /Volumes/bootfs/cmdline.txt /Volumes/bootfs/meta-data /Volumes/bootfs/user-data /Volumes/bootfs/network-config
 ls -la /Volumes/bootfs/fixwifi.sh /Volumes/bootfs/fixwifi.log 2&gt;/dev/null || true
 diskutil eject /Volumes/bootfs</code></pre>
-            </div>
-            <ul>
-              <li>Після цього встав SD у Raspberry Pi і подай живлення.</li>
-              <li>Почекай 3-5 хвилин: cloud-init має повторно застосувати Wi-Fi і створити NetworkManager profile.</li>
-              <li>Після boot пробуй ping vtxpi.local, ssh pi@vtxpi.local або відкрий http://vtxpi.local:8080.</li>
-            </ul>
-            <div class="code-card">
-              <div class="code-top">
-                <span>Якщо знову не підключилось</span>
-                <button class="copy-btn" type="button" data-copy>Копіювати</button>
               </div>
-              <pre><code>cat /Volumes/bootfs/cloudwifi.log
+              <ul>
+                <li>Після цього встав SD у Raspberry Pi і подай живлення.</li>
+                <li>Почекай 3-5 хвилин: cloud-init має повторно застосувати Wi-Fi і створити NetworkManager profile.</li>
+                <li>Після boot пробуй ping vtxpi.local, ssh pi@vtxpi.local або відкрий http://vtxpi.local:8080.</li>
+              </ul>
+              <div class="code-card">
+                <div class="code-top">
+                  <span>Якщо знову не підключилось</span>
+                  <button class="copy-btn" type="button" data-copy>Копіювати</button>
+                </div>
+                <pre><code>cat /Volumes/bootfs/cloudwifi.log
 cat /Volumes/bootfs/cmdline.txt
 cat /Volumes/bootfs/meta-data
 cat /Volumes/bootfs/network-config</code></pre>
+              </div>
+              <ul>
+                <li>Якщо cloudwifi.log з'явився, cloud-init виконав runcmd. Тоді перевір SSID, пароль, 2.4GHz Wi-Fi, WPA2 і список клієнтів роутера.</li>
+                <li>Якщо cloudwifi.log немає, перевір, чи instance-id у meta-data і ds=nocloud у cmdline.txt однакові та нові.</li>
+                <li>Якщо лишились fixwifi.sh або systemd.run, це старий recovery-спосіб. Прибери їх і повтори cloud-init recovery.</li>
+              </ul>
             </div>
-            <ul>
-              <li>Якщо cloudwifi.log з'явився, cloud-init виконав runcmd. Тоді перевір SSID, пароль, 2.4GHz Wi-Fi, WPA2 і список клієнтів роутера.</li>
-              <li>Якщо cloudwifi.log немає, перевір, чи instance-id у meta-data і ds=nocloud у cmdline.txt однакові та нові.</li>
-              <li>Якщо лишились fixwifi.sh або systemd.run, це старий recovery-спосіб. Прибери їх і повтори cloud-init recovery.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Немає відеосигналу</h3>
-            <ul>
-              <li>Перевір у /system, чи MPV, FFmpeg, Composite-1 і GPIO17 мають зелений статус.</li>
-              <li>Перевір, чи relay branch вмикає VTX під час playback.</li>
-              <li>Перевір, чи антена підключена до VTX.</li>
-              <li>Перевір, чи VTX не в PIT mode.</li>
-              <li>Перевір band/channel на receiver.</li>
-              <li>Перевір, чи VIDEO IN припаяний саме до Pi TV pad.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>SSH не підключається</h3>
-            <ul>
-              <li>Почекай 2-5 хвилин після першого boot.</li>
-              <li>Переконайся, що ноутбук і Raspberry Pi в одній Wi-Fi мережі.</li>
-              <li>Спробуй ssh-keygen -R vtxpi.local.</li>
-              <li>Знайди IP через arp -a або сторінку роутера.</li>
-              <li>Якщо Wi-Fi міняли після першого старту, виконай FAQ: змінити Wi-Fi без перезапису SD.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Composite-1 не connected</h3>
-            <ul>
-              <li>Запусти sudo bash install.sh повторно з папки проєкту.</li>
-              <li>Installer має виставити dtoverlay=vc4-kms-v3d,composite=1.</li>
-              <li>Installer має виставити enable_tvout=1 і sdtv_mode=2.</li>
-              <li>Installer має додати video=Composite-1:720x576@50e.</li>
-              <li>Після зміни boot config потрібен reboot.</li>
-            </ul>
-          </article>
-          <article class="diag-card">
-            <h3>Upload або conversion падає</h3>
-            <ul>
-              <li>Перевір, чи тип файлу підтримується: MP4, MOV, MKV, WEBM, AVI, MPEG, TS.</li>
-              <li>Перевір вільне місце на /system.</li>
-              <li>Перевір, чи ffmpeg доступний на /system.</li>
-              <li>Подивись помилку в Web UI і journalctl -u vtx-player.service -f.</li>
-              <li>Під час conversion playback заблокований — це нормально.</li>
-            </ul>
-          </article>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Немає відеосигналу</h3></summary>
+            <div class="faq-answer">
+              <ul>
+                <li>Перевір у /system, чи MPV, FFmpeg, Composite-1 і GPIO17 мають зелений статус.</li>
+                <li>Перевір, чи relay branch вмикає VTX під час playback.</li>
+                <li>Перевір, чи антена підключена до VTX.</li>
+                <li>Перевір, чи VTX не в PIT mode.</li>
+                <li>Перевір band/channel на receiver.</li>
+                <li>Перевір перший розділ FAQ з повною актуальною схемою підключень.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>SSH не підключається</h3></summary>
+            <div class="faq-answer">
+              <ul>
+                <li>Почекай 2-5 хвилин після першого boot.</li>
+                <li>Переконайся, що ноутбук і Raspberry Pi в одній Wi-Fi мережі.</li>
+                <li>Спробуй ssh-keygen -R vtxpi.local.</li>
+                <li>Знайди IP через arp -a або сторінку роутера.</li>
+                <li>Якщо Wi-Fi міняли після першого старту, виконай FAQ: змінити Wi-Fi без перезапису SD.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Composite-1 не connected</h3></summary>
+            <div class="faq-answer">
+              <ul>
+                <li>Запусти sudo bash install.sh повторно з папки проєкту.</li>
+                <li>Installer має виставити dtoverlay=vc4-kms-v3d,composite=1.</li>
+                <li>Installer має виставити enable_tvout=1 і sdtv_mode=2.</li>
+                <li>Installer має додати video=Composite-1:720x576@50e.</li>
+                <li>Після зміни boot config потрібен reboot.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Upload або conversion падає</h3></summary>
+            <div class="faq-answer">
+              <ul>
+                <li>Перевір, чи тип файлу підтримується: MP4, MOV, MKV, WEBM, AVI, MPEG, TS.</li>
+                <li>Перевір вільне місце на /system.</li>
+                <li>Перевір, чи ffmpeg доступний на /system.</li>
+                <li>Подивись помилку в Web UI і journalctl -u vtx-player.service -f.</li>
+                <li>Під час conversion playback заблокований — це нормально.</li>
+              </ul>
+            </div>
+          </details>
         </div>
       </section>
     </main>
@@ -1739,7 +1917,7 @@ cat /Volumes/bootfs/network-config</code></pre>
 
     const checklist = [
       "VTX antenna connected",
-      "Pi TV pad припаяний до VTX VIDEO IN",
+      "Pi TV pad підключений до VTX VIDEO IN",
       "Pi GND спільний з VTX GND",
       "Pi 5V підключений до Relay DC+",
       "Pi GND підключений до Relay DC-",
