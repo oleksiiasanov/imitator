@@ -1125,7 +1125,7 @@ Password: vtxplayer</code></pre>
                     <span class="wire-num">5</span>
                     <span class="wire-end">5V buck OUT+</span>
                     <span class="wire-line" aria-hidden="true"></span>
-                    <span class="wire-end">Raspberry Pi 5V pin, physical 2/4</span>
+                    <span class="wire-end">Raspberry Pi 5V pad</span>
                   </label>
                   <label class="wire-step" data-wire-color="black">
                     <input type="checkbox" data-wire-check="5">
@@ -1151,7 +1151,7 @@ Password: vtxplayer</code></pre>
                   <label class="wire-step" data-wire-color="red">
                     <input type="checkbox" data-wire-check="8">
                     <span class="wire-num">9</span>
-                    <span class="wire-end">Raspberry Pi 5V pin, physical 2/4</span>
+                    <span class="wire-end">Raspberry Pi 5V pad</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Relay DC+</span>
                   </label>
@@ -1165,7 +1165,7 @@ Password: vtxplayer</code></pre>
                   <label class="wire-step" data-wire-color="blue">
                     <input type="checkbox" data-wire-check="10">
                     <span class="wire-num">11</span>
-                    <span class="wire-end">Raspberry Pi GPIO17 pin, physical 11</span>
+                    <span class="wire-end">Raspberry Pi GPIO17 pad</span>
                     <span class="wire-line" aria-hidden="true"></span>
                     <span class="wire-end">Relay IN</span>
                   </label>
@@ -1230,7 +1230,7 @@ Password: vtxplayer</code></pre>
                 </div>
                 <pre><code>Battery + -> 5V buck IN+
 Battery - -> 5V buck IN-
-5V buck OUT+ -> Raspberry Pi 5V pin 2/4
+5V buck OUT+ -> Raspberry Pi 5V pad
 5V buck OUT- -> Raspberry Pi GND pad
 
 Battery + -> 12V buck IN+
@@ -1240,9 +1240,9 @@ Battery - -> 12V buck IN-
 
 Raspberry Pi TV pad -> VTX VIDEO IN
 Raspberry Pi GND pad -> VTX GND
-Raspberry Pi 5V pin 2/4 -> Relay DC+
+Raspberry Pi 5V pad -> Relay DC+
 Raspberry Pi GND pad -> Relay DC-
-Raspberry Pi GPIO17 pin 11 -> Relay IN
+Raspberry Pi GPIO17 pad -> Relay IN
 
 Relay NO -> VTX + / Fan +
 Relay NC -> not used</code></pre>
