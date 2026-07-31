@@ -30,7 +30,7 @@ Use the panel to upload a video, convert it for FPV playback, start or pause pla
 - Analog 5.8GHz VTX.
 - VTX antenna.
 - FPV receiver or SDR receiver.
-- 5V relay module with HIGH trigger support for VTX/fan power switching.
+- Relay module with HIGH trigger support for VTX/fan power switching. Verify the coil voltage printed on the relay itself (e.g. `JQC3F-12VDC-C` means a 12V coil) — listing descriptions are often wrong. This project wires the coil (`DC+`) from the 12V buck, not from Raspberry Pi 5V.
 - 5V USB power for initial setup.
 - Step-down buck converter set to 5.1V if powering the Raspberry Pi from a flight battery later.
 - Step-down buck converter set to the VTX/fan voltage, currently 12V in the verified relay wiring.
@@ -44,12 +44,12 @@ Connect the video signal and ground before powering the VTX.
 Raspberry Pi TV pad -> VTX VIDEO IN
 Raspberry Pi GND    -> VTX GND
 
-Raspberry Pi 5V     -> Relay DC+
 Raspberry Pi GND    -> Relay DC-
 Raspberry Pi GPIO17 -> Relay IN
 Relay trigger       -> HIGH trigger
 
 12V buck OUT+       -> Relay COM
+12V buck OUT+       -> Relay DC+
 Relay NO            -> VTX + / Fan +
 12V buck OUT-       -> VTX - / Fan -
 ```

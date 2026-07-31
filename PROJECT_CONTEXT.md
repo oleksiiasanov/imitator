@@ -53,7 +53,7 @@ Current supported hardware:
 * Buck converter set to 5.1V if powering Raspberry Pi from a battery
 * Buck converter set to the VTX/fan voltage, currently 12V in the verified relay wiring
 * Composite video output from the Raspberry Pi TV pad
-* 5V relay module controlled from GPIO17 for VTX/fan power switching
+* Relay module controlled from GPIO17 for VTX/fan power switching. Coil (`DC+`) is powered from the 12V buck, not from Raspberry Pi 5V — verify the coil voltage printed on the relay itself before wiring, listing text is often wrong.
 
 Planned hardware support:
 
@@ -67,7 +67,7 @@ Future hardware support must remain backward compatible with the current composi
 
 Current implementation:
 
-Battery or external power feeds the VTX/fan branch through a 5V relay module according to the VTX hardware requirements.
+Battery or external power feeds the VTX/fan branch through a relay module according to the VTX hardware requirements. The relay coil is powered from the 12V buck.
 
 The Raspberry Pi is powered separately from USB 5V during setup, or from a buck converter set to 5.1V in an autonomous build.
 
@@ -79,12 +79,12 @@ Required current wiring:
 Raspberry Pi TV pad -> VTX VIDEO IN
 Raspberry Pi GND    -> VTX GND
 
-Raspberry Pi 5V     -> Relay DC+
 Raspberry Pi GND    -> Relay DC-
 GPIO17              -> Relay IN
 Relay trigger       -> HIGH trigger
 
 12V buck OUT+       -> Relay COM
+12V buck OUT+       -> Relay DC+
 Relay NO            -> VTX + / Fan +
 12V buck OUT-       -> VTX - / Fan -
 ```
@@ -101,8 +101,9 @@ Relay power-switch architecture:
 
 ```text
 Battery
-├── 5V Buck Converter -> Raspberry Pi and relay module DC+
+├── 5V Buck Converter -> Raspberry Pi only
 └── 12V Buck Converter -> Relay COM/NO -> VTX and Cooling Fan
+                        -> Relay DC+ (coil power)
 ```
 
 The Raspberry Pi role is to control only the relay input. The Raspberry Pi must never power the VTX directly.
@@ -116,9 +117,9 @@ Current required wiring:
 ```text
 Pi TV OUT -> VTX VIDEO IN
 Pi GND    -> VTX VIDEO GND / VTX GND
-Pi 5V     -> Relay DC+
 Pi GND    -> Relay DC-
 Pi GPIO17 -> Relay IN
+12V buck OUT+ -> Relay DC+
 Relay NO  -> VTX/fan positive branch
 ```
 
@@ -130,8 +131,8 @@ Relay wiring:
 
 ```text
 GPIO17 -> Relay IN
-Pi 5V  -> Relay DC+
 Pi GND -> Relay DC-
+12V buck OUT+ -> Relay DC+
 12V buck OUT+ -> Relay COM
 Relay NO -> VTX + / Fan +
 ```
